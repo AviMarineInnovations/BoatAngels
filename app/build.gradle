@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "e.boatangels.boatangels"
+        applicationId "in.avimarine.boatangels"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1

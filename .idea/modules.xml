@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BoatAngel.iml" filepath="$PROJECT_DIR$/BoatAngel.iml" />
+      <module fileurl="file://C:\programing\BoatAngels\BoatAngel.iml" filepath="C:\programing\BoatAngels\BoatAngel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BoatAngels.iml" filepath="$PROJECT_DIR$/BoatAngels.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

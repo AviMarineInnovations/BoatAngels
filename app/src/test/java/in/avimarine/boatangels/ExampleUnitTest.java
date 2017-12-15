@@ -1,4 +1,4 @@
-package e.boatangels.boatangels;
+package in.avimarine.boatangels;
 
 import org.junit.Test;
 
