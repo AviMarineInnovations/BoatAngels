@@ -12,7 +12,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name="in.avimarine.boatangels.MainActivity">
+    <activity android:name="in.avimarine.boatangels.activities.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
