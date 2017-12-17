@@ -2,29 +2,33 @@ package in.avimarine.boatangels.db;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.db.objects.Boat;
+import in.avimarine.boatangels.db.objects.Inspection;
 import java.util.HashSet;
 import java.util.UUID;
 
 /**
- * Created by aayaffe on 16/12/2017.
+ * This file is part of an
+ * Avi Marine Innovations project: BoatAngels
+ * first created by aayaffe on 17/12/2017.
  */
 
 public class FireBase implements iDb {
 
   private static final String TAG = "FireBase";
   private FirebaseFirestore mFirestore;
-  private HashSet<Boat> boats = new HashSet<>();
+  private final HashSet<Boat> boats = new HashSet<>();
 
 
   public FireBase() {
-    mFirestore = FirebaseFirestore.getInstance();
-    FirebaseFirestore.setLoggingEnabled(true);
+      mFirestore = FirebaseFirestore.getInstance();
+      FirebaseFirestore.setLoggingEnabled(true);
   }
 
   @Override
@@ -37,8 +41,18 @@ public class FireBase implements iDb {
           Log.w(TAG, "Listen failed.", e);
           return;
         }
+        if (value==null)
+        {
+          Log.w(TAG, "Listen failed.");
+          return;
+        }
         for (DocumentSnapshot doc : value) {
           if (doc.get("name") != null) {
+            try {
+              doc.toObject(Boat.class);
+            }catch(Exception ex){
+              Log.e(TAG,"Get boats error.",ex);
+            }
             boats.add(doc.toObject(Boat.class));
           }
         }
@@ -61,4 +75,14 @@ public class FireBase implements iDb {
       }
       return null;
     }
+
+  @Override
+  public void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener ) {
+    mFirestore.collection("boats").whereEqualTo("marina", marina).get().addOnCompleteListener(listener);
   }
+
+  @Override
+  public void addInspection(Inspection i) {
+    mFirestore.collection("inspections").document(i.getUuid()).set(i);
+  }
+}

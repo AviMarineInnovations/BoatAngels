@@ -1,15 +1,24 @@
 package in.avimarine.boatangels.db;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.db.objects.Boat;
+import in.avimarine.boatangels.db.objects.Inspection;
 import java.util.UUID;
 
 /**
- * Created by aayaffe on 16/12/2017.
+ * This file is part of an
+ * Avi Marine Innovations project: BoatAngels
+ * first created by aayaffe on 17/12/2017.
  */
 
 public interface iDb {
 
   void setBoatQuery(String marina);
-  public void addBoat(Boat b);
-  public Boat getBoat(UUID uuid);
+  void addBoat(Boat b);
+  Boat getBoat(UUID uuid);
+
+  void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener);
+
+  void addInspection(Inspection inspection);
 }
