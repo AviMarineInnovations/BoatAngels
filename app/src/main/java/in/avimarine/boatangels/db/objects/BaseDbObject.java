@@ -1,6 +1,6 @@
 package in.avimarine.boatangels.db.objects;
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.firestore.Exclude;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,6 +15,7 @@ import java.util.UUID;
 
 
 public abstract class BaseDbObject {
+
 
   Long lastUpdateTime;
   Long firstAddedTime;

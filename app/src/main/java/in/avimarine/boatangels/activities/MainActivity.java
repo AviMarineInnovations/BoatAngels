@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -21,12 +22,9 @@ import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
-import in.avimarine.boatangels.db.objects.Boat;
-import java.util.ArrayList;
+import in.avimarine.boatangels.db.objects.Marina;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,12 +36,6 @@ public class MainActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.sign_out_btn)
   Button signout_btn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.set_boat_btn)
-  Button setboat_btn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.get_boat_btn)
-  Button getboat_btn;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspect_boat_btn)
   Button inspect_boat_btn;
@@ -74,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
               .build(),
           RC_SIGN_IN);
     }
-    db.setBoatQuery("Shavit");
     signout_btn.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -99,101 +90,62 @@ public class MainActivity extends AppCompatActivity {
             });
       }
     });
-    //TODO: Use @OnClick - Butterknife
-    setboat_btn.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Boat b = new Boat();
-        Random r = new Random();
-        b.location = new GeoPoint(r.nextInt(45-29)+29, r.nextInt(45-29)+29);
-        b.setFirstAddedTime(new Date());
-        b.setLastUpdate(new Date());
-        b.name = getRandomName(r.nextInt(49));
-        b.marina = "Shavit";
-        tempuuid = b.getUuid();
-        db.addBoat(b);
-      }
-    });
-    getboat_btn.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (tempuuid != null) {
-          Boat b = db.getBoat(UUID.fromString(tempuuid));
-          if (b != null) {
-            welcome_tv.setText(b.toString());
-          } else {
-            welcome_tv.setText(R.string.boat_not_found_message);
-          }
-        } else {
-          welcome_tv.setText(R.string.uuid_null_message);
-        }
-      }
-    });
-    inspect_boat_btn.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(MainActivity.this, InspectBoatActivity.class);
-        startActivity(intent);
-      }
-    });
+
   }
 
-  private String getRandomName(int i) { //TODO: Move to test utils later.
-    ArrayList<String> list = new ArrayList<>();
-    list.addAll(Arrays.asList(("J LYNN\n"
-        + "Jaguar\n"
-        + "Jalisco\n"
-        + "Jane Belle \n"
-        + "Jassy \n"
-        + "Jeanne Ann \n"
-        + "Jester\n"
-        + "Joana\n"
-        + "Joanna\n"
-        + "Join Venture\n"
-        + "Jolin-Jolan\n"
-        + "Jonas Whale\n"
-        + "Judge's Order\n"
-        + "June Bug\n"
-        + "Fair Weather\n"
-        + "Family Affair\n"
-        + "Fanny my Girl\n"
-        + "Fantastic\n"
-        + "Fantasy Five\n"
-        + "Fanthomas\n"
-        + "Far East\n"
-        + "Farolito\n"
-        + "Fatima\n"
-        + "Firewater\n"
-        + "Fish Bone\n"
-        + "Fish Tales\n"
-        + "Fish Tank\n"
-        + "Fisher Island\n"
-        + "Fishi Business\n"
-        + "Fishinator\n"
-        + "Flamenco\n"
-        + "Flipper\n"
-        + "Florida South\n"
-        + "Flying Cloud\n"
-        + "Folie \n"
-        + "Footloose\n"
-        + "For My Mom\n"
-        + "For Your Love\n"
-        + "Formidable \n"
-        + "Fortuna Lights\n"
-        + "Fortune \n"
-        + "Foxy Girl\n"
-        + "Frayed Knot\n"
-        + "Free Spirit\n"
-        + "Frejus\n"
-        + "French Connection\n"
-        + "French Girl\n"
-        + "Fully Engaged\n"
-        + "Funny Boat\n"
-        + "Funny Girl\n"
-        + "Funny Lady"
-    ).split("\\s+")));
-    return list.get(i);
+  @OnClick(R.id.add_boat_btn)
+  public void addBtnClick(View v) {
+    Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
+    startActivity(intent);
   }
+  @OnClick(R.id.inspect_boat_btn)
+  public void inspectBtnClick(View v) {
+    Intent intent = new Intent(MainActivity.this, InspectBoatActivity.class);
+    startActivity(intent);
+  }
+
+  /***
+   * For setting first marina db. Don't call!
+   */
+  private void addMarinas(){
+    Marina m = new Marina();
+    m.name = "Shavit, Haifa";
+    m.country = "Israel";
+    m.location = new GeoPoint(32.805672, 35.030550);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Herzliya";
+    m.country = "Israel";
+    m.location = new GeoPoint(32.162881, 34.795601);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Tel-Aviv";
+    m.country = "Israel";
+    m.location = new GeoPoint(32.086349, 34.767430);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Ashdod";
+    m.country = "Israel";
+    m.location = new GeoPoint(31.795030, 34.627701);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Ashkelon";
+    m.country = "Israel";
+    m.location = new GeoPoint(31.682364, 34.555713);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+  }
+
+
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
