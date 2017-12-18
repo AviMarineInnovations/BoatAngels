@@ -77,17 +77,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     boats_spinner.setAdapter(adapter);
-    boats_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(TAG, "Item Selected");
-      }
 
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-
-      }
-    });
   }
 
   @OnClick(R.id.submit_inspection_btn)
