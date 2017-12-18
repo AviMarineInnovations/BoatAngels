@@ -1,6 +1,9 @@
 package in.avimarine.boatangels.db.objects;
 
 import com.google.firebase.firestore.GeoPoint;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * This file is part of an
@@ -11,8 +14,13 @@ import com.google.firebase.firestore.GeoPoint;
 public class Boat extends BaseDbObject {
 
   public String name;
+  public String model;
   public GeoPoint location;
-  public String marina;
+  public String marinaUuid;
+  public String marinaName;
+
+
+  public final List<String> users = new ArrayList<>();
 
   @Override
   public String toString() {
@@ -21,8 +29,7 @@ public class Boat extends BaseDbObject {
         ", name='" + name + '\'' +
         ", lastUpdateTime=" + lastUpdateTime +
         ", firstAddedTime=" + firstAddedTime +
-        /*", aviLocation=" + aviLocation +*/
-        ", marina=" + marina +
+        ", marina=" + marinaName +
         '}';
   }
 

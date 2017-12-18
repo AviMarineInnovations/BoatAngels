@@ -3,7 +3,6 @@ package in.avimarine.boatangels.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,92 +20,124 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
-import in.avimarine.boatangels.db.objects.Inspection;
+import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * This file is part of an
- * Avi Marine Innovations project: BoatAngels
- * first created by aayaffe on 17/12/2017.
- */
+public class AddBoatActivity extends AppCompatActivity {
 
-public class InspectBoatActivity extends AppCompatActivity {
-
-  private static final String TAG = "InspectBoatActivity";
+  private static final String TAG = "AddBoatActivity";
   private iDb db;
-  private final List<Boat> boats = new ArrayList<>();
+  private final List<Marina> marinas = new ArrayList<>();
+
   @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.boat_spinner)
-  Spinner boats_spinner;
+  @BindView(R.id.marina_spinner)
+  Spinner marina_spinner;
   @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.inspection_editText)
-  EditText inspection_text;
-  private BoatSpinnerAdapter adapter;
+  @BindView(R.id.boatname_et)
+  EditText boatNameEt;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.boat_model_et)
+  EditText boatModelEt;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.latitude_et)
+  EditText boatLatEt;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.longitude_et)
+  EditText boatLonEt;
+
+
+  private MarinaSpinnerAdapter adapter;
+
 
   @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_inspect_boat);
+    setContentView(R.layout.activity_add_boat);
     ButterKnife.bind(this);
-    adapter  = new BoatSpinnerAdapter(this, boats);
+    adapter  = new MarinaSpinnerAdapter(this, marinas);
     db = new FireBase();
-    db.getBoatsInMarina("Shavit, Haifa", new OnCompleteListener<QuerySnapshot>() {
+    db.getMarinasInCountry("Israel", new OnCompleteListener<QuerySnapshot>() {
       @Override
       public void onComplete(@NonNull Task<QuerySnapshot> task) {
         if (task.isSuccessful()) {
           Log.d(TAG, "Received " + task.getResult().size() + " boats");
           for (DocumentSnapshot document : task.getResult()) {
-            boats.add(document.toObject(Boat.class));
+            marinas.add(document.toObject(Marina.class));
           }
           adapter.notifyDataSetChanged();
         } else {
           Log.d(TAG, "Error getting documents: ", task.getException());
-          Toast.makeText(InspectBoatActivity.this, "Error connecting to online service!", Toast.LENGTH_LONG).show();
+          Toast.makeText(AddBoatActivity.this, "Error connecting to online service!", Toast.LENGTH_LONG).show();
         }
       }
     });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    boats_spinner.setAdapter(adapter);
-
+    marina_spinner.setAdapter(adapter);
   }
-
-  @OnClick(R.id.submit_inspection_btn)
+  @OnClick(R.id.add_boat_btn)
   public void onClick(View v) {
-    Inspection inspection = new Inspection();
-    if (boats_spinner.getSelectedItem()==null)
+    Boat b = new Boat();
+    if (marina_spinner.getSelectedItem()==null)
     {
-      Toast.makeText(this,"No boat was selected",Toast.LENGTH_SHORT).show();
+      TextView tv = (TextView) marina_spinner.getSelectedView();
+      if (tv!=null)
+        tv.setError("No marina was selected");
+      else
+        Toast.makeText(this,"No marina was selected",Toast.LENGTH_SHORT).show();
       return;
     }
-    inspection.boatUid = ((Boat)boats_spinner.getSelectedItem()).getUuid();
-    inspection.boatName = ((Boat)boats_spinner.getSelectedItem()).name;
-    inspection.message = inspection_text.getText().toString();
-    inspection.inspectionTime = new Date().getTime();
-    inspection.inspectorUid = FirebaseAuth.getInstance().getUid();
-    db.addInspection(inspection);
+    b.marinaUuid = ((Marina)marina_spinner.getSelectedItem()).getUuid();
+    b.marinaName = ((Marina)marina_spinner.getSelectedItem()).name;
+    b.name = boatNameEt.getText().toString();
+    b.model = boatModelEt.getText().toString();
+    Double lat = GeneralUtils.tryParseDouble(boatLatEt.getText().toString());
+    Double lon = GeneralUtils.tryParseDouble(boatLonEt.getText().toString());
+    if (!isValidLat(lat)){
+      boatLatEt.setError("Out of range");
+      boatLatEt.requestFocus();
+      return;
+    }
+    if (!isValidLon(lon)){
+      boatLonEt.setError("Out of range");
+      boatLonEt.requestFocus();
+      return;
+    }
+    b.location = new GeoPoint(lat, lon);
+    b.setLastUpdate(new Date());
+    b.setFirstAddedTime(new Date());
+    b.users.add(FirebaseAuth.getInstance().getUid());
+    db.addBoat(b);
     finish();
   }
 
+  private boolean isValidLon(Double val) {
+    return val != null && (val >= -180) && (val <= 180);
+  }
+
+  private boolean isValidLat(Double val) {
+    return val != null && (val >= -90) && (val <= 90);
+  }
 
 
-
-  private class BoatSpinnerAdapter extends ArrayAdapter<Boat> {
+  private class MarinaSpinnerAdapter extends ArrayAdapter<Marina> {
 
     /**
      * The internal data (the ArrayList with the Objects).
      */
-    private final List<Boat> data;
+    private final List<Marina> data;
     private final Context context;
 
-    public BoatSpinnerAdapter(Context context,
-        List<Boat> values) {
+    public MarinaSpinnerAdapter(Context context,
+        List<Marina> values) {
       super(context, android.R.layout.simple_spinner_item,values);
       this.context = context;
       this.data = values;
@@ -125,7 +156,7 @@ public class InspectBoatActivity extends AppCompatActivity {
      * at the specified position.
      */
     @Override
-    public Boat getItem(int position) {
+    public Marina getItem(int position) {
       return data.get(position);
     }
 
@@ -148,15 +179,16 @@ public class InspectBoatActivity extends AppCompatActivity {
         @NonNull ViewGroup parent){
       View listItem = convertView;
       if(listItem == null)
-        listItem = LayoutInflater.from(context).inflate(android.R.layout.simple_spinner_item,parent,false);
+        listItem = LayoutInflater
+            .from(context).inflate(android.R.layout.simple_spinner_item,parent,false);
 
-      Boat boat = boats.get(position);
+      Marina marina = marinas.get(position);
 
       TextView name = listItem.findViewById(android.R.id.text1);
-      name.setText(boat.name);
+      name.setText(marina.name);
 
       return listItem;
     }
   }
-}
 
+}

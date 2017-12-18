@@ -1,12 +1,17 @@
-<resources>
-    <string name="app_name">BoatAngels</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">BoatAngels</string>
   <string name="sign_out">Sign Out</string>
   <string name="welcome_message">Welcome %1$s</string>
   <string name="send_btn_text">Send</string>
   <string name="inspection_for_yacht_title">Inspection for Yacht:</string>
-  <string name="get_boat_btn_text">Get Boat</string>
-  <string name="set_boat_btn_text">Set Boat</string>
   <string name="inspect_boat_btn_text">Inspect Boat</string>
-  <string name="boat_not_found_message">Boat not Found</string>
-  <string name="uuid_null_message">UUID null</string>
+  <string name="add_boat_btn_text">Add Boat</string>
+  <string name="title_activity_add_boat">AddBoatActivity</string>
+  <string name="boat_name_text">Name</string>
+  <string name="boat_model_text">Model</string>
+  <string name="marina_text">Marina</string>
+  <string name="latitude_text">Latitude</string>
+  <string name="longtitude_text">Longtitude</string>
+  <string name="add_btn_text">Add</string>
+  <string name="berth_text">Berth</string>
 </resources>

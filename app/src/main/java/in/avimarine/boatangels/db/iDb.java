@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
+import in.avimarine.boatangels.db.objects.Marina;
 import java.util.UUID;
 
 /**
@@ -21,4 +22,8 @@ public interface iDb {
   void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener);
 
   void addInspection(Inspection inspection);
+
+  void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener);
+
+  void addMarina(Marina m);
 }

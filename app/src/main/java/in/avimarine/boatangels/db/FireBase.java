@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
+import in.avimarine.boatangels.db.objects.Marina;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import java.util.UUID;
 public class FireBase implements iDb {
 
   private static final String TAG = "FireBase";
-  private FirebaseFirestore mFirestore;
+  private final FirebaseFirestore mFirestore;
   private final HashSet<Boat> boats = new HashSet<>();
 
 
@@ -78,11 +79,21 @@ public class FireBase implements iDb {
 
   @Override
   public void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener ) {
-    mFirestore.collection("boats").whereEqualTo("marina", marina).get().addOnCompleteListener(listener);
+    mFirestore.collection("boats").whereEqualTo("marinaName", marina).get().addOnCompleteListener(listener);
   }
 
   @Override
   public void addInspection(Inspection i) {
     mFirestore.collection("inspections").document(i.getUuid()).set(i);
+  }
+
+  @Override
+  public void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener) {
+    mFirestore.collection("marinas").whereEqualTo("country", country).get().addOnCompleteListener(listener);
+  }
+
+  @Override
+  public void addMarina(Marina m) {
+    mFirestore.collection("marinas").document(m.getUuid()).set(m);
   }
 }
