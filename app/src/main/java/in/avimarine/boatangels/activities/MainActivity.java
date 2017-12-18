@@ -1,9 +1,9 @@
 package in.avimarine.boatangels.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,35 +11,36 @@ import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
-import in.avimarine.boatangels.db.objects.Boat;
-import in.avimarine.boatangels.geographical.AviLocation;
+import in.avimarine.boatangels.db.objects.Marina;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = "MainActivity";
   private static final int RC_SIGN_IN = 123;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.welcome_message_textview)
   TextView welcome_tv;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.sign_out_btn)
   Button signout_btn;
-  @BindView(R.id.set_boat_btn)
-  Button setboat_btn;
-  @BindView(R.id.get_boat_btn)
-  Button getboat_btn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.inspect_boat_btn)
+  Button inspect_boat_btn;
 
-  private iDb db = new FireBase();
+  private final iDb db = new FireBase();
   private String tempuuid;
 
   @Override
@@ -65,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
               .build(),
           RC_SIGN_IN);
     }
-    db.setBoatQuery("Shavit");
     signout_btn.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -90,35 +90,62 @@ public class MainActivity extends AppCompatActivity {
             });
       }
     });
-    setboat_btn.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Boat b = new Boat();
-        b.aviLocation = new AviLocation(32.0, 33.0);
-        b.setFirstAddedTime(new Date());
-        b.setLastUpdate(new Date());
-        b.name = "Lou";
-        b.marina = "Shavit";
-        tempuuid = b.getUuid();
-        db.addBoat(b);
-      }
-    });
-    getboat_btn.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (tempuuid != null) {
-          Boat b = db.getBoat(UUID.fromString(tempuuid));
-          if (b != null) {
-            welcome_tv.setText(b.toString());
-          } else {
-            welcome_tv.setText("Boat not Found");
-          }
-        } else {
-          welcome_tv.setText("UUID null");
-        }
-      }
-    });
+
   }
+
+  @OnClick(R.id.add_boat_btn)
+  public void addBtnClick(View v) {
+    Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
+    startActivity(intent);
+  }
+  @OnClick(R.id.inspect_boat_btn)
+  public void inspectBtnClick(View v) {
+    Intent intent = new Intent(MainActivity.this, InspectBoatActivity.class);
+    startActivity(intent);
+  }
+
+  /***
+   * For setting first marina db. Don't call!
+   */
+  private void addMarinas(){
+    Marina m = new Marina();
+    m.name = "Shavit, Haifa";
+    m.country = "Israel";
+    m.location = new GeoPoint(32.805672, 35.030550);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Herzliya";
+    m.country = "Israel";
+    m.location = new GeoPoint(32.162881, 34.795601);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Tel-Aviv";
+    m.country = "Israel";
+    m.location = new GeoPoint(32.086349, 34.767430);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Ashdod";
+    m.country = "Israel";
+    m.location = new GeoPoint(31.795030, 34.627701);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+    m = new Marina();
+    m.name = "Ashkelon";
+    m.country = "Israel";
+    m.location = new GeoPoint(31.682364, 34.555713);
+    m.setFirstAddedTime(new Date());
+    m.setLastUpdate(new Date());
+    db.addMarina(m);
+  }
+
+
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
