@@ -1,7 +1,6 @@
 package in.avimarine.boatangels.geographical;
 
 import android.location.Location;
-//import com.google.android.gms.maps.model.LatLng;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +11,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GeoUtils {
 
+    @SuppressWarnings("WeakerAccess")
     public static final double NM2m = 1852.5;
     static public Location toLocation(AviLocation l){
         if (l==null)
@@ -19,7 +19,6 @@ public class GeoUtils {
         Location ret = new Location("Converted");
         ret.setLatitude(l.lat);
         ret.setLongitude(l.lon);
-        ret.setBearing(l.cog);
         return ret;
     }
 
@@ -44,7 +43,7 @@ public class GeoUtils {
     static public AviLocation toAviLocation(Location l){
         if (l==null)
             return null;
-        return new AviLocation(l.getLatitude(),l.getLongitude(),l.getBearing(),l.getSpeed(),new Date(l.getTime()));
+        return new AviLocation(l.getLatitude(),l.getLongitude(),new Date(l.getTime()));
     }
 
     public static AviLocation getLocationFromDirDist(AviLocation loc, double dir, int distm) {
@@ -59,29 +58,15 @@ public class GeoUtils {
         return new AviLocation(Math.toDegrees(lat2),Math.toDegrees(lon2));
     }
 
-//    public static Location getLocationFromDirDistm(Location loc, double dir, int distm) {
-//        double dis = (distm)/6371.009;
-//        double brng = Math.toRadians(dir);
-//        double lat1 = Math.toRadians(loc.getLatitude());
-//        double lon1 = Math.toRadians(loc.getLongitude());
-//        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dis) + Math.cos(lat1) * Math.sin(dis) * Math.cos(brng));
-//        double a = Math.atan2(Math.sin(brng)*Math.sin(dis)*Math.cos(lat1), Math.cos(dis)-Math.sin(lat1)*Math.sin(lat2));
-//        double lon2 = lon1 + a;
-//        lon2 = (lon2+ 3*Math.PI) % (2*Math.PI) - Math.PI;
-//        Location ret = new Location(loc);
-//        ret.setLatitude(Math.toDegrees(lat2));
-//        ret.setLongitude(Math.toDegrees(lon2));
-//        return ret;
-//    }
 
     public static AviLocation getLocationFromDirDist(AviLocation loc, double dir, double distNM) {
         return getLocationFromDirDist(loc,dir,(int)(distNM*GeoUtils.NM2m));
     }
 
     public static AviLocation getLocationFromTriangulation(AviLocation p1, double brng1, AviLocation p2,  double brng2){
-        AviLocation ret = new AviLocation();
-        double lat1 = Math.toRadians(p1.getLat()), lon1 = Math.toRadians(p1.getLon());
-        double lat2 = Math.toRadians(p2.getLat()), lon2 = Math.toRadians(p2.getLon());
+
+        double lat1 = Math.toRadians(p1.lat), lon1 = Math.toRadians(p1.lon);
+        double lat2 = Math.toRadians(p2.lat), lon2 = Math.toRadians(p2.lon);
         double brng13 = Math.toRadians(brng1), brng23 = Math.toRadians(brng2);
         double dLat = lat2 - lat1, dLon = lon2 - lon1;
         double dist12 = 2 * Math.asin(Math.sqrt(Math.sin(dLat / 2)
@@ -114,26 +99,23 @@ public class GeoUtils {
                 Math.cos(dist13) - Math.sin(lat1) * Math.sin(lat3));
         double lon3 = lon1 + dLon13;
         lon3 = (lon3 + Math.PI) % (2 * Math.PI) - Math.PI;
-        ret.lat = Math.toDegrees(lat3);
-        ret.lon = Math.toDegrees(lon3);
-        return ret;
+        return new AviLocation(Math.toDegrees(lat3),Math.toDegrees(lon3));
     }
 
     public static AviLocation getMidPointLocation(AviLocation p1, AviLocation p2){ //Middle point
-        AviLocation ret = new AviLocation();
-        double lon2 =p2.getLon();
-        double lon1 = p1.getLon();
+
+        double lon2 =p2.lon;
+        double lon1 = p1.lon;
         double dLon = Math.toRadians(lon2 - lon1);
-        double lat1 = Math.toRadians(p1.getLat());
-        double lat2 = Math.toRadians(p2.getLat());
-        lon1 = Math.toRadians(p1.getLon());
+        double lat1 = Math.toRadians(p1.lat);
+        double lat2 = Math.toRadians(p2.lat);
+        lon1 = Math.toRadians(p1.lon);
         double Bx = Math.cos(lat2) * Math.cos(dLon);
         double By = Math.cos(lat2) * Math.sin(dLon);
         double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
         double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
-        ret.lat=Math.toDegrees(lat3);
-        ret.lon=Math.toDegrees(lon3);
-        return ret;
+        return new AviLocation(Math.toDegrees(lat3),Math.toDegrees(lon3));
+
     }
 
     public static int relativeToTrueDirection(int trueDir, int relativDir){
@@ -185,9 +167,9 @@ enum LengthUnit {
      * unit will first be converted to this unit, then to
      * the desired unit.
      */
-    public static final LengthUnit PRIMARY = KILOMETER;
+    private static final LengthUnit PRIMARY = KILOMETER;
 
-    private double scaleFactor;
+    private final double scaleFactor;
 
     LengthUnit(double scaleFactor) {
         this.scaleFactor = scaleFactor;
