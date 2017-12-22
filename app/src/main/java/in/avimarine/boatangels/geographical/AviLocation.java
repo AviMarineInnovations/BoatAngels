@@ -1,9 +1,6 @@
 package in.avimarine.boatangels.geographical;
 
-//import android.location.Location;
-
-import com.google.firebase.database.Exclude;
-import java.io.Serializable;
+import in.avimarine.boatangels.db.objects.BaseDbObject;
 import java.util.Date;
 
 /**
@@ -11,71 +8,59 @@ import java.util.Date;
  *
  * Created by Amit Y. on 09/01/2016.
  */
-public class AviLocation implements Serializable {
+public class AviLocation extends BaseDbObject {
     public double lat;
     public double lon;
-    public double sog = 0;
-    public float cog = 0;
-    public Long lastUpdate;
 
-    public AviLocation() {
-        //Empty constructor for FireBase.
-    }
+    //public AviLocation(){}
     public AviLocation(double Lat, double Lng) {
+        super();
         lat = Lat;
         lon = Lng;
-        lastUpdate = new Date().getTime();
+        this.setLastUpdate(new Date());
     }
 
     /**
      *
-     * @param initial
-     * @param dir
-     * @param disNM
+     * @param source - source location
+     * @param dir - Direction from @source location
+     * @param disNM - Distance in NM from source location
      */
-    public AviLocation(AviLocation initial, float dir, double disNM){
-        AviLocation al = GeoUtils.getLocationFromDirDist(initial,dir,disNM);
-        lastUpdate = new Date().getTime();
-        lat = al.getLat();
-        lon = al.getLon();
+    public AviLocation(AviLocation source, float dir, double disNM){
+        AviLocation al = GeoUtils.getLocationFromDirDist(source,dir,disNM);
+        setLastUpdate(new Date());
+        lat= al.lat;
+        lon= al.lon;
     }
 
     /**
      * by 2 locations and 2 directions(radials)
-     * @param p1
-     * @param brng1
-     * @param p2
-     * @param brng2
+     * @param src1 - source location number 1
+     * @param brng1 - bearing from source location number1
+     * @param src2 - source location number2
+     * @param brng2 - bearing from source location number2
      */
-    public AviLocation(AviLocation p1, double brng1, AviLocation p2,  double brng2){
-        lastUpdate = new Date().getTime();
-        AviLocation al = GeoUtils.getLocationFromTriangulation(p1,brng1,p2,brng2);
-        lat= al.getLat();
-        lon= al.getLon();
+    public AviLocation(AviLocation src1, double brng1, AviLocation src2,  double brng2){
+        setLastUpdate(new Date());
+        AviLocation al = GeoUtils.getLocationFromTriangulation(src1,brng1,src2,brng2);
+        lat= al.lat;
+        lon= al.lon;
     }
 
     public AviLocation(AviLocation p1, AviLocation p2){ //Middle point
-        lastUpdate = new Date().getTime();
+        setLastUpdate(new Date());
         AviLocation al = GeoUtils.getMidPointLocation(p1,p2);
-        lat=al.getLat();
-        lon=al.getLon();
+        lat= al.lat;
+        lon= al.lon;
     }
 
 
-    public AviLocation(double Lat, double Lng,  float cog, double sog, Date lastUpdate) {
+    public AviLocation(double Lat, double Lng,  Date lastUpdate) {
         lat = Lat;
         lon = Lng;
-        this.sog = sog;
-        this.cog = cog;
-        this.lastUpdate = lastUpdate.getTime();
+        setLastUpdate(lastUpdate);
 
     }
-
-
-
-//    public Location toLocation(){
-//        return GeoUtils.createLocation(lat,lon);
-//    }
 
     public static long Age(AviLocation aviLocation) {
         if (aviLocation==null) return -1;
@@ -116,62 +101,10 @@ public class AviLocation implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        AviLocation that = (AviLocation) o;
-        return Double.compare(that.lat, lat) == 0 && Double.compare(that.lon, lon) == 0 && Double.compare(that.sog, sog) == 0 && Float.compare(that.cog, cog) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(lat);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(lon);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(sog);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (cog != +0.0f ? Float.floatToIntBits(cog) : 0);
-        return result;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-    public double getLon() {
-        return lon;
-    }
-
-    public AviLocation setLat(double Lat) {
-        this.lat=Lat;
-        return this;
-    }
-    public AviLocation setLon(double Lng) {
-        this.lon=Lng;
-        return this;
-    }
-
-    @Exclude
-    public Date getLastUpdate() {
-        return new Date(lastUpdate);
-    }
-    @Exclude
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate.getTime();
-    }
-
-    @Override
     public String toString() {
         return "AviLocation{" +
             "lat=" + lat +
             ", lon=" + lon +
-            ", sog=" + sog +
-            ", cog=" + cog +
-            ", lastUpdate=" + lastUpdate +
             '}';
     }
 }
