@@ -24,7 +24,7 @@ android:
     - sys-img-armeabi-v7a-android-22
     - sys-img-armeabi-v7a-android-17
   licenses:
-    - 'android-sdk-license-.+'
+    - 'android-sdk-license-26.+'
     - 'google-gdk-license-.+'
     
   before_install:
