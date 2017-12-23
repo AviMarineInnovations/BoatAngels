@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/message_container"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingTop="5dp"
+  android:paddingBottom="5dp">
+
+  <LinearLayout
+    android:id="@+id/message"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="26dp"
+    android:layout_marginRight="26dp"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+      android:id="@+id/date_time"
+      style="@style/TextAppearance.AppCompat.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textIsSelectable="true"
+      android:textStyle="bold"
+      tools:text="Hey this is a message, look!" />
+
+    <TextView
+      android:id="@+id/inspection_text"
+      style="@style/TextAppearance.AppCompat.Small"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textIsSelectable="true"
+      tools:text="Some User" />
+
+  </LinearLayout>
+
+</RelativeLayout>

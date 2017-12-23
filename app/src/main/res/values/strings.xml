@@ -14,4 +14,5 @@
   <string name="longtitude_text">Longtitude</string>
   <string name="add_btn_text">Add</string>
   <string name="berth_text">Berth</string>
+  <string name="show_inspections_btn_text">Show Inspections</string>
 </resources>

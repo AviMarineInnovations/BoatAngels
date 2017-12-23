@@ -47,5 +47,15 @@
     android:text="@string/add_boat_btn_text"
     app:layout_constraintStart_toEndOf="@+id/inspect_boat_btn"
     app:layout_constraintTop_toTopOf="parent"/>
+  <Button
+    android:id="@+id/show_inspections_btn"
+    android:layout_width="120dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:text="@string/show_inspections_btn_text"
+    app:layout_constraintStart_toEndOf="@+id/add_boat_btn"
+    app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

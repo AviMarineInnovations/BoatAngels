@@ -103,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = new Intent(MainActivity.this, InspectBoatActivity.class);
     startActivity(intent);
   }
+  @OnClick(R.id.show_inspections_btn)
+  public void showInspectionsBtnClick(View v) {
+    Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
+    intent.putExtra("BOAT_NAME","Goog");
+    startActivity(intent);
+  }
 
   /***
    * For setting first marina db. Don't call!
