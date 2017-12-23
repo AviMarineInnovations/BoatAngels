@@ -15,7 +15,8 @@
     android:layout_marginLeft="26dp"
     android:layout_marginRight="26dp"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp"
+    tools:ignore="UselessParent">
 
     <TextView
       android:id="@+id/date_time"

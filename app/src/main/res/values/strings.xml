@@ -15,4 +15,7 @@
   <string name="add_btn_text">Add</string>
   <string name="berth_text">Berth</string>
   <string name="show_inspections_btn_text">Show Inspections</string>
+  <string name="inspection_for_title_prefix">Inspections for</string>
+  <string name="intent_extra_boat_name">BOAT_NAME</string>
+  <string name="no_boat_name_error">No boat passed to Activity</string>
 </resources>
