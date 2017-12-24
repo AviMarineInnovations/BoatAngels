@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
   Button inspect_boat_btn;
 
   private final iDb db = new FireBase();
-  private String tempuuid;
-
+  private String ownBoatName = "Goog"; //TODO: Get from DB
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -91,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
+
   }
 
   @OnClick(R.id.add_boat_btn)
@@ -101,6 +101,12 @@ public class MainActivity extends AppCompatActivity {
   @OnClick(R.id.inspect_boat_btn)
   public void inspectBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, InspectBoatActivity.class);
+    startActivity(intent);
+  }
+  @OnClick(R.id.show_inspections_btn)
+  public void showInspectionsBtnClick(View v) {
+    Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
+    intent.putExtra(getString(R.string.intent_extra_boat_name),ownBoatName);
     startActivity(intent);
   }
 
@@ -163,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
           welcome_tv
               .setText(String.format(getString(R.string.welcome_message),
                   FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
+          //TODO: get boat name and save to variable. If no boat assigned to user disable boat related buttons (such as show inspections).
         }
         signout_btn.setEnabled(true);
         return;
