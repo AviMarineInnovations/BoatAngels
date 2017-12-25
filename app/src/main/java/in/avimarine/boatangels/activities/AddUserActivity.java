@@ -1,7 +1,8 @@
-package in.avimarine.boatangels;
+package in.avimarine.boatangels.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import in.avimarine.boatangels.R;
 
 public class activity_add_user extends AppCompatActivity {
 
