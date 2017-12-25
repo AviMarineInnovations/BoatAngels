@@ -110,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
+  @OnClick(R.id.add_user_btn)
+  public void addUserBtn(View v) {
+    Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+    startActivity(intent);
+  }
+
   /***
    * For setting first marina db. Don't call!
    */

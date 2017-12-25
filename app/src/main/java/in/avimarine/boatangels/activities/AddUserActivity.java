@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import in.avimarine.boatangels.R;
 
-public class activity_add_user extends AppCompatActivity {
+public class AddUserActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
