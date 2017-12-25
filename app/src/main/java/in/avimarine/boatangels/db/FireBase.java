@@ -8,9 +8,12 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import in.avimarine.boatangels.activities.AddUserActivity;
+import in.avimarine.boatangels.activities.MainActivity;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.db.objects.User;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -77,14 +80,24 @@ public class FireBase implements iDb {
       return null;
     }
 
+
+
   @Override
   public void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener ) {
     mFirestore.collection("boats").whereEqualTo("marinaName", marina).get().addOnCompleteListener(listener);
   }
 
+
+
   @Override
   public void addInspection(Inspection i) {
     mFirestore.collection("inspections").document(i.getUuid()).set(i);
+  }
+
+  @Override
+  public void addusers(User user) {
+      mFirestore.collection("Users").document(user.getUuid()).set(user);
+
   }
 
   @Override

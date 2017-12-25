@@ -8,7 +8,7 @@
   tools:context="in.avimarine.boatangels.activities.AddUserActivity">
 
   <EditText
-    android:id="@+id/editText"
+    android:id="@+id/name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:ems="10"
@@ -21,7 +21,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.028"/>
   <EditText
-    android:id="@+id/editText4"
+    android:id="@+id/mail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:ems="10"
@@ -34,7 +34,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.188"/>
   <EditText
-    android:id="@+id/editText5"
+    android:id="@+id/phone"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:ems="10"
@@ -47,7 +47,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.324"/>
   <EditText
-    android:id="@+id/editText6"
+    android:id="@+id/country"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:ems="10"
@@ -59,4 +59,15 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.469"/>
+  <Button
+    android:id="@+id/btn_sign_in"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="204dp"
+    android:text="@string/btn_sign_in"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.498"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/country"/>
+
 </android.support.constraint.ConstraintLayout>

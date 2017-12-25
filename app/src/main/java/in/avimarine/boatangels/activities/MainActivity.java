@@ -18,6 +18,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser CurrentUser = auth.getCurrentUser();
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
       welcome_tv.setText(String
@@ -91,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
     });
 
 
+  }
+
+  public static String UID(){
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser CurrentUser = auth.getCurrentUser();
+    String UserUID = CurrentUser.getUid();
+    return UserUID;
   }
 
   @OnClick(R.id.add_boat_btn)
