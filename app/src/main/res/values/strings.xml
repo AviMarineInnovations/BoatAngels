@@ -18,4 +18,6 @@
   <string name="inspection_for_title_prefix">Inspections for</string>
   <string name="intent_extra_boat_name">BOAT_NAME</string>
   <string name="no_boat_name_error">No boat passed to Activity</string>
+  <string name="boat_drawing_content_description">boat drawing</string>
+  <string name="intent_extra_inspection_messag">INSPECTION_MESSAGE</string>
 </resources>
