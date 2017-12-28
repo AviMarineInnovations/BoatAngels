@@ -2,20 +2,17 @@ package in.avimarine.boatangels;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 /**
  * This file is part of an
  * Avi Marine Innovations project: BoatAngels
  * first created by aayaffe on 28/12/2017.
+ *
+ * This class is a special CheckBox with three states instead of one.
  */
 
-public class CheckBoxTriState extends CheckBox {
-
-//  private static final int UNCHECKED = -1;
-//  private static final int XCHECKED = 0;
-//  private static final int VCHECKED = 1;
+public class CheckBoxTriState extends android.support.v7.widget.AppCompatCheckBox {
   private State state;
 
   public CheckBoxTriState(Context context) {
@@ -39,7 +36,6 @@ public class CheckBoxTriState extends CheckBox {
 
     setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-      // checkbox status is changed from uncheck to checked.
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (state) {
           case UNCHECKED:
@@ -84,7 +80,7 @@ public class CheckBoxTriState extends CheckBox {
     updateBtn();
   }
   public enum State{
-    UNCHECKED, XCHECKED , VCHECKED ;
+    UNCHECKED, XCHECKED , VCHECKED
   }
 
 }

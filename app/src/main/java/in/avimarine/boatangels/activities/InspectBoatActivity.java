@@ -1,16 +1,21 @@
 package in.avimarine.boatangels.activities;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -32,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This file is part of an
@@ -48,14 +55,28 @@ public class InspectBoatActivity extends AppCompatActivity {
   @BindView(R.id.boat_spinner)
   Spinner boats_spinner;
   @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.inspection_editText)
+  @BindView(R.id.message_linedEditText)
   EditText inspection_text;
+  @BindView(R.id.checkBox_bow)
+  CheckBoxTriState checkbox_bow;
+  @BindView(R.id.checkBox_jib)
+  CheckBoxTriState checkbox_jib;
+  @BindView(R.id.checkBox_mainsail)
+  CheckBoxTriState checkbox_main;
+  @BindView(R.id.checkBox_stern)
+  CheckBoxTriState checkbox_stern;
+  @BindView(R.id.moored_boat_body)
+  ImageView boatBody;
+  @BindView(R.id.moored_boat_bowlines)
+  ImageView boatBowLines;
+  @BindView(R.id.moored_boat_sternlines)
+  ImageView boatSternLines;
   private BoatSpinnerAdapter adapter;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_inspect_boat);
+    setContentView(R.layout.activity_inspect_boat_graphic);
     ButterKnife.bind(this);
     adapter  = new BoatSpinnerAdapter(this, boats);
     db = new FireBase();
@@ -76,10 +97,21 @@ public class InspectBoatActivity extends AppCompatActivity {
     });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     boats_spinner.setAdapter(adapter);
+    OnClickListener ocl = new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        colorBoat();
+      }
+    };
+    checkbox_stern.setOnClickListener(ocl);
+    checkbox_bow.setOnClickListener(ocl);
+    checkbox_jib.setOnClickListener(ocl);
+    checkbox_main.setOnClickListener(ocl);
+    colorBoat();
 
   }
 
-  @OnClick(R.id.submit_inspection_btn)
+  @OnClick(R.id.send_inspection_btn)
   public void onClick(View v) {
     Inspection inspection = new Inspection();
     if (boats_spinner.getSelectedItem()==null)
@@ -92,15 +124,103 @@ public class InspectBoatActivity extends AppCompatActivity {
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
     inspection.inspectorUid = FirebaseAuth.getInstance().getUid();
-    inspection.inspectorName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName(); //TODO: Switch to using name from User object
-    inspection.finding = new HashMap<>();
-    inspection.finding.put("BOWLINES", State.UNCHECKED.name());
-    inspection.finding.put("JIB", State.VCHECKED.name());
-    inspection.finding.put("MAIN", State.XCHECKED.name());
-    inspection.finding.put("STERNLINES", State.UNCHECKED.name());
+    if (FirebaseAuth.getInstance().getCurrentUser()!=null) {
+      inspection.inspectorName = FirebaseAuth.getInstance().getCurrentUser()
+          .getDisplayName(); //TODO: Switch to using name from User object
+    }
+    inspection.finding = getCheckBoxes();
     db.addInspection(inspection);
     finish();
   }
+
+
+
+  private void colorBoat() {
+    if (checkbox_bow.getState()==State.VCHECKED){
+      final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.VCheckedRopes);
+      final Drawable drawable = ResourcesCompat
+          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines, wrapper.getTheme());
+      boatBowLines.setImageDrawable(drawable);
+    }
+    else if (checkbox_bow.getState()==State.XCHECKED){
+      final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.XCheckedRopes);
+      final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines, wrapper.getTheme());
+      boatBowLines.setImageDrawable(drawable);
+    }
+    else {
+      final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.UncheckedBoat);
+      final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines, wrapper.getTheme());
+      boatBowLines.setImageDrawable(drawable);
+    }
+    if (checkbox_stern.getState()==State.VCHECKED){
+      final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.VCheckedRopes);
+      final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines, wrapper.getTheme());
+      boatSternLines.setImageDrawable(drawable);
+    }
+    else if (checkbox_stern.getState()==State.XCHECKED){
+      final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.XCheckedRopes);
+      final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines, wrapper.getTheme());
+      boatSternLines.setImageDrawable(drawable);
+    }
+    else {
+      final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.UncheckedBoat);
+      final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines, wrapper.getTheme());
+      boatSternLines.setImageDrawable(drawable);
+    }
+    ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.UncheckedBoat);
+    Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+    boatBody.setImageDrawable(drawable);
+    if (checkbox_jib.getState()==State.VCHECKED&&checkbox_main.getState()==State.VCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.VCheckedJibVCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.VCHECKED&&checkbox_main.getState()==State.XCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.VCheckedJibXCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.XCHECKED&&checkbox_main.getState()==State.VCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.XCheckedJibVCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.XCHECKED&&checkbox_main.getState()==State.XCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.XCheckedJibXCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.UNCHECKED&&checkbox_main.getState()==State.XCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.UnCheckedJibXCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.UNCHECKED&&checkbox_main.getState()==State.VCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.UnCheckedJibVCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.XCHECKED&&checkbox_main.getState()==State.UNCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.XCheckedJibUnCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+    else if (checkbox_jib.getState()==State.VCHECKED&&checkbox_main.getState()==State.UNCHECKED){
+      wrapper = new ContextThemeWrapper(this, R.style.VCheckedJibUnCheckedMain);
+      drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
+      boatBody.setImageDrawable(drawable);
+    }
+  }
+
+  private Map<String,String> getCheckBoxes() {
+    Map<String,String> ret =new HashMap<>();
+    ret.put("BOWLINES",checkbox_bow.getState().name());
+    ret.put("JIB",checkbox_jib.getState().name());
+    ret.put("MAIN",checkbox_main.getState().name());
+    ret.put("STERNLINES",checkbox_stern.getState().name());
+    return ret;
+  }
+
 
 
 

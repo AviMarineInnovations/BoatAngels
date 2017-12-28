@@ -93,8 +93,8 @@ public class InspectionResultActivity extends AppCompatActivity {
   public void updateUI(Inspection i){
     GeneralUtils.enableAndShowViews(title,subtitle,message,boatBody,boatBowLines,boatSternLines);
     GeneralUtils.showViews(checkbox_bow,checkbox_jib,checkbox_main,checkbox_stern);
-    title.setText("Inspection for " + i.boatName);
-    subtitle.setText("Made by " + i.inspectorName+" on " + GeneralUtils.toFormatedDateString(this,new Date(i.inspectionTime)));
+    title.setText(getString(R.string.inspection_title,i.boatName));
+    subtitle.setText(getString(R.string.inspection_subtitle, i.inspectorName, GeneralUtils.toFormatedDateString(this,new Date(i.inspectionTime))));
     message.setText(i.message);
     setCheckBoxes(i);
     colorBoat();

@@ -9,8 +9,8 @@ import java.util.Date;
  * Created by Amit Y. on 09/01/2016.
  */
 public class AviLocation extends BaseDbObject {
-    public double lat;
-    public double lon;
+    public final double lat;
+    public final double lon;
 
     //public AviLocation(){}
     public AviLocation(double Lat, double Lng) {
