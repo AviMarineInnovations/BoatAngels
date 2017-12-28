@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
@@ -29,6 +30,7 @@ import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -90,6 +92,12 @@ public class InspectBoatActivity extends AppCompatActivity {
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
     inspection.inspectorUid = FirebaseAuth.getInstance().getUid();
+    inspection.inspectorName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName(); //TODO: Switch to using name from User object
+    inspection.finding = new HashMap<>();
+    inspection.finding.put("BOWLINES", State.UNCHECKED.name());
+    inspection.finding.put("JIB", State.VCHECKED.name());
+    inspection.finding.put("MAIN", State.XCHECKED.name());
+    inspection.finding.put("STERNLINES", State.UNCHECKED.name());
     db.addInspection(inspection);
     finish();
   }

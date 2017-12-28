@@ -20,4 +20,7 @@
   <string name="no_boat_name_error">No boat passed to Activity</string>
   <string name="boat_drawing_content_description">boat drawing</string>
   <string name="intent_extra_inspection_messag">INSPECTION_MESSAGE</string>
+  <string name="intent_extra_inspection_uuid">EXTRA_UUID</string>
+  <string name="addphotosbuton_content_description">AddPhotosButon</string>
+  <string name="sendbutton_content_description">SendButton</string>
 </resources>

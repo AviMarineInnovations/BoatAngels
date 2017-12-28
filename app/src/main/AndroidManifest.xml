@@ -19,7 +19,8 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".activities.InspectBoatActivity">
+    <activity android:name=".activities.InspectBoatActivity"
+      android:screenOrientation="portrait">
     </activity>
     <activity
       android:label="@string/title_activity_add_boat"
@@ -28,7 +29,8 @@
     </activity>
     <activity android:name=".activities.InspectionsListActivity">
     </activity>
-    <activity android:name=".activities.InspectionResultActivity">
+    <activity android:name=".activities.InspectionResultActivity"
+      android:screenOrientation="portrait">
     </activity>
   </application>
 

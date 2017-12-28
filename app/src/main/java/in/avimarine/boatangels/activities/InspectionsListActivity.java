@@ -56,7 +56,7 @@ public class InspectionsListActivity extends AppCompatActivity {
         Inspection item = (Inspection) adapter.getItem(itemPosition);
 
         Intent intent = new Intent(InspectionsListActivity.this, InspectionResultActivity.class);
-        intent.putExtra(getString(R.string.intent_extra_inspection_messag),item.message);
+        intent.putExtra(getString(R.string.intent_extra_inspection_uuid),item.getUuid());
         startActivity(intent);
       }
     };

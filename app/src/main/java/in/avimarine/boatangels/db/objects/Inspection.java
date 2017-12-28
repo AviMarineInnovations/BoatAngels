@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class Inspection extends BaseDbObject {
   public String inspectorUid;
+  public String inspectorName;
   public String boatUid;
   public String boatName;
   public String message;

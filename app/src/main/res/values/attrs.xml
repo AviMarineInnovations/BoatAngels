@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="moored_boat_drawing">
+    <attr name="bowlines" format="color" />
+    <attr name="sternlines" format="color" />
+    <attr name="jib" format="color" />
+    <attr name="main" format="color" />
+  </declare-styleable>
+</resources>
