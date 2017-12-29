@@ -2,7 +2,6 @@ package in.avimarine.boatangels.activities;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -10,14 +9,12 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.User;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -50,11 +47,11 @@ public class AddUserActivity extends AppCompatActivity {
         country = countryCodePicker.getSelectedCountryName();
 
         if (!validInput(name)) {
-          editTextName.setError("Enter a Name");
-        } else if (!validInput(mail)) {
-          editTextMail.setError("Enter an valid e-mail address");
+          editTextName.setError(getString(R.string.name_error_message));
+        } else if (!validInput(mail)||!GeneralUtils.isValidEmail(mail)) {
+          editTextMail.setError(getString(R.string.email_error_message));
         } else if (!isValidMobile(phone)) {
-          editTextPhone.setError("Enter a valid phone number");
+          editTextPhone.setError(getString(R.string.phone_number_error_message));
         } else {
 
           uid = FirebaseAuth.getInstance().getUid();
@@ -88,4 +85,5 @@ public class AddUserActivity extends AppCompatActivity {
     }
     return false;
   }
+
 }
