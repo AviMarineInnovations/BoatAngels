@@ -26,7 +26,7 @@
     android:layout_height="wrap_content"
     android:ems="10"
     android:hint="@string/add_user_mail"
-    android:inputType="textPersonName"
+    android:inputType="textEmailAddress"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.918"
@@ -39,7 +39,7 @@
     android:layout_height="wrap_content"
     android:ems="10"
     android:hint="@string/add_user_phone"
-    android:inputType="textPersonName"
+    android:inputType="phone"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.918"
@@ -69,5 +69,4 @@
     app:layout_constraintHorizontal_bias="0.498"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/country"/>
-
 </android.support.constraint.ConstraintLayout>

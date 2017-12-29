@@ -8,8 +8,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import in.avimarine.boatangels.activities.AddUserActivity;
-import in.avimarine.boatangels.activities.MainActivity;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
@@ -87,6 +85,11 @@ public class FireBase implements iDb {
     mFirestore.collection("boats").whereEqualTo("marinaName", marina).get().addOnCompleteListener(listener);
   }
 
+  @Override
+  public void getUser(String uid, OnCompleteListener<QuerySnapshot> listener ) {
+    mFirestore.collection("Users").whereEqualTo("uid", uid).get().addOnCompleteListener(listener);
+  }
+
 
 
   @Override
@@ -95,8 +98,8 @@ public class FireBase implements iDb {
   }
 
   @Override
-  public void addusers(User user) {
-      mFirestore.collection("Users").document(user.getUuid()).set(user);
+  public void addUser(User user) {
+      mFirestore.collection("Users").document(user.uid).set(user);
 
   }
 

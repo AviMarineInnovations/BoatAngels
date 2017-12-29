@@ -85,6 +85,7 @@ public class AddBoatActivity extends AppCompatActivity {
   }
   @OnClick(R.id.add_boat_btn)
   public void onClick(View v) {
+
     Boat b = new Boat();
     if (marina_spinner.getSelectedItem()==null)
     {
@@ -190,5 +191,7 @@ public class AddBoatActivity extends AppCompatActivity {
       return listItem;
     }
   }
+
+
 
 }
