@@ -18,4 +18,12 @@
   <string name="inspection_for_title_prefix">Inspections for</string>
   <string name="intent_extra_boat_name">BOAT_NAME</string>
   <string name="no_boat_name_error">No boat passed to Activity</string>
+  <string name="add_user_name">Name</string>
+  <string name="add_user_mail">Mail</string>
+  <string name="add_user_phone">Phone</string>
+  <string name="add_user_country">Country</string>
+  <string name="add_user_btn">Add User</string>
+  <string name="btn_sign_in">Sign In</string>
+
+
 </resources>

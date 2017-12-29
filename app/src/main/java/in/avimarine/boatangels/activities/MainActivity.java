@@ -18,6 +18,10 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = "MainActivity";
   private static final int RC_SIGN_IN = 123;
+  private FirebaseFirestore DB = FirebaseFirestore.getInstance();
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.welcome_message_textview)
   TextView welcome_tv;
@@ -40,16 +45,21 @@ public class MainActivity extends AppCompatActivity {
   @BindView(R.id.inspect_boat_btn)
   Button inspect_boat_btn;
 
+
   private final iDb db = new FireBase();
   private String ownBoatName = "Goog"; //TODO: Get from DB
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser CurrentUser = auth.getCurrentUser();
+
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
+      checkIfUserRegistry(FirebaseAuth.getInstance().getUid());
       welcome_tv.setText(String
           .format(getString(R.string.welcome_message), auth.getCurrentUser().getDisplayName()));
       signout_btn.setEnabled(true);
@@ -93,6 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
   }
 
+  public static String UID(){
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser CurrentUser = auth.getCurrentUser();
+    String UserUID = CurrentUser.getUid();
+    return UserUID;
+  }
+
   @OnClick(R.id.add_boat_btn)
   public void addBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
@@ -110,9 +127,26 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
-  /***
-   * For setting first marina db. Don't call!
-   */
+  public void checkIfUserRegistry (String uid) {
+    DocumentReference docRef = DB.collection("Users").document(uid);
+    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+      @Override
+      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult();
+          if (!document.exists()) {
+            Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+            startActivity(intent);
+
+          }
+        }
+      }
+    });
+  }
+
+    /***
+     * For setting first marina db. Don't call!
+     */
   private void addMarinas(){
     Marina m = new Marina();
     m.name = "Shavit, Haifa";
