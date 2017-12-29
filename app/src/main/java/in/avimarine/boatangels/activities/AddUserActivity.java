@@ -43,20 +43,33 @@ public class AddUserActivity extends AppCompatActivity {
         mail = EditTExtMail.getText().toString();
         phone = EditTExtPhone.getText().toString();
         country = EditTExtCountry.getText().toString();
-        firstJoinTime = GetCurrentDate();
-        uid = FirebaseAuth.getInstance().getUid();
-        lastUpdateTime = GetCurrentDate();
 
-        User user = new User();
-        user.DisplayName = name;
-        user.Mail = mail;
-        user.Phone = phone;
-        user.Country = country;
-        user.FirstJoinTime = firstJoinTime;
-        user.LastUpdateTime = lastUpdateTime;
-        user.uid = uid;
-        db.addUser(user);
-        finish();
+        if (!validInput(name)) {
+          EditTExtName.setError("Enter a Name");
+        } else if (!validInput(mail)) {
+          EditTExtMail.setError("Enter a Mail");
+        } else if (!validInput(phone)) {
+          EditTExtPhone.setError("Enter a phone");
+        } else if (!validInput(country)) {
+          EditTExtCountry.setError("Enter a country");
+        }
+        else {
+
+          firstJoinTime = GetCurrentDate();
+          uid = FirebaseAuth.getInstance().getUid();
+          lastUpdateTime = GetCurrentDate();
+
+          User user = new User();
+          user.DisplayName = name;
+          user.Mail = mail;
+          user.Phone = phone;
+          user.Country = country;
+          user.FirstJoinTime = firstJoinTime;
+          user.LastUpdateTime = lastUpdateTime;
+          user.uid = uid;
+          db.addUser(user);
+          finish();
+        }
       }
     });
 
@@ -68,6 +81,13 @@ public class AddUserActivity extends AppCompatActivity {
     Date dateobj = new Date();
     return dateobj;
 
+  }
+
+  private boolean validInput(String inputGet){
+    if (inputGet.equals("")){
+      return false;
+    }
+    return true;
   }
 
 }
