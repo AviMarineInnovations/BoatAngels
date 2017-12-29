@@ -1,0 +1,91 @@
+package in.avimarine.boatangels.activities;
+
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.hbb20.CountryCodePicker;
+import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.db.FireBase;
+import in.avimarine.boatangels.db.iDb;
+import in.avimarine.boatangels.db.objects.User;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Pattern;
+
+public class AddUserActivity extends AppCompatActivity {
+  private String name;
+  private String mail;
+  private String phone;
+  private String country;
+  private String uid;
+  private final iDb db = new FireBase();
+
+  @BindView(R.id.ccp)
+  CountryCodePicker countryCodePicker;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_add_user);
+    ButterKnife.bind(this);
+    Button button = findViewById(R.id.btn_sign_in);
+    button.setOnClickListener(new View.OnClickListener() {
+
+      public void onClick(View v) {
+        EditText editTextName = findViewById(R.id.name);
+        EditText editTextMail = findViewById(R.id.mail);
+        EditText editTextPhone = findViewById(R.id.phone);
+        name = editTextName.getText().toString();
+        mail = editTextMail.getText().toString();
+        phone = editTextPhone.getText().toString();
+        country = countryCodePicker.getSelectedCountryName();
+
+        if (!validInput(name)) {
+          editTextName.setError("Enter a Name");
+        } else if (!validInput(mail)) {
+          editTextMail.setError("Enter an valid e-mail address");
+        } else if (!isValidMobile(phone)) {
+          editTextPhone.setError("Enter a valid phone number");
+        } else {
+
+          uid = FirebaseAuth.getInstance().getUid();
+
+          User user = new User();
+          user.displayName = name;
+          user.mail = mail;
+          user.phone = phone;
+          user.country = country;
+          user.firstJoinTime = new Date();
+          user.setFirstAddedTime(new Date());
+          user.setLastUpdate(new Date());
+          user.uid = uid;
+          db.addUser(user);
+          finish();
+        }
+      }
+    });
+  }
+
+  private boolean validInput(String s) {
+    return s != null && !s.isEmpty();
+  }
+
+  private boolean isValidMobile(String phone) {
+    if (!Pattern.matches("[a-zA-Z]+", phone)) {
+      if (phone.length() < 6 || phone.length() > 13) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+}
