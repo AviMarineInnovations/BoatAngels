@@ -87,6 +87,7 @@ public class AddUserActivity extends AppCompatActivity {
     if (inputGet.equals("")){
       return false;
     }
+    
     return true;
   }
 
