@@ -11,6 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.db.objects.User;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -83,6 +84,7 @@ public class FireBase implements iDb {
     mFirestore.collection("boats").whereEqualTo("marinaName", marina).get().addOnCompleteListener(listener);
   }
 
+
   @Override
   public void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener ) {
     mFirestore.collection("inspections").document(uuid).get().addOnCompleteListener(listener);
@@ -91,6 +93,15 @@ public class FireBase implements iDb {
   @Override
   public void addInspection(Inspection i) {
     mFirestore.collection("inspections").document(i.getUuid()).set(i);
+  }
+
+  @Override
+  public void addUser(User user) {
+      mFirestore.collection("users").document(user.uid).set(user);
+  }
+  @Override
+  public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
+    mFirestore.collection("users").document(uid).get().addOnCompleteListener(listener);
   }
 
   @Override

@@ -23,4 +23,10 @@
   <string name="sendbutton_content_description">SendButton</string>
   <string name="inspection_title">Inspection for %s</string>
   <string name="inspection_subtitle">Made by %s on %s</string>
+  <string name="add_user_name">Name</string>
+  <string name="add_user_mail">Mail</string>
+  <string name="add_user_phone">Phone</string>
+  <string name="add_user_country">Country</string>
+  <string name="add_user_btn">Add User</string>
+  <string name="btn_sign_in">Sign Up</string>
 </resources>

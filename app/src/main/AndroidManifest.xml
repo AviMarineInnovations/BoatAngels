@@ -31,6 +31,8 @@
     </activity>
     <activity android:name=".activities.InspectionResultActivity"
       android:screenOrientation="portrait">
+	</activity>
+    <activity android:name=".activities.AddUserActivity">
     </activity>
   </application>
 

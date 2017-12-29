@@ -9,6 +9,7 @@ buildscript {
         maven {
             url 'https://maven.fabric.io/public'
 
+
         }
     }
     dependencies {
@@ -27,8 +28,9 @@ allprojects {
         jcenter()
         maven {
             url 'https://maven.google.com/'
-        }
+            }
 
+        maven { url "https://jitpack.io" }
     }
 }
 

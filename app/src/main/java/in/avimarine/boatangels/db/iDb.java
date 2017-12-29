@@ -6,6 +6,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.db.objects.User;
 import java.util.UUID;
 
 /**
@@ -25,6 +26,10 @@ public interface iDb {
   void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
   void addInspection(Inspection inspection);
+
+  void addUser(User user);
+
+  void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener);
 
   void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener);
 
