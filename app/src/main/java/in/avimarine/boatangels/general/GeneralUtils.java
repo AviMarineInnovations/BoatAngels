@@ -3,8 +3,12 @@ package in.avimarine.boatangels.general;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -99,7 +103,12 @@ public class GeneralUtils {
         }
     }
 
-    enum CLAZZ {
+  public static boolean isValidEmail(CharSequence target) {
+    return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+  }
+
+
+  enum CLAZZ {
         Integer,Double,Float
 
     }
@@ -139,4 +148,32 @@ public class GeneralUtils {
         }
         return false;
     }
+
+    public static String toFormatedDateString(Context c, Date d){
+        return DateUtils.formatDateTime(c, d.getTime(),  DateUtils.FORMAT_SHOW_YEAR|DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME);
+    }
+
+  public static void enableAndShowViews (View... vs){
+    for (View v : vs){
+      if (v!=null) {
+        v.setEnabled(true);
+        v.setVisibility(View.VISIBLE);
+      }
+    }
+  }
+  public static void disableAndHideViews(boolean isGone, View... vs ) {
+    for (View v : vs){
+      if (v!=null) {
+        v.setEnabled(false);
+        v.setVisibility(isGone?View.GONE:View.INVISIBLE);
+      }
+    }
+  }
+  public static void showViews(View... vs) {
+    for (View v : vs){
+      if (v!=null) {
+        v.setVisibility(View.VISIBLE);
+      }
+    }
+  }
 }

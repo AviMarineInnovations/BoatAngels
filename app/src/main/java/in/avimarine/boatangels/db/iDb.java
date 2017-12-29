@@ -23,6 +23,8 @@ public interface iDb {
 
   void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener);
 
+  void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener);
+
   void addInspection(Inspection inspection);
 
   void addUser(User user);

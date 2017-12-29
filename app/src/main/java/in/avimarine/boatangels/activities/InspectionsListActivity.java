@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -28,6 +30,7 @@ public class InspectionsListActivity extends AppCompatActivity {
   @BindView(R.id.inspection_recyclerview)
   RecyclerView inspectionsRv;
   FirestoreRecyclerAdapter adapter;
+  private OnClickListener mOnClickListener;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,19 @@ public class InspectionsListActivity extends AppCompatActivity {
     }
     setTitle(getString(R.string.inspection_for_title_prefix) + boatName);
     inspectionsRv.setLayoutManager(new LinearLayoutManager(this));
+    mOnClickListener = new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+
+        int itemPosition = inspectionsRv.getChildLayoutPosition(view);
+        Log.d(TAG,"In on click listener: "+itemPosition);
+        Inspection item = (Inspection) adapter.getItem(itemPosition);
+
+        Intent intent = new Intent(InspectionsListActivity.this, InspectionResultActivity.class);
+        intent.putExtra(getString(R.string.intent_extra_inspection_uuid),item.getUuid());
+        startActivity(intent);
+      }
+    };
 
     Query query = FirebaseFirestore.getInstance()
         .collection("inspections")
@@ -64,6 +80,7 @@ public class InspectionsListActivity extends AppCompatActivity {
       public InspectionHolder onCreateViewHolder(ViewGroup group, int i) {
         View view = LayoutInflater.from(group.getContext())
             .inflate(R.layout.inspection, group, false);
+        view.setOnClickListener(mOnClickListener);
         return new InspectionHolder(view);
       }
     };

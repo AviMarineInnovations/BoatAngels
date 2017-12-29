@@ -1,7 +1,7 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -14,5 +14,48 @@
   </style>
 
 
+  <style name="XCheckedRopes" parent="UncheckedBoat">
+    <item name="bowlines">#d92c2f</item>
+    <item name="sternlines">#d92c2f</item>
+  </style>
+  <style name="VCheckedRopes" parent="UncheckedBoat">
+    <item name="bowlines">#0abf00</item>
+    <item name="sternlines">#0abf00</item>
+  </style>
+  <style name="XCheckedJibVCheckedMain" parent="UncheckedBoat">
+    <item name="jib">#d92c2f</item>
+    <item name="main">#0abf00</item>
+  </style>
+  <style name="VCheckedJibVCheckedMain" parent="UncheckedBoat">
+    <item name="jib">#0abf00</item>
+    <item name="main">#0abf00</item>
+  </style>
+  <style name="XCheckedJibXCheckedMain" parent="UncheckedBoat">
+    <item name="jib">#d92c2f</item>
+    <item name="main">#d92c2f</item>
+  </style>
+  <style name="VCheckedJibXCheckedMain" parent="UncheckedBoat">
+    <item name="jib">#0abf00</item>
+    <item name="main">#d92c2f</item>
+  </style>
+  <style name="UnCheckedJibVCheckedMain" parent="UncheckedBoat">
+    <item name="main">#0abf00</item>
+  </style>
+  <style name="VCheckedJibUnCheckedMain" parent="UncheckedBoat">
+    <item name="jib">#0abf00</item>
+  </style>
+  <style name="UnCheckedJibXCheckedMain" parent="UncheckedBoat">
+    <item name="main">#d92c2f</item>
+  </style>
+  <style name="XCheckedJibUnCheckedMain" parent="UncheckedBoat">
+    <item name="jib">#d92c2f</item>
+  </style>
 
+
+  <style name="UncheckedBoat">
+    <item name="bowlines">@color/colorPrimaryDark</item>
+    <item name="sternlines">@color/colorPrimaryDark</item>
+    <item name="jib">@color/colorPrimaryDark</item>
+    <item name="main">@color/colorPrimaryDark</item>
+  </style>
 </resources>
