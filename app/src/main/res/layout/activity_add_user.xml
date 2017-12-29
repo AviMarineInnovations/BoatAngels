@@ -58,7 +58,8 @@
     app:layout_constraintHorizontal_bias="0.918"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.469"/>
+    app:layout_constraintVertical_bias="0.437"/>
+
   <Button
     android:id="@+id/btn_sign_in"
     android:layout_width="wrap_content"
@@ -69,4 +70,17 @@
     app:layout_constraintHorizontal_bias="0.498"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/country"/>
+  <com.hbb20.CountryCodePicker
+    android:id="@+id/ccp"
+    android:layout_width="213dp"
+    android:layout_height="wrap_content"
+    app:ccp_showFullName="true"
+    app:ccp_showNameCode="false"
+    app:ccp_showPhoneCode="false"
+    app:layout_constraintBottom_toTopOf="@+id/btn_sign_in"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.919"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/phone"
+    app:layout_constraintVertical_bias="0.496"/>
 </android.support.constraint.ConstraintLayout>

@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:3.1.1'
     implementation 'com.firebaseui:firebase-ui-firestore:3.1.1'
     compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.hbb20:ccp:2.1.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }

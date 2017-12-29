@@ -15,6 +15,7 @@ import in.avimarine.boatangels.db.objects.User;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class AddUserActivity extends AppCompatActivity {
 
@@ -48,7 +49,7 @@ public class AddUserActivity extends AppCompatActivity {
           EditTExtName.setError("Enter a Name");
         } else if (!validInput(mail)) {
           EditTExtMail.setError("Enter a Mail");
-        } else if (!validInput(phone)) {
+        } else if (!isValidMobile(phone)) {
           EditTExtPhone.setError("Enter a phone");
         } else if (!validInput(country)) {
           EditTExtCountry.setError("Enter a country");
@@ -87,8 +88,22 @@ public class AddUserActivity extends AppCompatActivity {
     if (inputGet.equals("")){
       return false;
     }
-    
+
     return true;
   }
 
+  private boolean isValidMobile(String phone) {
+    boolean check=false;
+    if(!Pattern.matches("[a-zA-Z]+", phone)) {
+      if(phone.length() < 6 || phone.length() > 13) {
+        check = false;
+
+      } else {
+        check = true;
+      }
+    } else {
+      check=false;
+    }
+    return check;
+  }
 }

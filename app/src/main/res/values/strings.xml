@@ -23,7 +23,7 @@
   <string name="add_user_phone">Phone</string>
   <string name="add_user_country">Country</string>
   <string name="add_user_btn">Add User</string>
-  <string name="btn_sign_in">Sign In</string>
+  <string name="btn_sign_in">Sign Up</string>
 
 
 </resources>
