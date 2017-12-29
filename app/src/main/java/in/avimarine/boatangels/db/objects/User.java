@@ -5,30 +5,33 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Motim on 12/25/2017.
+ * This file is part of an
+ * Avi Marine Innovations project: BoatAngels
+ * first created by Motim on 25/12/2017.
+ *
+ * This Class defines a registered user in the system
  */
 
 public class User extends BaseDbObject {
 
-  public String DisplayName;
-  public String Mail;
-  public String Phone;
-  public String Country;
-  public Date FirstJoinTime;
+  public String displayName;
+  public String mail;
+  public String phone;
+  public String country;
+  public Date firstJoinTime;
   public String uid;
-  public Date LastUpdateTime;
   public final List<String> boats = new ArrayList<>();
 
   @Override
   public String toString() {
     return "Users{" +
-        "name='" + DisplayName + '\'' +
+        "name='" + displayName + '\'' +
         ", uid=" + uid +
-        ", Mail=" + Mail +
-        ", Phone=" + Phone +
-        ", firstAddedTime=" + FirstJoinTime +
+        ", mail=" + mail +
+        ", Phone=" + phone +
+        ", firstAddedTime=" + firstJoinTime +
         ", firstAddedTime=" + boats +
-        ", lastUpdateTime=" + LastUpdateTime +
+        ", lastUpdateTime=" + lastUpdateTime +
         '}';
   }
 }

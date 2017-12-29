@@ -2,12 +2,16 @@ package in.avimarine.boatangels.activities;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hbb20.CountryCodePicker;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
@@ -18,92 +22,70 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class AddUserActivity extends AppCompatActivity {
-
   private String name;
   private String mail;
   private String phone;
   private String country;
-  private Date firstJoinTime;
   private String uid;
-  private Date lastUpdateTime;
   private final iDb db = new FireBase();
-  private FirebaseFirestore DB = FirebaseFirestore.getInstance();
+
+  @BindView(R.id.ccp)
+  CountryCodePicker countryCodePicker;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_user);
+    ButterKnife.bind(this);
     Button button = findViewById(R.id.btn_sign_in);
     button.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
-        EditText EditTExtName = (EditText) findViewById(R.id.name);
-        EditText EditTExtMail = (EditText) findViewById(R.id.mail);
-        EditText EditTExtPhone = (EditText) findViewById(R.id.phone);
-        EditText EditTExtCountry = (EditText) findViewById(R.id.country);
-        name = EditTExtName.getText().toString();
-        mail = EditTExtMail.getText().toString();
-        phone = EditTExtPhone.getText().toString();
-        country = EditTExtCountry.getText().toString();
+        EditText editTextName = findViewById(R.id.name);
+        EditText editTextMail = findViewById(R.id.mail);
+        EditText editTextPhone = findViewById(R.id.phone);
+        name = editTextName.getText().toString();
+        mail = editTextMail.getText().toString();
+        phone = editTextPhone.getText().toString();
+        country = countryCodePicker.getSelectedCountryName();
 
         if (!validInput(name)) {
-          EditTExtName.setError("Enter a Name");
+          editTextName.setError("Enter a Name");
         } else if (!validInput(mail)) {
-          EditTExtMail.setError("Enter a Mail");
+          editTextMail.setError("Enter an valid e-mail address");
         } else if (!isValidMobile(phone)) {
-          EditTExtPhone.setError("Enter a phone");
-        } else if (!validInput(country)) {
-          EditTExtCountry.setError("Enter a country");
-        }
-        else {
+          editTextPhone.setError("Enter a valid phone number");
+        } else {
 
-          firstJoinTime = GetCurrentDate();
           uid = FirebaseAuth.getInstance().getUid();
-          lastUpdateTime = GetCurrentDate();
 
           User user = new User();
-          user.DisplayName = name;
-          user.Mail = mail;
-          user.Phone = phone;
-          user.Country = country;
-          user.FirstJoinTime = firstJoinTime;
-          user.LastUpdateTime = lastUpdateTime;
+          user.displayName = name;
+          user.mail = mail;
+          user.phone = phone;
+          user.country = country;
+          user.firstJoinTime = new Date();
+          user.setFirstAddedTime(new Date());
+          user.setLastUpdate(new Date());
           user.uid = uid;
           db.addUser(user);
           finish();
         }
       }
     });
-
-
   }
 
-  private Date GetCurrentDate() {
-    DateFormat df = new SimpleDateFormat("dd/MM/yy");
-    Date dateobj = new Date();
-    return dateobj;
-
-  }
-
-  private boolean validInput(String inputGet){
-    if (inputGet.equals("")){
-      return false;
-    }
-
-    return true;
+  private boolean validInput(String s) {
+    return s != null && !s.isEmpty();
   }
 
   private boolean isValidMobile(String phone) {
-    boolean check=false;
-    if(!Pattern.matches("[a-zA-Z]+", phone)) {
-      if(phone.length() < 6 || phone.length() > 13) {
-        check = false;
-
-      } else {
-        check = true;
+    if (!Pattern.matches("[a-zA-Z]+", phone)) {
+      if (phone.length() < 6 || phone.length() > 13) {
+        return false;
       }
-    } else {
-      check=false;
+      return true;
     }
-    return check;
+    return false;
   }
 }

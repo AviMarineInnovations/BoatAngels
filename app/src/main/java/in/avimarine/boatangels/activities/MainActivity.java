@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -18,10 +17,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -34,16 +30,15 @@ public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = "MainActivity";
   private static final int RC_SIGN_IN = 123;
-  private FirebaseFirestore DB = FirebaseFirestore.getInstance();
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.welcome_message_textview)
-  TextView welcome_tv;
+  TextView welcomeTv;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.sign_out_btn)
-  Button signout_btn;
+  Button signoutBtn;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspect_boat_btn)
-  Button inspect_boat_btn;
+  Button inspectBoatBtn;
 
 
   private final iDb db = new FireBase();
@@ -55,14 +50,13 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseUser CurrentUser = auth.getCurrentUser();
 
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
-      checkIfUserRegistry(FirebaseAuth.getInstance().getUid());
-      welcome_tv.setText(String
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
+      welcomeTv.setText(String
           .format(getString(R.string.welcome_message), auth.getCurrentUser().getDisplayName()));
-      signout_btn.setEnabled(true);
+      signoutBtn.setEnabled(true);
     } else {
       Log.d(TAG, "Not logged in");
       startActivityForResult(
@@ -70,44 +64,30 @@ public class MainActivity extends AppCompatActivity {
               .createSignInIntentBuilder()
               .setAvailableProviders(
                   Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                      new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build(),
                       new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
               .build(),
           RC_SIGN_IN);
     }
-    signout_btn.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        AuthUI.getInstance()
-            .signOut(MainActivity.this)
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-              public void onComplete(@NonNull Task<Void> task) {
-                // user is now signed out
-                signout_btn.setEnabled(false);
-                startActivityForResult(
-                    AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(
-                            Arrays
-                                .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                    new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER)
-                                        .build(),
-                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                        .build(),
-                    RC_SIGN_IN);
-              }
-            });
-      }
-    });
-
-
   }
 
-  public static String UID(){
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseUser CurrentUser = auth.getCurrentUser();
-    String UserUID = CurrentUser.getUid();
-    return UserUID;
+  @OnClick(R.id.sign_out_btn)
+  public void signoutBtnClick(View v){
+    AuthUI.getInstance()
+        .signOut(MainActivity.this)
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+          public void onComplete(@NonNull Task<Void> task) {
+            signoutBtn.setEnabled(false);
+            startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(
+                        Arrays
+                            .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                    .build(),
+                RC_SIGN_IN);
+          }
+        });
   }
 
   @OnClick(R.id.add_boat_btn)
@@ -127,9 +107,8 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
-  public void checkIfUserRegistry (String uid) {
-    DocumentReference docRef = DB.collection("Users").document(uid);
-    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+  public void isUserRegistered(String uid) {
+    db.getUser(uid, new OnCompleteListener<DocumentSnapshot>() {
       @Override
       public void onComplete(@NonNull Task<DocumentSnapshot> task) {
         if (task.isSuccessful()) {
@@ -137,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
           if (!document.exists()) {
             Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
             startActivity(intent);
-
           }
         }
       }
@@ -199,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Logged in!!");
         if (FirebaseAuth.getInstance() != null
             && FirebaseAuth.getInstance().getCurrentUser() != null) {
-          //noinspection ConstantConditions
-          welcome_tv
+          isUserRegistered(FirebaseAuth.getInstance().getUid());
+          welcomeTv
               .setText(String.format(getString(R.string.welcome_message),
                   FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
           //TODO: get boat name and save to variable. If no boat assigned to user disable boat related buttons (such as show inspections).
         }
-        signout_btn.setEnabled(true);
+        signoutBtn.setEnabled(true);
         return;
       } else {
         // Sign in failed

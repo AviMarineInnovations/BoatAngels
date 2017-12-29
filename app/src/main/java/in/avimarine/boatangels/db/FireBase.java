@@ -85,12 +85,6 @@ public class FireBase implements iDb {
     mFirestore.collection("boats").whereEqualTo("marinaName", marina).get().addOnCompleteListener(listener);
   }
 
-  @Override
-  public void getUser(String uid, OnCompleteListener<QuerySnapshot> listener ) {
-    mFirestore.collection("Users").whereEqualTo("uid", uid).get().addOnCompleteListener(listener);
-  }
-
-
 
   @Override
   public void addInspection(Inspection i) {
@@ -99,8 +93,11 @@ public class FireBase implements iDb {
 
   @Override
   public void addUser(User user) {
-      mFirestore.collection("Users").document(user.uid).set(user);
-
+      mFirestore.collection("users").document(user.uid).set(user);
+  }
+  @Override
+  public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
+    mFirestore.collection("users").document(uid).get().addOnCompleteListener(listener);
   }
 
   @Override
