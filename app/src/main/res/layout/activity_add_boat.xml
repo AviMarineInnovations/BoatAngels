@@ -40,6 +40,18 @@
       android:inputType="textPersonName"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/boatname_et"/>
+    <EditText
+      android:id="@+id/boat_club_et"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginLeft="16dp"
+      android:ems="10"
+      android:hint="@string/boat_club_text"
+      android:inputType="textPersonName"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/boat_model_et"/>
     <TextView
       android:id="@+id/marin_tv"
       android:layout_width="wrap_content"
@@ -50,7 +62,7 @@
       android:hint="@string/marina_text"
       android:textSize="18sp"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/boat_model_et"/>
+      app:layout_constraintTop_toBottomOf="@+id/boat_club_et"/>
     <Spinner
       android:id="@+id/marina_spinner"
       android:layout_width="0dp"

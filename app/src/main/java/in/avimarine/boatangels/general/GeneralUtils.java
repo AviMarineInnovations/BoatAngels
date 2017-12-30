@@ -36,15 +36,18 @@ public class GeneralUtils {
         return date;
     }
     public static long dateDifference(Date dateTime){
-
         if (dateTime==null)
             return -1;
         Date currentDate = new Date(System.currentTimeMillis());
-
         long diffInMs = currentDate.getTime() - dateTime.getTime();
-
         return TimeUnit.MILLISECONDS.toSeconds(diffInMs);
+    }
+    public static int getDaysDifference(Date fromDate,Date toDate)
+    {
+      if(fromDate==null||toDate==null)
+        return 0;
 
+      return (int)( (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
     }
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.

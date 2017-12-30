@@ -27,6 +27,7 @@ import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,9 +54,12 @@ public class AddBoatActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.longitude_et)
   EditText boatLonEt;
-
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.boat_club_et)
+  EditText boatClubEt;
 
   private MarinaSpinnerAdapter adapter;
+
 
 
   @Override
@@ -100,6 +104,7 @@ public class AddBoatActivity extends AppCompatActivity {
     b.marinaName = ((Marina)marina_spinner.getSelectedItem()).name;
     b.name = boatNameEt.getText().toString();
     b.model = boatModelEt.getText().toString();
+    b.clubName = boatClubEt.getText().toString();
     Double lat = GeneralUtils.tryParseDouble(boatLatEt.getText().toString());
     Double lon = GeneralUtils.tryParseDouble(boatLonEt.getText().toString());
     if (!isValidLat(lat)){
@@ -116,6 +121,9 @@ public class AddBoatActivity extends AppCompatActivity {
     b.setLastUpdate(new Date());
     b.setFirstAddedTime(new Date());
     b.users.add(FirebaseAuth.getInstance().getUid());
+    User u = db.getCurrentUser();
+    u.boats.add(b.getUuid());
+    db.addUser(u);
     db.addBoat(b);
     finish();
   }

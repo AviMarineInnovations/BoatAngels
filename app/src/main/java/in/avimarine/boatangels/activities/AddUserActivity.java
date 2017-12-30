@@ -46,9 +46,9 @@ public class AddUserActivity extends AppCompatActivity {
         phone = editTextPhone.getText().toString();
         country = countryCodePicker.getSelectedCountryName();
 
-        if (!validInput(name)) {
+        if (!isValidInput(name)) {
           editTextName.setError(getString(R.string.name_error_message));
-        } else if (!validInput(mail)||!GeneralUtils.isValidEmail(mail)) {
+        } else if (!isValidInput(mail)||!GeneralUtils.isValidEmail(mail)) {
           editTextMail.setError(getString(R.string.email_error_message));
         } else if (!isValidMobile(phone)) {
           editTextPhone.setError(getString(R.string.phone_number_error_message));
@@ -72,18 +72,12 @@ public class AddUserActivity extends AppCompatActivity {
     });
   }
 
-  private boolean validInput(String s) {
+  private boolean isValidInput(String s) {
     return s != null && !s.isEmpty();
   }
 
   private boolean isValidMobile(String phone) {
-    if (!Pattern.matches("[a-zA-Z]+", phone)) {
-      if (phone.length() < 6 || phone.length() > 13) {
-        return false;
-      }
-      return true;
-    }
-    return false;
+    return !Pattern.matches("[a-zA-Z]+", phone) && !(phone.length() < 6 || phone.length() > 13);
   }
 
 }
