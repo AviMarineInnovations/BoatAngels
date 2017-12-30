@@ -14,7 +14,7 @@ import java.util.Map;
 public class Inspection extends BaseDbObject {
   public String inspectorUid;
   public String inspectorName;
-  public String boatUid;
+  public String boatUuid;
   public String boatName;
   public String message;
   public Map<String, String> finding;
@@ -26,7 +26,7 @@ public class Inspection extends BaseDbObject {
     return "Inspection{" +
         "inspectorUid='" + inspectorUid + '\'' +
         ", lastUpdateTime=" + lastUpdateTime +
-        ", boatUid='" + boatUid + '\'' +
+        ", boatUuid='" + boatUuid + '\'' +
         ", boatName='" + boatName + '\'' +
         ", message='" + message + '\'' +
         ", firstAddedTime=" + firstAddedTime +

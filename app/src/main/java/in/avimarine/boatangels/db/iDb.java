@@ -7,7 +7,6 @@ import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
-import java.util.UUID;
 
 /**
  * This file is part of an
@@ -17,11 +16,18 @@ import java.util.UUID;
 
 public interface iDb {
 
-  void setBoatQuery(String marina);
   void addBoat(Boat b);
-  Boat getBoat(UUID uuid);
+
+  void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
   void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener);
+
+  /**
+   * This method gets all the boats in the DB
+   * This can be very intensive on resources!
+   * @param listener - listener to be called on completion of query
+   */
+  void getBoats(OnCompleteListener<QuerySnapshot> listener);
 
   void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
@@ -34,4 +40,8 @@ public interface iDb {
   void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener);
 
   void addMarina(Marina m);
+
+  void setCurrentUser(User u);
+
+  User getCurrentUser();
 }

@@ -18,9 +18,10 @@ public class Boat extends BaseDbObject {
   public GeoPoint location;
   public String marinaUuid;
   public String marinaName;
-
-
   public final List<String> users = new ArrayList<>();
+  public String clubName;
+  public String clubUuid;
+  public Long lastInspectionDate;
 
   @Override
   public String toString() {

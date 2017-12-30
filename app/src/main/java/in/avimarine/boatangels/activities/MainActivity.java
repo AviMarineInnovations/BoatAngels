@@ -23,6 +23,7 @@ import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.db.objects.User;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -39,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspect_boat_btn)
   Button inspectBoatBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.add_boat_btn)
+  Button addBoatBtn;
 
 
   private final iDb db = new FireBase();
-  private String ownBoatName = "Goog"; //TODO: Get from DB
+  private String ownBoatUuid;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  @Override
+  protected void onStart() {
+    super.onStart();
+    isUserRegistered(FirebaseAuth.getInstance().getUid());
+  }
+
   @OnClick(R.id.sign_out_btn)
   public void signoutBtnClick(View v){
     AuthUI.getInstance()
@@ -91,19 +101,19 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @OnClick(R.id.add_boat_btn)
-  public void addBtnClick(View v) {
+  public void addBoatBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
     startActivity(intent);
   }
   @OnClick(R.id.inspect_boat_btn)
   public void inspectBtnClick(View v) {
-    Intent intent = new Intent(MainActivity.this, InspectBoatActivity.class);
+    Intent intent = new Intent(MainActivity.this, BoatForInspectionActivity.class);
     startActivity(intent);
   }
   @OnClick(R.id.show_inspections_btn)
   public void showInspectionsBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
-    intent.putExtra(getString(R.string.intent_extra_boat_name),ownBoatName);
+    intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
 
@@ -116,6 +126,16 @@ public class MainActivity extends AppCompatActivity {
           if (!document.exists()) {
             Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
             startActivity(intent);
+          }
+          else{
+            User u = document.toObject(User.class);
+            db.setCurrentUser(u);
+            if (u.boats.size()>0) {
+              addBoatBtn.setEnabled(false);
+              ownBoatUuid = u.boats.get(0);
+            }
+            else
+              addBoatBtn.setEnabled(true);
           }
         }
       }

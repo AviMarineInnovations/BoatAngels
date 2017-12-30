@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">BoatAngels</string>
   <string name="sign_out">Sign Out</string>
   <string name="welcome_message">Welcome %1$s</string>
@@ -15,7 +15,7 @@
   <string name="berth_text">Berth</string>
   <string name="show_inspections_btn_text">Show Inspections</string>
   <string name="inspection_for_title_prefix">Inspections for</string>
-  <string name="intent_extra_boat_name">BOAT_NAME</string>
+  <string name="intent_extra_boat_uuid">EXTRA_BOAT_UUID</string>
   <string name="no_boat_name_error">No boat passed to Activity</string>
   <string name="boat_drawing_content_description">boat drawing</string>
   <string name="intent_extra_inspection_uuid">EXTRA_UUID</string>
@@ -26,10 +26,10 @@
   <string name="add_user_name">Name</string>
   <string name="add_user_mail">Mail</string>
   <string name="add_user_phone">Phone</string>
-  <string name="add_user_country">Country</string>
-  <string name="add_user_btn">Add User</string>
   <string name="btn_sign_in">Sign Up</string>
   <string name="name_error_message">Enter a Name</string>
   <string name="email_error_message">Enter a valid e-mail address</string>
   <string name="phone_number_error_message">Enter a valid phone number</string>
+  <string name="boat_status_content_description">Boat\'s Status</string>
+  <string name="boat_club_text">Club</string>
 </resources>
