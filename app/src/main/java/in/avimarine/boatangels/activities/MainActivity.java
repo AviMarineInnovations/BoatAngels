@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
-    isUserRegistered(FirebaseAuth.getInstance().getUid());
+    if (FirebaseAuth.getInstance().getUid()!= null)
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
   }
 
   @OnClick(R.id.sign_out_btn)
