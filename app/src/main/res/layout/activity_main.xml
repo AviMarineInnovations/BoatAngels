@@ -57,5 +57,16 @@
     android:text="@string/show_inspections_btn_text"
     app:layout_constraintStart_toEndOf="@+id/add_boat_btn"
     app:layout_constraintTop_toTopOf="parent"/>
+  <Button
+    android:id="@+id/ask_inspection"
+    android:layout_width="wrap_content"
+    android:layout_height="39dp"
+    android:onClick="ask"
+    android:text="@string/ask_for_inspection_btn"
+    app:layout_constraintBottom_toTopOf="@+id/welcome_message_textview"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/add_boat_btn"
+    app:layout_constraintVertical_bias="0.349"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -117,7 +117,12 @@ public class MainActivity extends AppCompatActivity {
     intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
+  @OnClick(R.id.ask_inspection)
+  public void ask(View v) {
+    Intent intent = new Intent(MainActivity.this, AskInspection.class);
+    startActivity(intent);
 
+  }
   public void isUserRegistered(String uid) {
     db.getUser(uid, new OnCompleteListener<DocumentSnapshot>() {
       @Override
