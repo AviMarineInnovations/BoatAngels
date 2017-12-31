@@ -1,10 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+/*def debugsuffix = System.
+        getProperty('debugsuffix', project.getProperties().get('debugsuffix', null))*/
+
+def final yourApplicationId = 'in.avimarine.boatangels'
+
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "in.avimarine.boatangels"
+        applicationId = yourApplicationId
+        //These are the values for the authorities and account types.
+        //Reference them in the java files with e.g. BuildConfig.ACCOUNT_TYPE.
+        buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+        buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+        //Reference them in .xml files.
+        resValue "string", "account_type", "${applicationId}.account"
+        resValue "string", "authority", "${applicationId}.provider"
+
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
@@ -17,6 +30,35 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "standard"
+    productFlavors {
+        dev {
+            dimension "standard"
+            applicationIdSuffix ".dev"
+            //Reference them again so they get overwritten by the flavor.
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+            resValue "string", "account_type", "${applicationId}.account"
+            resValue "string", "authority", "${applicationId}.provider"
+        }
+        stage {
+            dimension "standard"
+            applicationIdSuffix ".stage"
+            //Reference them again so they get overwritten by the flavor.
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+            resValue "string", "account_type", "${applicationId}.account"
+            resValue "string", "authority", "${applicationId}.provider"
+        }
+        production {
+            dimension "standard"
+            //Reference them again so they get overwritten by the flavor.
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+            resValue "string", "account_type", "${applicationId}.account"
+            resValue "string", "authority", "${applicationId}.provider"
         }
     }
 }

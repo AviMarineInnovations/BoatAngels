@@ -45,6 +45,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginLeft="8dp"
     android:text="@string/add_boat_btn_text"
+    android:enabled="false"
     app:layout_constraintStart_toEndOf="@+id/inspect_boat_btn"
     app:layout_constraintTop_toTopOf="parent"/>
   <Button

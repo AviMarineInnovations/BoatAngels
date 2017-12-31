@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.add_boat_btn)
   Button addBoatBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.show_inspections_btn)
+  Button showInspectionsBtn;
 
 
   private final iDb db = new FireBase();
@@ -72,17 +75,19 @@ public class MainActivity extends AppCompatActivity {
               .build(),
           RC_SIGN_IN);
     }
+    addMarinas();
   }
 
   @Override
   protected void onStart() {
     super.onStart();
-    if (FirebaseAuth.getInstance().getUid()!= null)
+    if (FirebaseAuth.getInstance().getUid() != null) {
       isUserRegistered(FirebaseAuth.getInstance().getUid());
+    }
   }
 
   @OnClick(R.id.sign_out_btn)
-  public void signoutBtnClick(View v){
+  public void signoutBtnClick(View v) {
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -106,11 +111,13 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.inspect_boat_btn)
   public void inspectBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, BoatForInspectionActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.show_inspections_btn)
   public void showInspectionsBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
@@ -127,26 +134,27 @@ public class MainActivity extends AppCompatActivity {
           if (!document.exists()) {
             Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
             startActivity(intent);
-          }
-          else{
+          } else {
             User u = document.toObject(User.class);
             db.setCurrentUser(u);
-            if (u.boats.size()>0) {
+            if (u.boats.isEmpty()) {
+              addBoatBtn.setEnabled(true);
+              showInspectionsBtn.setEnabled(false);
+            } else {
               addBoatBtn.setEnabled(false);
+              showInspectionsBtn.setEnabled(true);
               ownBoatUuid = u.boats.get(0);
             }
-            else
-              addBoatBtn.setEnabled(true);
           }
         }
       }
     });
   }
 
-    /***
-     * For setting first marina db. Don't call!
-     */
-  private void addMarinas(){
+  /***
+   * For setting first marina db. Don't call!
+   */
+  private void addMarinas() {
     Marina m = new Marina();
     m.name = "Shavit, Haifa";
     m.country = "Israel";
@@ -183,7 +191,6 @@ public class MainActivity extends AppCompatActivity {
     m.setLastUpdate(new Date());
     db.addMarina(m);
   }
-
 
 
   @Override
