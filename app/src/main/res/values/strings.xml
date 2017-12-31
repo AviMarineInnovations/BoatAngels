@@ -35,5 +35,6 @@
   <string name="ask_for_inspection">Ask for inspection</string>
   <string name="ask_for_inspection_btn">Ask inspection</string>
   <string name="inspection_offer">offer yachtie points</string>
+  <string name="inspect_me">Inspect Me</string>
 
 </resources>
