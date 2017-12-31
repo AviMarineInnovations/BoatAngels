@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
-/*def debugsuffix = System.
-        getProperty('debugsuffix', project.getProperties().get('debugsuffix', null))*/
-
 def final yourApplicationId = 'in.avimarine.boatangels'
-
+android.variantFilter { variant ->
+    if(variant.buildType.name.equals('release') && variant.getFlavors().get(0).name.equals('dev')) {
+        variant.setIgnore(true);
+    }
+}
 android {
     compileSdkVersion 27
     defaultConfig {
