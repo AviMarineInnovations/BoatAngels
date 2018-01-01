@@ -20,18 +20,49 @@ public class User extends BaseDbObject {
   public String country;
   public Date firstJoinTime;
   public String uid;
+  public Date lastUpdateTime;
   public final List<String> boats = new ArrayList<>();
 
   @Override
   public String toString() {
-    return "Users{" +
-        "name='" + displayName + '\'' +
-        ", uid=" + uid +
-        ", mail=" + mail +
-        ", Phone=" + phone +
-        ", firstAddedTime=" + firstJoinTime +
-        ", firstAddedTime=" + boats +
-        ", lastUpdateTime=" + lastUpdateTime +
-        '}';
+    return
+        "Name =" + displayName + '\n' +
+        "uid =" + uid + '\n' +
+        "mail=" + mail +'\n' +
+        "Phone=" + phone +'\n' +
+        "firstAddedTime=" + firstJoinTime +'\n' +
+        "boats=" + boats +'\n'+
+        "lastUpdateTime=" + lastUpdateTime
+        ;
   }
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public String getMail() {
+    return mail;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public String getCountry() {
+    return country;
+  }
+
+  public Date getFirstJoinTime() {
+    return firstJoinTime;
+  }
+
+  public String getUid() {
+    return uid;
+  }
+
+  public List<String> getBoats() {
+    return boats;
+  }
+
+
 }

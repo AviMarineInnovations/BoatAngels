@@ -62,8 +62,7 @@ public class AddUserActivity extends AppCompatActivity {
           user.phone = phone;
           user.country = country;
           user.firstJoinTime = new Date();
-          user.setFirstAddedTime(new Date());
-          user.setLastUpdate(new Date());
+          user.lastUpdateTime = (new Date());
           user.uid = uid;
           db.addUser(user);
           finish();

@@ -25,13 +25,48 @@ public class Boat extends BaseDbObject {
 
   @Override
   public String toString() {
-    return "Boat{" +
-        "_uuid=" + getUuid() +
-        ", name='" + name + '\'' +
-        ", lastUpdateTime=" + lastUpdateTime +
-        ", firstAddedTime=" + firstAddedTime +
-        ", marina=" + marinaName +
-        '}';
+    return
+        "_uuid=" + getUuid() + "\n"+
+        "Name='" + name +  "\n" +
+        "lastUpdateTime=" + lastUpdateTime +"\n"+
+        "firstAddedTime=" + firstAddedTime +"\n"+
+        "Marina=" + marinaName
+        ;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public String getModel() {
+    return model;
+  }
+
+  public GeoPoint getLocation() {
+    return location;
+  }
+
+  public String getMarinaUuid() {
+    return marinaUuid;
+  }
+
+  public String getMarinaName() {
+    return marinaName;
+  }
+
+  public List<String> getUsers() {
+    return users;
+  }
+
+  public String getClubName() {
+    return clubName;
+  }
+
+  public String getClubUuid() {
+    return clubUuid;
+  }
+
+  public Long getLastInspectionDate() {
+    return lastInspectionDate;
+  }
 }
