@@ -2,8 +2,9 @@ package in.avimarine.boatangels.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import butterknife.OnClick;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -18,33 +19,30 @@ public class AskInspection extends AppCompatActivity {
   private Boat inspectBoat;
   private User user;
   private String getBoatUid ;
-  private String yachtiePoint;
+  private int yachtiePoint;
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+  private String Uid;
 
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_ask_for_inspection);
-    EditText pointOffer = (EditText) findViewById(R.id.yachtie_point_editxt);
-    yachtiePoint = pointOffer.getText().toString();
-    inspectMe(yachtiePoint);
+
   }
 
-
-  public void inspectMe(String yachtiePoint) {
+  @OnClick(R.id.ask_inspection_btn)
+  public void inspectMe(View v) {
     DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getUid());
     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
       @Override
       public void onSuccess(DocumentSnapshot documentSnapshot) {
         user = documentSnapshot.toObject(User.class);
         getBoatUid = user.getBoats().toString();
-        String Uid = getBoatUid.replaceAll("[]\\[]","");
+        Uid = getBoatUid.replaceAll("[]\\[]","");
         getBoat(Uid);
       }
     });
-
 
   }
 
@@ -53,10 +51,30 @@ public class AskInspection extends AppCompatActivity {
     doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
       @Override
       public void onSuccess(DocumentSnapshot documentSnapshot) {
-        inspectBoat = documentSnapshot.toObject(Boat.class);
+        EditText yactiepointEditxt = (EditText)findViewById(R.id.yachtie_point_editxt);
+        try{
+          inspectBoat = documentSnapshot.toObject(Boat.class);
+          String getOfferPoints = yactiepointEditxt.getText().toString();
+          yachtiePoint = Integer.parseInt(getOfferPoints);
+          if(yachtiePoint > inspectBoat.yachtiePoint){
+            yactiepointEditxt.setError(getString(R.string.max_point_error_message));
+          }else if (yachtiePoint <= 0){
+            yactiepointEditxt.setError(getString(R.string.inspect_points_error_message));
+            }else{
+          inspectBoat.yachtiePoint -= yachtiePoint;
+            db.collection("boats").document(Uid)
+                .update(
+                    "yachtiePoint", inspectBoat.yachtiePoint
 
-        TextView test = (TextView) findViewById(R.id.textView4);
-        test.setText(inspectBoat.toString());
+                );
+          }
+
+        }
+        catch (NumberFormatException nfe){
+          yactiepointEditxt.setError(getString(R.string.inspect_points_error_message));
+
+         }
+
       }
     });
 

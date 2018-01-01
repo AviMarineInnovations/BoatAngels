@@ -33,37 +33,30 @@
     app:layout_constraintVertical_bias="0.235"/>
   <EditText
     android:id="@+id/yachtie_point_editxt"
-    android:layout_width="55dp"
+    android:layout_width="33dp"
     android:layout_height="46dp"
     android:ems="10"
     android:inputType="number"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintHorizontal_bias="0.561"
+    app:layout_constraintHorizontal_bias="0.693"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.226"/>
+    app:layout_constraintVertical_bias="0.228"/>
   <Button
-    android:id="@+id/button2"
+    android:id="@+id/ask_inspection_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:onClick="inspectMe"
     android:text="@string/inspect_me"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.498"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.463"/>
-  <TextView
-    android:id="@+id/textView4"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.172"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/button2"
-    app:layout_constraintVertical_bias="0.106"/>
+    app:layout_constraintVertical_bias="0.463"/><![CDATA[
+
   />
+
+]]>
 </android.support.constraint.ConstraintLayout>

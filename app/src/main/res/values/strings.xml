@@ -36,5 +36,7 @@
   <string name="ask_for_inspection_btn">Ask inspection</string>
   <string name="inspection_offer">offer yachtie points</string>
   <string name="inspect_me">Inspect Me</string>
+  <string name="inspect_points_error_message">Insert Point!</string>
+  <string name="max_point_error_message">You do not have enough points!</string>
 
 </resources>

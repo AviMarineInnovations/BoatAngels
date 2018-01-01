@@ -18,6 +18,7 @@ public class Boat extends BaseDbObject {
   public GeoPoint location;
   public String marinaUuid;
   public String marinaName;
+  public int yachtiePoint = 100;
   public final List<String> users = new ArrayList<>();
   public String clubName;
   public String clubUuid;
@@ -34,6 +35,7 @@ public class Boat extends BaseDbObject {
         "model: " + model+"\n"+
         "location: " + location +"\n"+
         "ClubName: " + clubName+"\n"+
+        "yachtiePoint: " + yachtiePoint + "\n" +
         "lastInspectionDate: " + lastInspectionDate
         ;
   }
@@ -68,6 +70,14 @@ public class Boat extends BaseDbObject {
 
   public String getClubUuid() {
     return clubUuid;
+  }
+
+  public int getYachtiePoint() {
+    return yachtiePoint;
+  }
+
+  public void setYachtiePoint(int yachtiePoint) {
+    this.yachtiePoint = yachtiePoint;
   }
 
   public Long getLastInspectionDate() {
