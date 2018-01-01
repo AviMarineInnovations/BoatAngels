@@ -15,9 +15,12 @@ import in.avimarine.boatangels.db.objects.User;
 
 public class AskInspection extends AppCompatActivity {
 
+  private Boat inspectBoat;
+  private User user;
+  private String getBoatUid ;
   private String yachtiePoint;
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
-  ;
+
 
 
   @Override
@@ -35,12 +38,25 @@ public class AskInspection extends AppCompatActivity {
     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
       @Override
       public void onSuccess(DocumentSnapshot documentSnapshot) {
+        user = documentSnapshot.toObject(User.class);
+        getBoatUid = user.getBoats().toString();
+        String Uid = getBoatUid.replaceAll("[]\\[]","");
+        getBoat(Uid);
+      }
+    });
+
+
+  }
+
+  public void getBoat(final String Uid) {
+    DocumentReference doc = db.collection("boats").document(Uid);
+    doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+      @Override
+      public void onSuccess(DocumentSnapshot documentSnapshot) {
+        inspectBoat = documentSnapshot.toObject(Boat.class);
+
         TextView test = (TextView) findViewById(R.id.textView4);
-        User user = documentSnapshot.toObject(User.class);
-        test.setText(user.toString());
-        DocumentReference Refboat = db.collection("boats").document(user.getBoats().toString());
-        Boat boat = documentSnapshot.toObject(Boat.class);
-        //test.setText(boat.toString());
+        test.setText(inspectBoat.toString());
       }
     });
 

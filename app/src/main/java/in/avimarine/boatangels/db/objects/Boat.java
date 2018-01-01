@@ -26,11 +26,15 @@ public class Boat extends BaseDbObject {
   @Override
   public String toString() {
     return
-        "_uuid=" + getUuid() + "\n"+
-        "Name='" + name +  "\n" +
-        "lastUpdateTime=" + lastUpdateTime +"\n"+
-        "firstAddedTime=" + firstAddedTime +"\n"+
-        "Marina=" + marinaName
+        "uuid: " + getUuid() + "\n"+
+        "Name: " + name +  "\n" +
+        "lastUpdateTime: " + lastUpdateTime +"\n"+
+        "firstAddedTime: " + firstAddedTime +"\n"+
+        "Marina: " + marinaName+"\n"+
+        "model: " + model+"\n"+
+        "location: " + location +"\n"+
+        "ClubName: " + clubName+"\n"+
+        "lastInspectionDate: " + lastInspectionDate
         ;
   }
 
