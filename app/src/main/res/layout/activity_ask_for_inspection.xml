@@ -8,10 +8,11 @@
   tools:context="in.avimarine.boatangels.activities.AskInspection">
 
   <TextView
-    android:id="@+id/textView2"
+    android:id="@+id/ask_for_inspection_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/ask_for_inspection"
+    android:text="@string/ask_for_inspection_title"
+    android:textColor="#000000"
     android:textSize="24dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -20,29 +21,30 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.04"/>
   <TextView
-    android:id="@+id/textView3"
+    android:id="@+id/offer_yactie_point"
     android:layout_width="wrap_content"
     android:layout_height="30dp"
     android:text="@string/inspection_offer"
+    android:textColor="#000000"
     android:textSize="22dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintHorizontal_bias="0.054"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.073"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.235"/>
+    app:layout_constraintVertical_bias="0.19999999"/>
   <EditText
     android:id="@+id/yachtie_point_editxt"
-    android:layout_width="33dp"
+    android:layout_width="50dp"
     android:layout_height="46dp"
     android:ems="10"
     android:inputType="number"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintHorizontal_bias="0.693"
+    app:layout_constraintHorizontal_bias="0.68"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.228"/>
+    app:layout_constraintVertical_bias="0.19999999"/>
   <Button
     android:id="@+id/ask_inspection_btn"
     android:layout_width="wrap_content"
@@ -54,9 +56,38 @@
     app:layout_constraintHorizontal_bias="0.498"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.463"/><![CDATA[
+    app:layout_constraintVertical_bias="0.463"/>
+  <TextView
+    android:id="@+id/show_yachtie_point"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/show_yactie_point"
+    android:textColor="#000000"
+    android:textSize="22dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.05"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.296"/>
+  <TextView
+    android:id="@+id/show_point"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:textColor="#000000"
+    android:textSize="22dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.41"
+
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.296"/><![CDATA[
+
 
   />
+
 
 ]]>
 </android.support.constraint.ConstraintLayout>
