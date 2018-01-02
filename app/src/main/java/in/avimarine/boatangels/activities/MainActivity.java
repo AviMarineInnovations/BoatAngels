@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
   }
   @OnClick(R.id.ask_inspection)
   public void ask(View v) {
-    Intent intent = new Intent(MainActivity.this, AskInspection.class);
+    Intent intent = new Intent(MainActivity.this, AskInspectionActivity.class);
     startActivity(intent);
 
   }

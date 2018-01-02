@@ -5,7 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="in.avimarine.boatangels.activities.AskInspection">
+  tools:context="in.avimarine.boatangels.activities.AskInspectionActivity">
 
   <TextView
     android:id="@+id/ask_for_inspection_title"

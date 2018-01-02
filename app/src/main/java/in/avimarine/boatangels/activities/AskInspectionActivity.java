@@ -16,7 +16,7 @@ import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.User;
 
-public class AskInspection extends AppCompatActivity {
+public class AskInspectionActivity extends AppCompatActivity {
 
   private Boat inspectBoat;
   private User user;
@@ -25,6 +25,7 @@ public class AskInspection extends AppCompatActivity {
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
   private String Uid;
   private String points;
+  private final String  p = " points";
 
 
   @Override
@@ -63,7 +64,9 @@ public class AskInspection extends AppCompatActivity {
             inspectBoat.yachtiePoint -= yachtiePoint;
             db.collection("boats").document(Uid)
                 .update(
-                    "yachtiePoint", inspectBoat.yachtiePoint
+                    "yachtiePoint", inspectBoat.yachtiePoint,
+                    "offerPoint", yachtiePoint
+
 
                 );
             showPoint(Uid);
@@ -88,15 +91,15 @@ public class AskInspection extends AppCompatActivity {
         Button inspectMeBtn = (Button)findViewById(R.id.ask_inspection_btn);
         inspectBoat = documentSnapshot.toObject(Boat.class);
         String point = "";
-        points = point.valueOf(inspectBoat.getYachtiePoint());
+        points = points.valueOf(inspectBoat.getYachtiePoint());
         if(inspectBoat.getYachtiePoint() <= 0){
           points = point.valueOf(inspectBoat.getYachtiePoint());
           inspectMeBtn.setEnabled(false);
-          setTextShowPoint.setText(points + " points");
+          setTextShowPoint.setText(points + p);
         }
         else{
         points = point.valueOf(inspectBoat.getYachtiePoint());
-          setTextShowPoint.setText(points + " points");
+          setTextShowPoint.setText(points + p);
         }
       }
     });

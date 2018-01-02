@@ -38,7 +38,8 @@ public class BoatForInspectionActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     Query query = FirebaseFirestore.getInstance()
         .collection("boats")
-//        .orderBy("lastInspectionTime")
+        .whereGreaterThan("offerPoint", 0)
+        .orderBy("offerPoint")
         .limit(50);
 
     FirestoreRecyclerOptions<Boat> options = new FirestoreRecyclerOptions.Builder<Boat>()

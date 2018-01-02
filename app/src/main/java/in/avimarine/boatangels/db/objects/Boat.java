@@ -18,6 +18,7 @@ public class Boat extends BaseDbObject {
   public GeoPoint location;
   public String marinaUuid;
   public String marinaName;
+  public int offerPoint = 0;
   public int yachtiePoint = 100;
   public final List<String> users = new ArrayList<>();
   public String clubName;
@@ -29,17 +30,25 @@ public class Boat extends BaseDbObject {
     return
         "uuid: " + getUuid() + "\n"+
         "Name: " + name +  "\n" +
+
         "lastUpdateTime: " + lastUpdateTime +"\n"+
         "firstAddedTime: " + firstAddedTime +"\n"+
         "Marina: " + marinaName+"\n"+
         "model: " + model+"\n"+
         "location: " + location +"\n"+
         "ClubName: " + clubName+"\n"+
+        "OfferPoint: " + offerPoint+"\n"+
         "yachtiePoint: " + yachtiePoint + "\n" +
         "lastInspectionDate: " + lastInspectionDate
         ;
   }
-
+/*
+  public String getOfferPointString() {
+    String point = "";
+    String points = point.valueOf(offerPoint);
+    return  points;
+  }
+*/
   public String getName() {
     return name;
   }
