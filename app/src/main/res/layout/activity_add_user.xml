@@ -63,11 +63,11 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    app:ccp_autoDetectCountry="true"
     app:ccp_showFullName="true"
     app:ccp_showNameCode="false"
     app:ccp_showPhoneCode="false"
     app:layout_constraintEnd_toEndOf="@+id/phone"
     app:layout_constraintStart_toStartOf="@+id/phone"
-    app:layout_constraintTop_toBottomOf="@+id/phone"
-    app:ccp_autoDetectCountry="true"/>
+    app:layout_constraintTop_toBottomOf="@+id/phone"/>
 </android.support.constraint.ConstraintLayout>

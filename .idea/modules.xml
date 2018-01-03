@@ -3,10 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://C:\programing\BoatAngels\BoatAngel.iml" filepath="C:\programing\BoatAngels\BoatAngel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/BoatAngels.iml" filepath="$PROJECT_DIR$/BoatAngels.iml" />
       <module fileurl="file://C:\Users\Motim\AndroidStudioProjects\BoatAngels_New\BoatAngels.iml" filepath="C:\Users\Motim\AndroidStudioProjects\BoatAngels_New\BoatAngels.iml" />
       <module fileurl="file://C:\programing\BoatAngels\BoatAngels_New.iml" filepath="C:\programing\BoatAngels\BoatAngels_New.iml" />
+      <module fileurl="file://H:\BoatAngle\boat\BoatAngels_New.iml" filepath="H:\BoatAngle\boat\BoatAngels_New.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boat.iml" filepath="$PROJECT_DIR$/boat.iml" />
     </modules>
   </component>
 </project>

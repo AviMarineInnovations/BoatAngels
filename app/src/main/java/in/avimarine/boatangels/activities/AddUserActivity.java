@@ -1,11 +1,16 @@
 package in.avimarine.boatangels.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +30,6 @@ public class AddUserActivity extends AppCompatActivity {
   private String country;
   private String uid;
   private final iDb db = new FireBase();
-
   @BindView(R.id.ccp)
   CountryCodePicker countryCodePicker;
 
@@ -36,8 +40,7 @@ public class AddUserActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     Button button = findViewById(R.id.btn_sign_in);
     button.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
+     public void onClick(View v) {
         EditText editTextName = findViewById(R.id.name);
         EditText editTextMail = findViewById(R.id.mail);
         EditText editTextPhone = findViewById(R.id.phone);
@@ -62,8 +65,7 @@ public class AddUserActivity extends AppCompatActivity {
           user.phone = phone;
           user.country = country;
           user.firstJoinTime = new Date();
-          user.setFirstAddedTime(new Date());
-          user.setLastUpdate(new Date());
+          user.lastUpdateTime = (new Date());
           user.uid = uid;
           db.addUser(user);
           finish();
@@ -71,6 +73,7 @@ public class AddUserActivity extends AppCompatActivity {
       }
     });
   }
+
 
   private boolean isValidInput(String s) {
     return s != null && !s.isEmpty();

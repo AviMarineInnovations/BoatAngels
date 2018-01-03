@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
-    isUserRegistered(FirebaseAuth.getInstance().getUid());
+    if (FirebaseAuth.getInstance().getUid()!= null)
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
   }
 
   @OnClick(R.id.sign_out_btn)
@@ -116,7 +118,12 @@ public class MainActivity extends AppCompatActivity {
     intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
+  @OnClick(R.id.ask_inspection)
+  public void ask(View v) {
+    Intent intent = new Intent(MainActivity.this, AskInspectionActivity.class);
+    startActivity(intent);
 
+  }
   public void isUserRegistered(String uid) {
     db.getUser(uid, new OnCompleteListener<DocumentSnapshot>() {
       @Override
