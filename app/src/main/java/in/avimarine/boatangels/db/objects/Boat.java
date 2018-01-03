@@ -42,19 +42,17 @@ public class Boat extends BaseDbObject {
         "lastInspectionDate: " + lastInspectionDate
         ;
   }
-/*
-  public String getOfferPointString() {
-    String point = "";
-    String points = point.valueOf(offerPoint);
-    return  points;
-  }
-*/
+
   public String getName() {
     return name;
   }
 
   public String getModel() {
     return model;
+  }
+
+  public int getOfferPoint() {
+    return offerPoint;
   }
 
   public GeoPoint getLocation() {

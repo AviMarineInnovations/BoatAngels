@@ -19,9 +19,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
@@ -29,6 +32,7 @@ import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
+import in.avimarine.boatangels.db.objects.User;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -113,6 +117,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
+    inspection.getPoint = b.getOfferPoint();
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.name;
     inspection.message = inspection_text.getText().toString();
@@ -128,7 +133,6 @@ public class InspectBoatActivity extends AppCompatActivity {
     db.addBoat(b);
     finish();
   }
-
 
   private void colorBoat() {
     if (checkbox_bow.getState() == State.VCHECKED) {

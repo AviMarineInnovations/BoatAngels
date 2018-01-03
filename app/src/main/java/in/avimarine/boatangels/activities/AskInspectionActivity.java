@@ -40,6 +40,7 @@ public class AskInspectionActivity extends AppCompatActivity {
         getBoatUid = user.getBoats().toString();
         Uid = getBoatUid.replaceAll("[]\\[]", "");
         showPoint(Uid);
+
        }
     });
   }
