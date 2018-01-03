@@ -1,6 +1,7 @@
 package in.avimarine.boatangels.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import butterknife.OnClick;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.github.pwittchen.weathericonview.WeatherIconView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,8 +26,22 @@ import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
+import in.avimarine.boatangels.general.GeneralUtils;
+import in.avimarine.boatangels.geographical.GeoUtils;
+import in.avimarine.boatangels.geographical.OpenWeatherMap;
+import in.avimarine.boatangels.geographical.Weather;
+import in.avimarine.boatangels.geographical.Weather.Wind;
+import in.avimarine.boatangels.geographical.WeatherHttpClient;
+import in.avimarine.boatangels.geographical.AsyncResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +62,42 @@ public class MainActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.show_inspections_btn)
   Button showInspectionsBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.day0_tv)
+  TextView day0_tv;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.weather_icon_0)
+  WeatherIconView weatherIcon0;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.day1_tv)
+  TextView day1_tv;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.weather_icon_1)
+  WeatherIconView weatherIcon1;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.day2_tv)
+  TextView day2_tv;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.weather_icon_2)
+  WeatherIconView weatherIcon2;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.day3_tv)
+  TextView day3_tv;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.weather_icon_3)
+  WeatherIconView weatherIcon3;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.day4_tv)
+  TextView day4_tv;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.weather_icon_4)
+  WeatherIconView weatherIcon4;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.day5_tv)
+  TextView day5_tv;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.weather_icon_5)
+  WeatherIconView weatherIcon5;
 
 
   private final iDb db = new FireBase();
@@ -75,7 +127,91 @@ public class MainActivity extends AppCompatActivity {
               .build(),
           RC_SIGN_IN);
     }
+    final OpenWeatherMap owp = new OpenWeatherMap();
+    new WeatherHttpClient(new AsyncResponse(){
+      @Override
+      public void processFinish(String output){
+        Weather w = owp.parseData(output);
+        Log.d(TAG,w.windForecast.toString());
+
+        Map<Integer,Wind> daysArr = getMaxWindDaysArray(w.windForecast);
+        int i=0;
+        for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
+
+          if (e!=null&&e.getValue()!=null){
+            switch (i) {
+              case 0:
+                setWeatherIcon(weatherIcon0,day0_tv,e.getValue().getDirection(),e.getValue().getSpeed());
+                break;
+              case 1:
+                setWeatherIcon(weatherIcon1,day1_tv,e.getValue().getDirection(),e.getValue().getSpeed());
+                break;
+              case 2:
+                setWeatherIcon(weatherIcon2,day2_tv,e.getValue().getDirection(),e.getValue().getSpeed());
+                break;
+              case 3:
+                setWeatherIcon(weatherIcon3,day3_tv,e.getValue().getDirection(),e.getValue().getSpeed());
+                break;
+              case 4:
+                setWeatherIcon(weatherIcon4,day4_tv,e.getValue().getDirection(),e.getValue().getSpeed());
+                break;
+              case 5:
+                setWeatherIcon(weatherIcon5,day5_tv,e.getValue().getDirection(),e.getValue().getSpeed());
+                break;
+            }
+          }
+          i++;
+        }
+
+      }
+    }).execute(GeoUtils.createLocation(32.56,34.94));
+
     //addMarinas();
+  }
+
+  private void setWeatherIcon(WeatherIconView weatherIcon, TextView tv, Float direction, Float speed) {
+    if (!GeneralUtils.isNull(weatherIcon,direction)){
+      weatherIcon.setIconResource(getString(R.string.wi_wind_direction));
+      weatherIcon.setRotation(direction+180);
+      if (speed>7.5){
+        weatherIcon.setIconColor(Color.RED);
+      }
+      weatherIcon.setVisibility(View.VISIBLE);
+      tv.setText(Math.round(speed*1.94)+"kn");
+    }
+    else weatherIcon.setVisibility(View.INVISIBLE);
+
+  }
+
+  private Map<Integer,Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
+    Map<Integer,Wind> ret = new TreeMap<>();
+    int day = -1;
+    double speed = 0;
+    double dir = 0;
+    for (Map.Entry<Date,Wind> w : windForecast.entrySet()){
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(w.getKey());
+      if (day == -1){
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        speed = w.getValue().getSpeed();
+        dir = w.getValue().getDirection();
+        ret.put(day,new Weather().new Wind(speed,dir));
+      }else{
+        if (day==cal.get(Calendar.DAY_OF_MONTH)){
+          if(w.getValue().getSpeed()>speed){
+            speed= w.getValue().getSpeed();
+            dir = w.getValue().getDirection();
+            ret.put(day,new Weather().new Wind(speed,dir));
+          }
+        } else{
+          speed= w.getValue().getSpeed();
+          dir = w.getValue().getDirection();
+          day = cal.get(Calendar.DAY_OF_MONTH);
+          ret.put(day,new Weather().new Wind(speed,dir));
+        }
+      }
+    }
+    return ret;
   }
 
   @Override

@@ -14,11 +14,12 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.33999997"/>
   <Button
     android:id="@+id/sign_out_btn"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="0dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="148dp"
     android:layout_marginEnd="148dp"
@@ -58,5 +59,172 @@
     android:text="@string/show_inspections_btn_text"
     app:layout_constraintStart_toEndOf="@+id/add_boat_btn"
     app:layout_constraintTop_toTopOf="parent"/>
+  <TableLayout
+    android:id="@+id/tableLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/sign_out_btn">
+
+    <TableRow
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent">
+
+      <LinearLayout
+        android:orientation="vertical"
+        android:padding="3dp">
+        <com.github.pwittchen.weathericonview.WeatherIconView
+          android:id="@+id/weather_icon_0"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/weather_tv"
+          app:weatherIconColor="@android:color/black"
+          app:weatherIconResource="@string/wi_day_sunny_overcast"
+          app:weatherIconSize="20"/>
+        <TextView
+          android:id="@+id/day0_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="12kn"/>
+      </LinearLayout>
+      <LinearLayout
+        android:orientation="vertical"
+        android:padding="3dp">
+        <com.github.pwittchen.weathericonview.WeatherIconView
+          android:id="@+id/weather_icon_1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/weather_tv"
+          app:weatherIconColor="@android:color/black"
+          app:weatherIconResource="@string/wi_day_sunny_overcast"
+          app:weatherIconSize="20"/>
+        <TextView
+          android:id="@+id/day1_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="12kn"/>
+      </LinearLayout>
+      <LinearLayout
+        android:orientation="vertical"
+        android:padding="3dp">
+        <com.github.pwittchen.weathericonview.WeatherIconView
+          android:id="@+id/weather_icon_2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/weather_tv"
+          app:weatherIconColor="@android:color/black"
+          app:weatherIconResource="@string/wi_day_sunny_overcast"
+          app:weatherIconSize="20"/>
+        <TextView
+          android:id="@+id/day2_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="12kn"/>
+      </LinearLayout>
+      <LinearLayout
+        android:orientation="vertical"
+        android:padding="3dp">
+        <com.github.pwittchen.weathericonview.WeatherIconView
+          android:id="@+id/weather_icon_3"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/weather_tv"
+          app:weatherIconColor="@android:color/black"
+          app:weatherIconResource="@string/wi_day_sunny_overcast"
+          app:weatherIconSize="20"/>
+        <TextView
+          android:id="@+id/day3_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="12kn"/>
+      </LinearLayout>
+      <LinearLayout
+        android:orientation="vertical"
+        android:padding="3dp">
+        <com.github.pwittchen.weathericonview.WeatherIconView
+          android:id="@+id/weather_icon_4"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/weather_tv"
+          app:weatherIconColor="@android:color/black"
+          app:weatherIconResource="@string/wi_day_sunny_overcast"
+          app:weatherIconSize="20"/>
+        <TextView
+          android:id="@+id/day4_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="12kn"/>
+      </LinearLayout>
+      <LinearLayout
+        android:orientation="vertical"
+        android:padding="3dp">
+        <com.github.pwittchen.weathericonview.WeatherIconView
+          android:id="@+id/weather_icon_5"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          android:rotation="90"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/weather_tv"
+          app:weatherIconColor="@android:color/black"
+          app:weatherIconResource="@string/wi_wind_direction"
+          app:weatherIconSize="20"/>
+        <TextView
+          android:id="@+id/day5_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="12kn"/>
+      </LinearLayout>
+    </TableRow>
+
+
+  </TableLayout>
+
 
 </android.support.constraint.ConstraintLayout>
