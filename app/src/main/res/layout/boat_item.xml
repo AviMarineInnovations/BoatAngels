@@ -36,7 +36,7 @@
     <TextView
       android:id="@+id/sum_offer_points"
       style="@style/TextAppearance.AppCompat.Small"
-      android:layout_width="92dp"
+      android:layout_width="100dp"
       android:layout_height="wrap_content"
       tools:text="Offer"/>
 
@@ -53,7 +53,7 @@
     <ImageView
       android:id="@+id/status_iv"
       android:layout_width="40dp"
-      android:layout_height="40dp"
+      android:layout_height="90dp"
       android:contentDescription="@string/boat_status_content_description"
       app:srcCompat="@drawable/ic_traffic_green_24px"/>
   </LinearLayout>

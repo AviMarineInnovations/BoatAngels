@@ -35,7 +35,7 @@ public class BoatHolder extends RecyclerView.ViewHolder {
     //DateUtils.getRelativeTimeSpanString(b.lastInspectionDate)
     String SumOffer = Integer.toString(b.offerPoint);
     setClubName(b.clubName);
-    setmSumOfferPoints(SumOffer);
+    setmSumOfferPoints("offer: " + SumOffer + " points");
     setClubName(b.clubName);
     setStatus(getStatus(b.lastInspectionDate));
   }
