@@ -18,6 +18,7 @@ public class User extends BaseDbObject {
   public String mail;
   public String phone;
   public String country;
+  public int yachtiePoint = 100;
   public Date firstJoinTime;
   public String uid;
   public Date lastUpdateTime;
@@ -30,6 +31,7 @@ public class User extends BaseDbObject {
         "uid =" + uid + '\n' +
         "mail=" + mail +'\n' +
         "Phone=" + phone +'\n' +
+        "yachtiePoint=" + yachtiePoint +'\n' +
         "firstAddedTime=" + firstJoinTime +'\n' +
         "boats=" + boats +'\n'+
         "lastUpdateTime=" + lastUpdateTime
@@ -46,6 +48,10 @@ public class User extends BaseDbObject {
 
   public String getPhone() {
     return phone;
+  }
+
+  public int getYachtiePoint() {
+    return yachtiePoint;
   }
 
   public String getCountry() {

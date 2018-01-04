@@ -74,7 +74,6 @@ public class FireBase implements iDb {
   public void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener) {
     mFirestore.collection("marinas").whereEqualTo("country", country).get().addOnCompleteListener(listener);
   }
-
   @Override
   public void addMarina(Marina m) {
     mFirestore.collection("marinas").document(m.getUuid()).set(m);
