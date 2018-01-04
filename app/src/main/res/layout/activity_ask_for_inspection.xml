@@ -13,7 +13,7 @@
     android:layout_height="wrap_content"
     android:text="@string/ask_for_inspection_title"
     android:textColor="#000000"
-    android:textSize="24dp"
+    android:textSize="24sp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.498"
@@ -26,7 +26,7 @@
     android:layout_height="30dp"
     android:text="@string/inspection_offer"
     android:textColor="#000000"
-    android:textSize="22dp"
+    android:textSize="22sp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.073"
@@ -63,7 +63,7 @@
     android:layout_height="wrap_content"
     android:text="@string/show_yactie_point"
     android:textColor="#000000"
-    android:textSize="22dp"
+    android:textSize="22sp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.05"
@@ -74,20 +74,12 @@
     android:id="@+id/show_point"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-
     android:textColor="#000000"
-    android:textSize="22dp"
+    android:textSize="22sp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.41"
-
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.296"/><![CDATA[
-
-
-  />
-
-
-]]>
+    app:layout_constraintVertical_bias="0.296"/>
 </android.support.constraint.ConstraintLayout>
