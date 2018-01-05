@@ -45,11 +45,16 @@ public class MainActivity extends AppCompatActivity {
   Button addBoatBtn;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.show_inspections_btn)
-  Button showInspectionsBtn;
+  Button showInspectionBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.ask_inspection)
+  Button askInspectionBtn;
+
 
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
+  private User currentUser = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +129,12 @@ public class MainActivity extends AppCompatActivity {
     intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
+  @OnClick(R.id.ask_inspection)
+  public void ask(View v) {
+    Intent intent = new Intent(MainActivity.this, AskInspectionActivity.class);
+    startActivity(intent);
 
+  }
   public void isUserRegistered(String uid) {
     db.getUser(uid, new OnCompleteListener<DocumentSnapshot>() {
       @Override
@@ -134,16 +144,21 @@ public class MainActivity extends AppCompatActivity {
           if (!document.exists()) {
             Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
             startActivity(intent);
-          } else {
-            User u = document.toObject(User.class);
-            db.setCurrentUser(u);
-            if (u.boats.isEmpty()) {
-              addBoatBtn.setEnabled(true);
-              showInspectionsBtn.setEnabled(false);
-            } else {
+          }
+          else{
+            currentUser = document.toObject(User.class);
+            db.setCurrentUser(currentUser);
+            welcomeTv.setText(getString(R.string.welcome_message,currentUser.getDisplayName()));
+            if (!currentUser.getBoats().isEmpty()) {
               addBoatBtn.setEnabled(false);
-              showInspectionsBtn.setEnabled(true);
-              ownBoatUuid = u.boats.get(0);
+              showInspectionBtn.setEnabled(true);
+              askInspectionBtn.setEnabled(true);
+              ownBoatUuid = currentUser.getBoats().get(0);
+            }
+            else {
+              addBoatBtn.setEnabled(true);
+              showInspectionBtn.setEnabled(false);
+              askInspectionBtn.setEnabled(false);
             }
           }
         }
@@ -206,10 +221,8 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance() != null
             && FirebaseAuth.getInstance().getCurrentUser() != null) {
           isUserRegistered(FirebaseAuth.getInstance().getUid());
-          welcomeTv
-              .setText(String.format(getString(R.string.welcome_message),
-                  FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
-          //TODO: get boat name and save to variable. If no boat assigned to user disable boat related buttons (such as show inspections).
+
+
         }
         signoutBtn.setEnabled(true);
         return;

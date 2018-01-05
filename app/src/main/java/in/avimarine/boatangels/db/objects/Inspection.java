@@ -20,11 +20,13 @@ public class Inspection extends BaseDbObject {
   public Map<String, String> finding;
   public Long inspectionTime;
   public List<Message> discussion;
+  public int pointsEarned;
 
   @Override
   public String toString() {
     return "Inspection{" +
         "inspectorUid='" + inspectorUid + '\'' +
+        "getPoint='" + pointsEarned + '\'' +
         ", lastUpdateTime=" + lastUpdateTime +
         ", boatUuid='" + boatUuid + '\'' +
         ", boatName='" + boatName + '\'' +
