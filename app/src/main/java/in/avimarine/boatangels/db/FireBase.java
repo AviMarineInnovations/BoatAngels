@@ -63,7 +63,7 @@ public class FireBase implements iDb {
 
   @Override
   public void addUser(User user) {
-      mFirestore.collection("users").document(user.uid).set(user);
+      mFirestore.collection("users").document(user.getUid()).set(user);
   }
   @Override
   public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
@@ -74,7 +74,6 @@ public class FireBase implements iDb {
   public void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener) {
     mFirestore.collection("marinas").whereEqualTo("country", country).get().addOnCompleteListener(listener);
   }
-
   @Override
   public void addMarina(Marina m) {
     mFirestore.collection("marinas").document(m.getUuid()).set(m);

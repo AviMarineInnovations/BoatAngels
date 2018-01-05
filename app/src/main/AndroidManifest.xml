@@ -38,8 +38,8 @@
     </activity>
     <activity android:name=".activities.BoatForInspectionActivity">
     </activity>
-
+    <activity android:name=".activities.AskInspectionActivity">
+    </activity>
   </application>
-  <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>
