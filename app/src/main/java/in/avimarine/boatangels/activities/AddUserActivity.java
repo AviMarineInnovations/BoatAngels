@@ -1,16 +1,11 @@
 package in.avimarine.boatangels.activities;
 
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,24 +44,24 @@ public class AddUserActivity extends AppCompatActivity {
         phone = editTextPhone.getText().toString();
         country = countryCodePicker.getSelectedCountryName();
 
-        if (!isValidInput(name)) {
+        if (isNotValidInput(name)) {
           editTextName.setError(getString(R.string.name_error_message));
-        } else if (!isValidInput(mail)||!GeneralUtils.isValidEmail(mail)) {
+        } else if (isNotValidInput(mail)|| GeneralUtils.isNotValidEmail(mail)) {
           editTextMail.setError(getString(R.string.email_error_message));
-        } else if (!isValidMobile(phone)) {
+        } else if (isNotValidMobile(phone)) {
           editTextPhone.setError(getString(R.string.phone_number_error_message));
         } else {
 
           uid = FirebaseAuth.getInstance().getUid();
 
           User user = new User();
-          user.displayName = name;
-          user.mail = mail;
-          user.phone = phone;
-          user.country = country;
-          user.firstJoinTime = new Date();
-          user.lastUpdateTime = (new Date());
-          user.uid = uid;
+          user.setDisplayName(name);
+          user.setMail(mail);
+          user.setPhone(phone);
+          user.setCountry(country);
+          user.setFirstJoinTime(new Date());
+          user.setLastUpdate(new Date());
+          user.setUid(uid);
           db.addUser(user);
           finish();
         }
@@ -75,12 +70,12 @@ public class AddUserActivity extends AppCompatActivity {
   }
 
 
-  private boolean isValidInput(String s) {
-    return s != null && !s.isEmpty();
+  private boolean isNotValidInput(String s) {
+    return s == null || s.isEmpty();
   }
 
-  private boolean isValidMobile(String phone) {
-    return !Pattern.matches("[a-zA-Z]+", phone) && !(phone.length() < 6 || phone.length() > 13);
+  private boolean isNotValidMobile(String phone) {
+    return Pattern.matches("[a-zA-Z]+", phone) || (phone.length() < 6 || phone.length() > 13);
   }
 
 }

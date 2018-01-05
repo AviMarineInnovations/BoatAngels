@@ -19,12 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
@@ -67,6 +64,7 @@ public class InspectBoatActivity extends AppCompatActivity {
   @BindView(R.id.inspect_boat_title)
   TextView title;
   Boat b;
+  User u = null;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +93,12 @@ public class InspectBoatActivity extends AppCompatActivity {
         }
       }
     });
+    u = db.getCurrentUser();
+    if (u==null)
+    {
+      Log.e(TAG,"Current user is null!");
+      finish();
+    }
 
     OnClickListener ocl = new OnClickListener() {
       @Override
@@ -122,10 +126,9 @@ public class InspectBoatActivity extends AppCompatActivity {
     inspection.boatName = b.name;
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
-    inspection.inspectorUid = FirebaseAuth.getInstance().getUid();
+    inspection.inspectorUid = u.getUid();
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-      inspection.inspectorName = FirebaseAuth.getInstance().getCurrentUser()
-          .getDisplayName(); //TODO: Switch to using name from User object
+      inspection.inspectorName = u.getDisplayName();
     }
     inspection.finding = getCheckBoxes();
     b.lastInspectionDate = inspection.inspectionTime;

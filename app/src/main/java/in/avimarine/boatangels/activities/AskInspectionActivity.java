@@ -33,7 +33,6 @@ public class AskInspectionActivity extends AppCompatActivity {
   Button inspectMeBtn;
   @BindView(R.id.yachtie_point_editxt)
   EditText yactiepointEditxt;
-  private final String p = " points";
 
 
   @Override
@@ -55,7 +54,7 @@ public class AskInspectionActivity extends AppCompatActivity {
         } else {
           inspectMeBtn.setEnabled(true);
         }
-        showPointTv.setText(user.getYachtiePoint() + p);
+        showPointTv.setText(getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint()));
         getBoatUid = user.getBoats().toString().replaceAll("[]\\[]", "");
 
 
@@ -79,7 +78,8 @@ public class AskInspectionActivity extends AppCompatActivity {
             yachtiePoint -= OfferPoints;
             updateCollection("users", uid, "yachtiePoint", yachtiePoint);
             updateCollection("boats", getBoatUid, "offerPoint", OfferPoints);
-            showPointTv.setText(yachtiePoint + p);
+            showPointTv.setText(
+                getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint()));
           }
 
         } catch (NumberFormatException nfe) {
@@ -99,6 +99,4 @@ public class AskInspectionActivity extends AppCompatActivity {
         .update(
             field, value);
   }
-
-
 }

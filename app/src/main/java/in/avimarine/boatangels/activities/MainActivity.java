@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,10 +43,17 @@ public class MainActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.add_boat_btn)
   Button addBoatBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.show_inspections_btn)
+  Button showInspectionBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.ask_inspection)
+  Button askInspectionBtn;
 
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
+  private User currentUser = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -135,14 +141,20 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
           }
           else{
-            User u = document.toObject(User.class);
-            db.setCurrentUser(u);
-            if (u.boats.size()>0) {
+            currentUser = document.toObject(User.class);
+            db.setCurrentUser(currentUser);
+            welcomeTv.setText(getString(R.string.welcome_message,currentUser.getDisplayName()));
+            if (!currentUser.getBoats().isEmpty()) {
               addBoatBtn.setEnabled(false);
-              ownBoatUuid = u.boats.get(0);
+              showInspectionBtn.setEnabled(true);
+              askInspectionBtn.setEnabled(true);
+              ownBoatUuid = currentUser.getBoats().get(0);
             }
-            else
+            else {
               addBoatBtn.setEnabled(true);
+              showInspectionBtn.setEnabled(false);
+              askInspectionBtn.setEnabled(false);
+            }
           }
         }
       }
@@ -205,10 +217,8 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance() != null
             && FirebaseAuth.getInstance().getCurrentUser() != null) {
           isUserRegistered(FirebaseAuth.getInstance().getUid());
-          welcomeTv
-              .setText(String.format(getString(R.string.welcome_message),
-                  FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
-          //TODO: get boat name and save to variable. If no boat assigned to user disable boat related buttons (such as show inspections).
+
+
         }
         signoutBtn.setEnabled(true);
         return;

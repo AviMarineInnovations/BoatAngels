@@ -14,15 +14,17 @@ import java.util.List;
 
 public class User extends BaseDbObject {
 
-  public String displayName;
-  public String mail;
-  public String phone;
-  public String country;
-  public int yachtiePoint = 100;
-  public Date firstJoinTime;
-  public String uid;
-  public Date lastUpdateTime;
-  public final List<String> boats = new ArrayList<>();
+  private String displayName;
+  private String mail;
+  private String phone;
+  private String country;
+  private int yachtiePoint = 100;
+  private Date firstJoinTime;
+  private String uid;
+
+
+
+  private List<String> boats = new ArrayList<>();
 
   @Override
   public String toString() {
@@ -70,5 +72,35 @@ public class User extends BaseDbObject {
     return boats;
   }
 
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  public void setMail(String mail) {
+    this.mail = mail;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public void setCountry(String country) {
+    this.country = country;
+  }
+
+  public void setYachtiePoint(int yachtiePoint) {
+    this.yachtiePoint = yachtiePoint;
+  }
+
+  public void setFirstJoinTime(Date firstJoinTime) {
+    this.firstJoinTime = firstJoinTime;
+  }
+
+  public void setUid(String uid) {
+    this.uid = uid;
+  }
+  public void setBoats(List<String> boats) {
+    this.boats = boats;
+  }
 
 }

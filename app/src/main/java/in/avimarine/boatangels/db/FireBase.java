@@ -63,7 +63,7 @@ public class FireBase implements iDb {
 
   @Override
   public void addUser(User user) {
-      mFirestore.collection("users").document(user.uid).set(user);
+      mFirestore.collection("users").document(user.getUid()).set(user);
   }
   @Override
   public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
