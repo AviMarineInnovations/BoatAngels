@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
   Button askInspectionBtn;
 
 
+
   private final iDb db = new FireBase();
   private String ownBoatUuid;
   private User currentUser = null;
@@ -79,17 +80,19 @@ public class MainActivity extends AppCompatActivity {
               .build(),
           RC_SIGN_IN);
     }
+    //addMarinas();
   }
 
   @Override
   protected void onStart() {
     super.onStart();
-    if (FirebaseAuth.getInstance().getUid()!= null)
+    if (FirebaseAuth.getInstance().getUid() != null) {
       isUserRegistered(FirebaseAuth.getInstance().getUid());
+    }
   }
 
   @OnClick(R.id.sign_out_btn)
-  public void signoutBtnClick(View v){
+  public void signoutBtnClick(View v) {
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -113,11 +116,13 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.inspect_boat_btn)
   public void inspectBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, BoatForInspectionActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.show_inspections_btn)
   public void showInspectionsBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
@@ -161,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
     });
   }
 
-    /***
-     * For setting first marina db. Don't call!
-     */
-  private void addMarinas(){
+  /***
+   * For setting first marina db. Don't call!
+   */
+  private void addMarinas() {
     Marina m = new Marina();
     m.name = "Shavit, Haifa";
     m.country = "Israel";
@@ -201,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
     m.setLastUpdate(new Date());
     db.addMarina(m);
   }
-
 
 
   @Override
