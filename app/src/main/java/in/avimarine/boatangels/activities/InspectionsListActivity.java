@@ -58,7 +58,7 @@ public class InspectionsListActivity extends AppCompatActivity {
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             Boat b = document.toObject(Boat.class);
-            setTitle(getString(R.string.inspection_for_title_prefix) + b.name);
+            setTitle(getString(R.string.inspection_for_title_prefix) + b.getName());
         }
       }
     }});
