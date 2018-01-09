@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,43 +68,6 @@ public class MainActivity extends AppCompatActivity {
   @BindView(R.id.show_inspections_btn)
   Button showInspectionBtn;
   @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.day0_tv)
-  TextView day0_tv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.weather_icon_0)
-  WeatherIconView weatherIcon0;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.day1_tv)
-  TextView day1_tv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.weather_icon_1)
-  WeatherIconView weatherIcon1;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.day2_tv)
-  TextView day2_tv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.weather_icon_2)
-  WeatherIconView weatherIcon2;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.day3_tv)
-  TextView day3_tv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.weather_icon_3)
-  WeatherIconView weatherIcon3;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.day4_tv)
-  TextView day4_tv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.weather_icon_4)
-  WeatherIconView weatherIcon4;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.day5_tv)
-  TextView day5_tv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.weather_icon_5)
-  WeatherIconView weatherIcon5;
-
-  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.ask_inspection)
   Button askInspectionBtn;
 
@@ -132,42 +100,25 @@ public class MainActivity extends AppCompatActivity {
           RC_SIGN_IN);
     }
     final OpenWeatherMap owp = new OpenWeatherMap();
-    new WeatherHttpClient(new AsyncResponse(){
-      @Override
-      public void processFinish(String output){
-        Weather w = owp.parseData(output);
-        Log.d(TAG,w.windForecast.toString());
-
-        Map<Integer,Wind> daysArr = getMaxWindDaysArray(w.windForecast);
-        int i=0;
-        for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
-
-          if (e!=null&&e.getValue()!=null){
-            switch (i) {
-              case 0:
-                setWeatherIcon(weatherIcon0,day0_tv,e.getValue().getDirection(),e.getValue().getSpeed());
-                break;
-              case 1:
-                setWeatherIcon(weatherIcon1,day1_tv,e.getValue().getDirection(),e.getValue().getSpeed());
-                break;
-              case 2:
-                setWeatherIcon(weatherIcon2,day2_tv,e.getValue().getDirection(),e.getValue().getSpeed());
-                break;
-              case 3:
-                setWeatherIcon(weatherIcon3,day3_tv,e.getValue().getDirection(),e.getValue().getSpeed());
-                break;
-              case 4:
-                setWeatherIcon(weatherIcon4,day4_tv,e.getValue().getDirection(),e.getValue().getSpeed());
-                break;
-              case 5:
-                setWeatherIcon(weatherIcon5,day5_tv,e.getValue().getDirection(),e.getValue().getSpeed());
-                break;
-            }
-          }
-          i++;
+    new WeatherHttpClient(output -> {
+      Weather w = owp.parseData(output);
+      Log.d(TAG,w.windForecast.toString());
+      Map<Integer,Wind> daysArr = getMaxWindDaysArray(w.windForecast);
+      int i=0;
+      TableLayout tblLayout = (TableLayout)findViewById(R.id.tableLayout);
+      TableRow row = (TableRow)tblLayout.getChildAt(0); // Here get row id depending on number of row
+      LayoutInflater inflater = (LayoutInflater)      getSystemService(LAYOUT_INFLATER_SERVICE);
+      for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
+        if (e!=null&&e.getValue()!=null){
+          View childLayout = inflater.inflate(R.layout.weather_table_col, null);
+          WeatherIconView wiv = (WeatherIconView) ((ViewGroup)childLayout).getChildAt(0);
+          TextView tv = (TextView) ((ViewGroup)childLayout).getChildAt(1);
+          setWeatherIcon(wiv,tv,e.getValue().getDirection(),e.getValue().getSpeed());
+          row.addView(childLayout);
         }
-
+        i++;
       }
+
     }).execute(GeoUtils.createLocation(32.56,34.94));
 
     //addMarinas();
