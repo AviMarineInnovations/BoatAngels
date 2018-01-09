@@ -85,7 +85,7 @@ public class InspectBoatActivity extends AppCompatActivity {
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             b = document.toObject(Boat.class);
-            title.setText(getString(R.string.inspection_title, b.name));
+            title.setText(getString(R.string.inspection_title, b.getName()));
           } else {
             Log.e(TAG, "No Boat found for this uuid available");
             finish();
@@ -123,7 +123,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     }
     inspection.pointsEarned = b.getOfferPoint();
     inspection.boatUuid = b.getUuid();
-    inspection.boatName = b.name;
+    inspection.boatName = b.getName();
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
     inspection.inspectorUid = u.getUid();
@@ -131,7 +131,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       inspection.inspectorName = u.getDisplayName();
     }
     inspection.finding = getCheckBoxes();
-    b.lastInspectionDate = inspection.inspectionTime;
+    b.setLastInspectionDate(inspection.inspectionTime);
     db.addInspection(inspection);
     db.addBoat(b);
     finish();

@@ -100,11 +100,11 @@ public class AddBoatActivity extends AppCompatActivity {
         Toast.makeText(this,"No marina was selected",Toast.LENGTH_SHORT).show();
       return;
     }
-    b.marinaUuid = ((Marina)marina_spinner.getSelectedItem()).getUuid();
-    b.marinaName = ((Marina)marina_spinner.getSelectedItem()).name;
-    b.name = boatNameEt.getText().toString();
-    b.model = boatModelEt.getText().toString();
-    b.clubName = boatClubEt.getText().toString();
+    b.setMarinaUuid(((Marina)marina_spinner.getSelectedItem()).getUuid());
+    b.setMarinaName(((Marina)marina_spinner.getSelectedItem()).name);
+    b.setName(boatNameEt.getText().toString());
+    b.setModel(boatModelEt.getText().toString());
+    b.setClubName(boatClubEt.getText().toString());
     Double lat = GeneralUtils.tryParseDouble(boatLatEt.getText().toString());
     Double lon = GeneralUtils.tryParseDouble(boatLonEt.getText().toString());
     if (!isValidLat(lat)){
@@ -117,7 +117,7 @@ public class AddBoatActivity extends AppCompatActivity {
       boatLonEt.requestFocus();
       return;
     }
-    b.location = new GeoPoint(lat, lon);
+    b.setLocation(new GeoPoint(lat, lon));
     b.setLastUpdate(new Date());
     b.setFirstAddedTime(new Date());
     b.users.add(FirebaseAuth.getInstance().getUid());
