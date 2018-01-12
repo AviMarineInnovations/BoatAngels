@@ -6,4 +6,29 @@
     <attr name="jib" format="color" />
     <attr name="main" format="color" />
   </declare-styleable>
+
+  <declare-styleable name="WeatherTableView">
+    <attr name="date_time" format="string" />
+    <attr name="days">
+      <enum name="zero" value="0" />
+      <enum name="one" value="1" />
+      <enum name="two" value="2" />
+      <enum name="three" value="3" />
+      <enum name="four" value="4" />
+      <enum name="five" value="5" />
+      <enum name="six" value="6" />
+    </attr>
+    <attr name="day0spd" format="integer" />
+    <attr name="day1spd" format="integer" />
+    <attr name="day2spd" format="integer" />
+    <attr name="day3spd" format="integer" />
+    <attr name="day4spd" format="integer" />
+    <attr name="day5spd" format="integer" />
+    <attr name="day0dir" format="integer" />
+    <attr name="day1dir" format="integer" />
+    <attr name="day2dir" format="integer" />
+    <attr name="day3dir" format="integer" />
+    <attr name="day4dir" format="integer" />
+    <attr name="day5dir" format="integer" />
+  </declare-styleable>
 </resources>

@@ -27,8 +27,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.customViews.WeatherTableView;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
+import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
@@ -74,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
   private final iDb db = new FireBase();
   private String ownBoatUuid;
   private User currentUser = null;
+  private Boat currentBoat = null;
+  private Marina currentMarina = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -99,44 +103,13 @@ public class MainActivity extends AppCompatActivity {
               .build(),
           RC_SIGN_IN);
     }
-    final OpenWeatherMap owp = new OpenWeatherMap();
-    new WeatherHttpClient(output -> {
-      Weather w = owp.parseData(output);
-      Log.d(TAG,w.windForecast.toString());
-      Map<Integer,Wind> daysArr = getMaxWindDaysArray(w.windForecast);
-      int i=0;
-      TableLayout tblLayout = (TableLayout)findViewById(R.id.tableLayout);
-      TableRow row = (TableRow)tblLayout.getChildAt(0); // Here get row id depending on number of row
-      LayoutInflater inflater = (LayoutInflater)      getSystemService(LAYOUT_INFLATER_SERVICE);
-      for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
-        if (e!=null&&e.getValue()!=null){
-          View childLayout = inflater.inflate(R.layout.weather_table_col, null);
-          WeatherIconView wiv = (WeatherIconView) ((ViewGroup)childLayout).getChildAt(0);
-          TextView tv = (TextView) ((ViewGroup)childLayout).getChildAt(1);
-          setWeatherIcon(wiv,tv,e.getValue().getDirection(),e.getValue().getSpeed());
-          row.addView(childLayout);
-        }
-        i++;
-      }
 
-    }).execute(GeoUtils.createLocation(32.56,34.94));
+
 
     //addMarinas();
   }
 
-  private void setWeatherIcon(WeatherIconView weatherIcon, TextView tv, Float direction, Float speed) {
-    if (!GeneralUtils.isNull(weatherIcon,direction)){
-      weatherIcon.setIconResource(getString(R.string.wi_wind_direction));
-      weatherIcon.setRotation(direction+180);
-      if (speed>7.5){
-        weatherIcon.setIconColor(Color.RED);
-      }
-      weatherIcon.setVisibility(View.VISIBLE);
-      tv.setText(Math.round(speed*1.94)+"kn");
-    }
-    else weatherIcon.setVisibility(View.INVISIBLE);
 
-  }
 
   private Map<Integer,Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
     Map<Integer,Wind> ret = new TreeMap<>();
@@ -240,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
               showInspectionBtn.setEnabled(true);
               askInspectionBtn.setEnabled(true);
               ownBoatUuid = currentUser.getBoats().get(0);
+              getOwnBoat(ownBoatUuid);
             }
             else {
               addBoatBtn.setEnabled(true);
@@ -250,6 +224,68 @@ public class MainActivity extends AppCompatActivity {
         }
       }
     });
+  }
+
+  private void getOwnBoat(String uuid) {
+    if (currentBoat==null || !currentBoat.getUuid().equals(uuid)) {
+      db.getBoat(uuid, task -> {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult();
+          if (document.exists()) {
+            currentBoat = document.toObject(Boat.class);
+            if (!GeneralUtils.isNull(currentBoat,currentBoat.getMarinaUuid())) {
+              db.getMarina(currentBoat.getMarinaUuid(),
+                  task1 -> {
+                    DocumentSnapshot document1 = task1.getResult();
+                    if (document1.exists()) {
+                      currentMarina = document1.toObject(Marina.class);
+                      updateWeather(currentMarina.getLocation());
+                    } else {
+                      Log.e(TAG, "Unable to get own marina");
+                    }
+                  });
+            }
+            else{
+              Log.e(TAG,"Unable to get own boat");
+            }
+          }
+
+          else{
+            Log.e(TAG,"Unable to get own boat");
+          }
+        }
+      });
+    }
+
+  }
+
+  private void updateWeather(GeoPoint location) {
+    if (GeneralUtils.isNull(location))
+      Log.e(TAG, "Marina location is null");
+    final OpenWeatherMap owp = new OpenWeatherMap();
+    new WeatherHttpClient(output -> {
+      Weather w = owp.parseData(output);
+      Log.d(TAG,w.getWindForecast().toString());
+      Map<Integer,Wind> daysArr = getMaxWindDaysArray(w.getWindForecast());
+      ArrayList<Wind> winds = new ArrayList<>();
+      for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
+        winds.add(e.getValue());
+      }
+      ((WeatherTableView)findViewById(R.id.tableLayout)).setWind(winds);
+      ((WeatherTableView)findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
+//      TableRow row = findViewById(R.id.tableLayout);
+//      LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//      row.removeAllViewsInLayout();
+//      for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
+//        if (e!=null&&e.getValue()!=null){
+//          View childLayout = inflater.inflate(R.layout.weather_table_col, null);
+//          WeatherIconView wiv = (WeatherIconView) ((ViewGroup)childLayout).getChildAt(0);
+//          TextView tv = (TextView) ((ViewGroup)childLayout).getChildAt(1);
+//          setWeatherIcon(wiv,tv,e.getValue().getDirection(),e.getValue().getSpeed());
+//          row.addView(childLayout);
+//        }
+//      }
+    }).execute(GeoUtils.createLocation(location.getLatitude(),location.getLongitude()));
   }
 
   /***

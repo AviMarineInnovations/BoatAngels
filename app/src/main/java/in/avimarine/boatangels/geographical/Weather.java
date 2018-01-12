@@ -2,6 +2,7 @@ package in.avimarine.boatangels.geographical;
 
 import android.location.Location;
 import android.view.Window;
+import in.avimarine.boatangels.db.objects.BaseDbObject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +14,15 @@ import java.util.TreeMap;
  * first created by aayaffe on 31/12/2017.
  */
 
-public class Weather {
+public class Weather extends BaseDbObject{
 
-  public Location location;
-  public Wind currentWind;
-  public String country;
-  public String city;
-  public int sunrise;
-  public int sunset;
-
-  public Map<Date,Wind> windForecast = new TreeMap<>();
+  private Location location;
+  private Wind currentWind;
+  private String country;
+  private String city;
+  private int sunrise;
+  private int sunset;
+  private Map<Date,Wind> windForecast = new TreeMap<>();
 
   public Location getLocation() {
     return location;
@@ -84,6 +84,10 @@ public class Weather {
         ", sunrise=" + sunrise +
         ", sunset=" + sunset +
         '}';
+  }
+
+  public Map<Date, Wind> getWindForecast() {
+    return windForecast;
   }
 
 

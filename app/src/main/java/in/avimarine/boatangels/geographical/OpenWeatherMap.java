@@ -39,20 +39,15 @@ public class OpenWeatherMap implements iWeather {
       Location loc = GeoUtils
           .createLocation((double) getFloat("lat", coordObj), (double) getFloat("lon", coordObj));
 
-      ret.location = loc;
+      ret.setLocation(loc);
 
       JSONArray jsonArray=jObj.getJSONArray("list");
       for (int i=0; i < jsonArray.length(); i++){
         if (jsonArray.get(i) instanceof JSONObject ) {
-          parseWind(ret.windForecast,(JSONObject)jsonArray.get(i));
+          parseWind(ret.getWindForecast(),(JSONObject)jsonArray.get(i));
         }
       }
-//      // Wind
-//      JSONObject wObj = getObject("wind", jObj);
-//      ret.currentWind = new Weather().new Wind();
-//      ret.currentWind.setSpeed(getFloat("speed", wObj));
-//      ret.currentWind.setDirection(getFloat("deg", wObj));
-
+      ret.setLastUpdate(new Date());
       return ret;
     } catch (JSONException e) {
       Log.e(TAG, "parseData: error parsing Json", e);

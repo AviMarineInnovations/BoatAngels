@@ -42,6 +42,11 @@ public class FireBase implements iDb {
     mFirestore.collection("boats").document(uuid).get().addOnCompleteListener(listener);
   }
 
+  @Override
+  public void getMarina(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
+    mFirestore.collection("marinas").document(uuid).get().addOnCompleteListener(listener);
+  }
+
 
   @Override
   public void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener ) {

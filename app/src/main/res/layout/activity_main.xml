@@ -77,11 +77,11 @@
     app:layout_constraintHorizontal_bias="0.503"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/add_boat_btn"/>
-  <TableLayout
+  <in.avimarine.boatangels.customViews.WeatherTableView
     android:id="@+id/tableLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="25dp"
     android:layout_marginBottom="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -89,13 +89,5 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/sign_out_btn">
-
-    <TableRow
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent">
-
-    </TableRow>
-
-
-  </TableLayout>
+  </in.avimarine.boatangels.customViews.WeatherTableView>
 </android.support.constraint.ConstraintLayout>

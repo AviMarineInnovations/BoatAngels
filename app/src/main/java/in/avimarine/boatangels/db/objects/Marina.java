@@ -25,4 +25,8 @@ public class Marina extends BaseDbObject{
         ", firstAddedTime=" + firstAddedTime +
         '}';
   }
+
+  public GeoPoint getLocation() {
+    return location;
+  }
 }

@@ -20,6 +20,8 @@ public interface iDb {
 
   void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
+  void getMarina(String uuid, OnCompleteListener<DocumentSnapshot> listener);
+
   void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener);
 
   /**
