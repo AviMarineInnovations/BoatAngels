@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="sign_out">התנתק</string>
+  <string name="welcome_message">ברוך הבא %1$s</string>
+  <string name="inspection_for_yacht_title">"בדיקה עבור הסירה: "</string>
+  <string name="inspect_boat_btn_text">בדוק סירה</string>
+  <string name="add_boat_btn_text">הוסף סירה</string>
+  <string name="boat_name_text">שם</string>
+  <string name="boat_model_text">דגם</string>
+  <string name="marina_text">מעגן</string>
+  <string name="latitude_text">קו רוחב</string>
+  <string name="longtitude_text">קו אורך</string>
+  <string name="add_btn_text">הוסף</string>
+  <string name="berth_text">מקום עגינה</string>
+  <string name="show_inspections_btn_text">הצג בדיקות</string>
+  <string name="inspection_for_title_prefix">בדיקות עבור</string>
+  <string name="no_boat_name_error">אף סירה לא הועברה</string>
+  <string name="boat_drawing_content_description">ציור הסירה</string>
+  <string name="addphotosbuton_content_description">כפתורהוספתתמונות</string>
+  <string name="sendbutton_content_description">כפתור שלח</string>
+  <string name="inspection_title">בדיקה עבור %s</string>
+  <string name="inspection_subtitle">בוצעה על ידי %s ב- %s</string>
+  <string name="add_user_name">שם</string>
+  <string name="add_user_mail">דוא\"ל</string>
+  <string name="add_user_phone">טלפון</string>
+  <string name="btn_sign_in">הירשם</string>
+  <string name="name_error_message">הכנס שם</string>
+  <string name="email_error_message">הכנס כתובת דוא\"ל חוקית</string>
+  <string name="phone_number_error_message">הכנס מס\' טלפון חוקי</string>
+  <string name="boat_status_content_description">מצב הסירה</string>
+  <string name="boat_club_text">מועדון</string>
+  <string name="ask_for_inspection_btn">בקש בדיקה</string>
+  <string name="inspection_offer">הצע נקודות:</string>
+  <string name="show_yactie_point">יש לך:</string>
+  <string name="ask_for_inspection_title">בקש בדיקה</string>
+  <string name="inspect_me">בדוק אותי</string>
+  <string name="inspect_points_error_message">הכנס נקודות</string>
+  <string name="max_point_error_message">אין ברשותך מספיק נקודות</string>
+</resources>

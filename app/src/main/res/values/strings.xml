@@ -1,11 +1,10 @@
 <resources>
-  <string name="app_name">BoatAngels</string>
+  <string name="app_name" translatable="false">BoatAngels</string>
   <string name="sign_out">Sign Out</string>
   <string name="welcome_message">Welcome %1$s</string>
   <string name="inspection_for_yacht_title">Inspection for Yacht:</string>
   <string name="inspect_boat_btn_text">Inspect Boat</string>
   <string name="add_boat_btn_text">Add Boat</string>
-  <string name="title_activity_add_boat">AddBoatActivity</string>
   <string name="boat_name_text">Name</string>
   <string name="boat_model_text">Model</string>
   <string name="marina_text">Marina</string>
@@ -15,10 +14,10 @@
   <string name="berth_text">Berth</string>
   <string name="show_inspections_btn_text">Show Inspections</string>
   <string name="inspection_for_title_prefix">Inspections for</string>
-  <string name="intent_extra_boat_uuid">EXTRA_BOAT_UUID</string>
+  <string name="intent_extra_boat_uuid" translatable="false">EXTRA_BOAT_UUID</string>
   <string name="no_boat_name_error">No boat passed to Activity</string>
   <string name="boat_drawing_content_description">boat drawing</string>
-  <string name="intent_extra_inspection_uuid">EXTRA_UUID</string>
+  <string name="intent_extra_inspection_uuid" translatable="false">EXTRA_UUID</string>
   <string name="addphotosbuton_content_description">AddPhotosButon</string>
   <string name="sendbutton_content_description">SendButton</string>
   <string name="inspection_title">Inspection for %s</string>
@@ -37,7 +36,7 @@
   <string name="show_yactie_point">you have:</string>
   <string name="ask_for_inspection_title">Ask for inspection</string>
   <string name="inspect_me">Inspect Me</string>
-  <string name="inspect_points_error_message">Insert Point!</string>
+  <string name="inspect_points_error_message">Insert Points!</string>
   <string name="max_point_error_message">You do not have enough points!</string>
   <plurals name="points_txt">
     <item quantity="one">One Point</item>
