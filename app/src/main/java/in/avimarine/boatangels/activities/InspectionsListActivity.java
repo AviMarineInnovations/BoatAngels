@@ -16,8 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,9 +32,9 @@ public class InspectionsListActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspection_recyclerview)
   RecyclerView inspectionsRv;
-  FirestoreRecyclerAdapter adapter;
+  private FirestoreRecyclerAdapter adapter;
   private OnClickListener mOnClickListener;
-  FireBase db = new FireBase();
+  private final FireBase db = new FireBase();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,28 +49,23 @@ public class InspectionsListActivity extends AppCompatActivity {
       finish();
     }
 
-    db.getBoat(boatUuid, new OnCompleteListener<DocumentSnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        if (task.isSuccessful()) {
-          DocumentSnapshot document = task.getResult();
-          if (document.exists()) {
-            Boat b = document.toObject(Boat.class);
-            setTitle(getString(R.string.inspection_for_title_prefix) + b.name);
-        }
+    db.getBoat(boatUuid, task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (document.exists()) {
+          Boat b = document.toObject(Boat.class);
+          setTitle(getString(R.string.inspection_for_title_prefix) + b.getName());
       }
-    }});
+    }
+  });
     inspectionsRv.setLayoutManager(new LinearLayoutManager(this));
-    mOnClickListener = new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        int itemPosition = inspectionsRv.getChildLayoutPosition(view);
-        Log.d(TAG,"In on click listener: "+itemPosition);
-        Inspection item = (Inspection) adapter.getItem(itemPosition);
-        Intent intent = new Intent(InspectionsListActivity.this, InspectionResultActivity.class);
-        intent.putExtra(getString(R.string.intent_extra_inspection_uuid),item.getUuid());
-        startActivity(intent);
-      }
+    mOnClickListener = view -> {
+      int itemPosition = inspectionsRv.getChildLayoutPosition(view);
+      Log.d(TAG,"In on click listener: "+itemPosition);
+      Inspection item = (Inspection) adapter.getItem(itemPosition);
+      Intent intent1 = new Intent(InspectionsListActivity.this, InspectionResultActivity.class);
+      intent1.putExtra(getString(R.string.intent_extra_inspection_uuid),item.getUuid());
+      startActivity(intent1);
     };
 
     Query query = FirebaseFirestore.getInstance()

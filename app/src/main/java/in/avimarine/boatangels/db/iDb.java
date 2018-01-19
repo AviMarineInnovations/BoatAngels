@@ -7,6 +7,7 @@ import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
+import in.avimarine.boatangels.geographical.Weather;
 
 /**
  * This file is part of an
@@ -19,6 +20,8 @@ public interface iDb {
   void addBoat(Boat b);
 
   void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener);
+
+  void getMarina(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
   void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener);
 
@@ -44,4 +47,6 @@ public interface iDb {
   void setCurrentUser(User u);
 
   User getCurrentUser();
+
+  void updateWeather(String uuid, Weather w);
 }

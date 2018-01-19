@@ -1,10 +1,26 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+def final yourApplicationId = 'in.avimarine.boatangels'
+android.variantFilter { variant ->
+    if(variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'dev') {
+        variant.setIgnore(true)
+    }
+}
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "in.avimarine.boatangels"
+        applicationId = yourApplicationId
+        //These are the values for the authorities and account types.
+        //Reference them in the java files with e.g. BuildConfig.ACCOUNT_TYPE.
+        buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+        buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+        //Reference them in .xml files.
+
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
@@ -17,6 +33,29 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "standard"
+    productFlavors {
+        dev {
+            dimension "standard"
+            applicationIdSuffix ".dev"
+            //Reference them again so they get overwritten by the flavor.
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+        }
+        stage {
+            dimension "standard"
+            applicationIdSuffix ".stage"
+            //Reference them again so they get overwritten by the flavor.
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+        }
+        production {
+            dimension "standard"
+            //Reference them again so they get overwritten by the flavor.
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
         }
     }
 }
@@ -41,9 +80,11 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
+    compile 'com.github.pwittchen:weathericonview:1.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'org.jetbrains:annotations:15.0'
 }
 apply plugin: 'com.google.gms.google-services'
