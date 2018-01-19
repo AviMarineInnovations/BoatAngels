@@ -6,6 +6,6 @@ package in.avimarine.boatangels.geographical;
  * first created by aayaffe on 31/12/2017.
  */
 
-public interface iWeather {
+interface iWeather {
 
 }

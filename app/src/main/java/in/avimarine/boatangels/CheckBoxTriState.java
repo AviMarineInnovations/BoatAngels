@@ -2,7 +2,6 @@ package in.avimarine.boatangels;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.CompoundButton;
 
 /**
  * This file is part of an
@@ -34,22 +33,19 @@ public class CheckBoxTriState extends android.support.v7.widget.AppCompatCheckBo
     state = State.UNCHECKED;
     updateBtn();
 
-    setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (state) {
-          case UNCHECKED:
-            state = State.XCHECKED;
-            break;
-          case XCHECKED:
-            state = State.VCHECKED;
-            break;
-          case VCHECKED:
-            state = State.UNCHECKED;
-            break;
-        }
-        updateBtn();
+    setOnCheckedChangeListener((buttonView, isChecked) -> {
+      switch (state) {
+        case UNCHECKED:
+          state = State.XCHECKED;
+          break;
+        case XCHECKED:
+          state = State.VCHECKED;
+          break;
+        case VCHECKED:
+          state = State.UNCHECKED;
+          break;
       }
+      updateBtn();
     });
 
   }

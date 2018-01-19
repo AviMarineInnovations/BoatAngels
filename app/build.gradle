@@ -3,8 +3,8 @@ apply plugin: 'io.fabric'
 
 def final yourApplicationId = 'in.avimarine.boatangels'
 android.variantFilter { variant ->
-    if(variant.buildType.name.equals('release') && variant.getFlavors().get(0).name.equals('dev')) {
-        variant.setIgnore(true);
+    if(variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'dev') {
+        variant.setIgnore(true)
     }
 }
 android {
@@ -20,8 +20,6 @@ android {
         buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
         buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
         //Reference them in .xml files.
-        resValue "string", "account_type", "${applicationId}.account"
-        resValue "string", "authority", "${applicationId}.provider"
 
         minSdkVersion 16
         targetSdkVersion 27
@@ -45,8 +43,6 @@ android {
             //Reference them again so they get overwritten by the flavor.
             buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
             buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
-            resValue "string", "account_type", "${applicationId}.account"
-            resValue "string", "authority", "${applicationId}.provider"
         }
         stage {
             dimension "standard"
@@ -54,16 +50,12 @@ android {
             //Reference them again so they get overwritten by the flavor.
             buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
             buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
-            resValue "string", "account_type", "${applicationId}.account"
-            resValue "string", "authority", "${applicationId}.provider"
         }
         production {
             dimension "standard"
             //Reference them again so they get overwritten by the flavor.
             buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
             buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
-            resValue "string", "account_type", "${applicationId}.account"
-            resValue "string", "authority", "${applicationId}.provider"
         }
     }
 }
@@ -93,5 +85,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'org.jetbrains:annotations:15.0'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -3,7 +3,6 @@ package in.avimarine.boatangels.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import butterknife.BindView;
@@ -25,6 +24,7 @@ public class AddUserActivity extends AppCompatActivity {
   private String country;
   private String uid;
   private final iDb db = new FireBase();
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.ccp)
   CountryCodePicker countryCodePicker;
 
@@ -34,39 +34,37 @@ public class AddUserActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_user);
     ButterKnife.bind(this);
     Button button = findViewById(R.id.btn_sign_in);
-    button.setOnClickListener(new View.OnClickListener() {
-     public void onClick(View v) {
-        EditText editTextName = findViewById(R.id.name);
-        EditText editTextMail = findViewById(R.id.mail);
-        EditText editTextPhone = findViewById(R.id.phone);
-        name = editTextName.getText().toString();
-        mail = editTextMail.getText().toString();
-        phone = editTextPhone.getText().toString();
-        country = countryCodePicker.getSelectedCountryName();
+    button.setOnClickListener(v -> {
+       EditText editTextName = findViewById(R.id.name);
+       EditText editTextMail = findViewById(R.id.mail);
+       EditText editTextPhone = findViewById(R.id.phone);
+       name = editTextName.getText().toString();
+       mail = editTextMail.getText().toString();
+       phone = editTextPhone.getText().toString();
+       country = countryCodePicker.getSelectedCountryName();
 
-        if (isNotValidInput(name)) {
-          editTextName.setError(getString(R.string.name_error_message));
-        } else if (isNotValidInput(mail)|| GeneralUtils.isNotValidEmail(mail)) {
-          editTextMail.setError(getString(R.string.email_error_message));
-        } else if (isNotValidMobile(phone)) {
-          editTextPhone.setError(getString(R.string.phone_number_error_message));
-        } else {
+       if (isNotValidInput(name)) {
+         editTextName.setError(getString(R.string.name_error_message));
+       } else if (isNotValidInput(mail)|| GeneralUtils.isNotValidEmail(mail)) {
+         editTextMail.setError(getString(R.string.email_error_message));
+       } else if (isNotValidMobile(phone)) {
+         editTextPhone.setError(getString(R.string.phone_number_error_message));
+       } else {
 
-          uid = FirebaseAuth.getInstance().getUid();
+         uid = FirebaseAuth.getInstance().getUid();
 
-          User user = new User();
-          user.setDisplayName(name);
-          user.setMail(mail);
-          user.setPhone(phone);
-          user.setCountry(country);
-          user.setFirstJoinTime(new Date());
-          user.setLastUpdate(new Date());
-          user.setUid(uid);
-          db.addUser(user);
-          finish();
-        }
-      }
-    });
+         User user = new User();
+         user.setDisplayName(name);
+         user.setMail(mail);
+         user.setPhone(phone);
+         user.setCountry(country);
+         user.setFirstJoinTime(new Date());
+         user.setLastUpdate(new Date());
+         user.setUid(uid);
+         db.addUser(user);
+         finish();
+       }
+     });
   }
 
 

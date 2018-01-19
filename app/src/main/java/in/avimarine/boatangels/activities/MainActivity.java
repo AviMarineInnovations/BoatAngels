@@ -1,18 +1,11 @@
 package in.avimarine.boatangels.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,14 +13,12 @@ import butterknife.OnClick;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.github.pwittchen.weathericonview.WeatherIconView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.customViews.WeatherTableView;
+import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
@@ -37,18 +28,14 @@ import in.avimarine.boatangels.general.GeneralUtils;
 import in.avimarine.boatangels.geographical.GeoUtils;
 import in.avimarine.boatangels.geographical.OpenWeatherMap;
 import in.avimarine.boatangels.geographical.Weather;
-import in.avimarine.boatangels.geographical.Weather.Wind;
+import in.avimarine.boatangels.geographical.Wind;
 import in.avimarine.boatangels.geographical.WeatherHttpClient;
-import in.avimarine.boatangels.geographical.AsyncResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -115,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     Map<Integer,Wind> ret = new TreeMap<>();
     int day = -1;
     double speed = 0;
-    double dir = 0;
+    double dir;
     for (Map.Entry<Date,Wind> w : windForecast.entrySet()){
       Calendar cal = Calendar.getInstance();
       cal.setTime(w.getKey());
@@ -123,19 +110,19 @@ public class MainActivity extends AppCompatActivity {
         day = cal.get(Calendar.DAY_OF_MONTH);
         speed = w.getValue().getSpeed();
         dir = w.getValue().getDirection();
-        ret.put(day,new Weather().new Wind(speed,dir));
+        ret.put(day,new Wind(speed,dir));
       }else{
         if (day==cal.get(Calendar.DAY_OF_MONTH)){
           if(w.getValue().getSpeed()>speed){
             speed= w.getValue().getSpeed();
             dir = w.getValue().getDirection();
-            ret.put(day,new Weather().new Wind(speed,dir));
+            ret.put(day,new Wind(speed,dir));
           }
         } else{
           speed= w.getValue().getSpeed();
           dir = w.getValue().getDirection();
           day = cal.get(Calendar.DAY_OF_MONTH);
-          ret.put(day,new Weather().new Wind(speed,dir));
+          ret.put(day,new Wind(speed,dir));
         }
       }
     }
@@ -154,19 +141,17 @@ public class MainActivity extends AppCompatActivity {
   public void signoutBtnClick(View v) {
     AuthUI.getInstance()
         .signOut(MainActivity.this)
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-          public void onComplete(@NonNull Task<Void> task) {
-            signoutBtn.setEnabled(false);
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(
-                        Arrays
-                            .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                    .build(),
-                RC_SIGN_IN);
-          }
+        .addOnCompleteListener(task -> {
+          signoutBtn.setEnabled(false);
+          startActivityForResult(
+              AuthUI.getInstance()
+                  .createSignInIntentBuilder()
+                  .setAvailableProviders(
+                      Arrays
+                          .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                              new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                  .build(),
+              RC_SIGN_IN);
         });
   }
 
@@ -194,32 +179,29 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
 
   }
-  public void isUserRegistered(String uid) {
-    db.getUser(uid, new OnCompleteListener<DocumentSnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        if (task.isSuccessful()) {
-          DocumentSnapshot document = task.getResult();
-          if (!document.exists()) {
-            Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
-            startActivity(intent);
+  private void isUserRegistered(String uid) {
+    db.getUser(uid, task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (!document.exists()) {
+          Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+          startActivity(intent);
+        }
+        else{
+          currentUser = document.toObject(User.class);
+          db.setCurrentUser(currentUser);
+          welcomeTv.setText(getString(R.string.welcome_message,currentUser.getDisplayName()));
+          if (!currentUser.getBoats().isEmpty()) {
+            addBoatBtn.setEnabled(false);
+            showInspectionBtn.setEnabled(true);
+            askInspectionBtn.setEnabled(true);
+            ownBoatUuid = currentUser.getBoats().get(0);
+            getOwnBoat(ownBoatUuid);
           }
-          else{
-            currentUser = document.toObject(User.class);
-            db.setCurrentUser(currentUser);
-            welcomeTv.setText(getString(R.string.welcome_message,currentUser.getDisplayName()));
-            if (!currentUser.getBoats().isEmpty()) {
-              addBoatBtn.setEnabled(false);
-              showInspectionBtn.setEnabled(true);
-              askInspectionBtn.setEnabled(true);
-              ownBoatUuid = currentUser.getBoats().get(0);
-              getOwnBoat(ownBoatUuid);
-            }
-            else {
-              addBoatBtn.setEnabled(true);
-              showInspectionBtn.setEnabled(false);
-              askInspectionBtn.setEnabled(false);
-            }
+          else {
+            addBoatBtn.setEnabled(true);
+            showInspectionBtn.setEnabled(false);
+            askInspectionBtn.setEnabled(false);
           }
         }
       }
@@ -227,65 +209,70 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void getOwnBoat(String uuid) {
-    if (currentBoat==null || !currentBoat.getUuid().equals(uuid)) {
+    if (currentBoat == null || !currentBoat.getUuid().equals(uuid)) {
       db.getBoat(uuid, task -> {
         if (task.isSuccessful()) {
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             currentBoat = document.toObject(Boat.class);
-            if (!GeneralUtils.isNull(currentBoat,currentBoat.getMarinaUuid())) {
+            if (!GeneralUtils.isNull(currentBoat, currentBoat.getMarinaUuid())) {
               db.getMarina(currentBoat.getMarinaUuid(),
                   task1 -> {
                     DocumentSnapshot document1 = task1.getResult();
                     if (document1.exists()) {
                       currentMarina = document1.toObject(Marina.class);
-                      updateWeather(currentMarina.getLocation());
+                      updateWeather(currentMarina);
                     } else {
                       Log.e(TAG, "Unable to get own marina");
                     }
                   });
+            } else {
+              Log.e(TAG, "Unable to get own boat");
             }
-            else{
-              Log.e(TAG,"Unable to get own boat");
-            }
-          }
-
-          else{
-            Log.e(TAG,"Unable to get own boat");
+          } else {
+            Log.e(TAG, "Unable to get own boat");
           }
         }
       });
     }
-
   }
 
-  private void updateWeather(GeoPoint location) {
-    if (GeneralUtils.isNull(location))
-      Log.e(TAG, "Marina location is null");
+  private void updateWeather(Marina m) {
+    if (GeneralUtils.isNull(m,m.getLocation()))
+      Log.e(TAG, "Current Marina is null");
     final OpenWeatherMap owp = new OpenWeatherMap();
-    new WeatherHttpClient(output -> {
-      Weather w = owp.parseData(output);
-      Log.d(TAG,w.getWindForecast().toString());
-      Map<Integer,Wind> daysArr = getMaxWindDaysArray(w.getWindForecast());
-      ArrayList<Wind> winds = new ArrayList<>();
-      for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
-        winds.add(e.getValue());
-      }
-      ((WeatherTableView)findViewById(R.id.tableLayout)).setWind(winds);
-      ((WeatherTableView)findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
-//      TableRow row = findViewById(R.id.tableLayout);
-//      LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//      row.removeAllViewsInLayout();
-//      for (Map.Entry<Integer,Wind> e: daysArr.entrySet()){
-//        if (e!=null&&e.getValue()!=null){
-//          View childLayout = inflater.inflate(R.layout.weather_table_col, null);
-//          WeatherIconView wiv = (WeatherIconView) ((ViewGroup)childLayout).getChildAt(0);
-//          TextView tv = (TextView) ((ViewGroup)childLayout).getChildAt(1);
-//          setWeatherIcon(wiv,tv,e.getValue().getDirection(),e.getValue().getSpeed());
-//          row.addView(childLayout);
-//        }
-//      }
-    }).execute(GeoUtils.createLocation(location.getLatitude(),location.getLongitude()));
+    if (checkWeather(m.getWeather()))
+      updateWeatherWidget(m.getWeather());
+    else {
+      new WeatherHttpClient(this,output -> {
+        Weather w = owp.parseData(output);
+        if (w != null) {
+          updateWeatherWidget(w);
+//          db.updateWeather(m.getUuid(),w);
+          currentMarina.setWeather(w);
+          db.addMarina(currentMarina);
+        }
+      }).execute(GeoUtils.createLocation(m.getLocation().getLatitude(), m.getLocation().getLongitude()));
+    }
+  }
+
+  private boolean checkWeather(Weather weather) {
+    if (weather==null) return false;
+    if (getMaxWindDaysArray(weather.getWindForecast()).size()==6)
+      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(),GeneralUtils.now())<120)
+        return true;
+    return false;
+  }
+
+  private void updateWeatherWidget(Weather w) {
+    Map<Integer, Wind> daysArr = getMaxWindDaysArray(w.getWindForecast());
+    ArrayList<Wind> winds = new ArrayList<>();
+    for (Map.Entry<Integer, Wind> e : daysArr.entrySet()) {
+      winds.add(e.getValue());
+    }
+    ((WeatherTableView) findViewById(R.id.tableLayout)).setWind(winds);
+    ((WeatherTableView) findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
+    ((WeatherTableView) findViewById(R.id.tableLayout)).setSpeedUnits(SpeedUnits.KNOTS);
   }
 
   /***
@@ -293,37 +280,37 @@ public class MainActivity extends AppCompatActivity {
    */
   private void addMarinas() {
     Marina m = new Marina();
-    m.name = "Shavit, Haifa";
-    m.country = "Israel";
-    m.location = new GeoPoint(32.805672, 35.030550);
+    m.setName("Shavit, Haifa");
+    m.setCountry("Israel");
+    m.setLocation(new GeoPoint(32.805672, 35.030550));
     m.setFirstAddedTime(new Date());
     m.setLastUpdate(new Date());
     db.addMarina(m);
     m = new Marina();
-    m.name = "Herzliya";
-    m.country = "Israel";
-    m.location = new GeoPoint(32.162881, 34.795601);
+    m.setName("Herzliya");
+    m.setCountry("Israel");
+    m.setLocation(new GeoPoint(32.162881, 34.795601));
     m.setFirstAddedTime(new Date());
     m.setLastUpdate(new Date());
     db.addMarina(m);
     m = new Marina();
-    m.name = "Tel-Aviv";
-    m.country = "Israel";
-    m.location = new GeoPoint(32.086349, 34.767430);
+    m.setName("Tel-Aviv");
+    m.setCountry("Israel");
+    m.setLocation(new GeoPoint(32.086349, 34.767430));
     m.setFirstAddedTime(new Date());
     m.setLastUpdate(new Date());
     db.addMarina(m);
     m = new Marina();
-    m.name = "Ashdod";
-    m.country = "Israel";
-    m.location = new GeoPoint(31.795030, 34.627701);
+    m.setName("Ashdod");
+    m.setCountry("Israel");
+    m.setLocation(new GeoPoint(31.795030, 34.627701));
     m.setFirstAddedTime(new Date());
     m.setLastUpdate(new Date());
     db.addMarina(m);
     m = new Marina();
-    m.name = "Ashkelon";
-    m.country = "Israel";
-    m.location = new GeoPoint(31.682364, 34.555713);
+    m.setName("Ashkelon");
+    m.setCountry("Israel");
+    m.setLocation(new GeoPoint(31.682364, 34.555713));
     m.setFirstAddedTime(new Date());
     m.setLastUpdate(new Date());
     db.addMarina(m);

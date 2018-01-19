@@ -1,18 +1,10 @@
 package in.avimarine.boatangels.geographical;
 
-import android.location.Location;
-import android.os.AsyncTask;
 import android.util.Log;
-import in.avimarine.boatangels.general.GeneralUtils;
-import in.avimarine.boatangels.geographical.Weather.Wind;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.google.firebase.firestore.GeoPoint;
 import java.util.Date;
 import java.util.Map;
+import java.util.TreeMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,17 +28,18 @@ public class OpenWeatherMap implements iWeather {
       // We start extracting the info
       JSONObject cityObj = getObject("city", jObj);
       JSONObject coordObj = getObject("coord", cityObj);
-      Location loc = GeoUtils
-          .createLocation((double) getFloat("lat", coordObj), (double) getFloat("lon", coordObj));
+      GeoPoint loc = new GeoPoint((double) getFloat("lat", coordObj), (double) getFloat("lon", coordObj));
 
       ret.setLocation(loc);
 
       JSONArray jsonArray=jObj.getJSONArray("list");
+      Map<Date,Wind> winds = new TreeMap<>();
       for (int i=0; i < jsonArray.length(); i++){
         if (jsonArray.get(i) instanceof JSONObject ) {
-          parseWind(ret.getWindForecast(),(JSONObject)jsonArray.get(i));
+          parseWind(winds,(JSONObject)jsonArray.get(i));
         }
       }
+      ret.setWindForecast(winds);
       ret.setLastUpdate(new Date());
       return ret;
     } catch (JSONException e) {
@@ -60,7 +53,7 @@ public class OpenWeatherMap implements iWeather {
     try {
       Date d = new Date(jsonObject.getLong("dt")*1000L);
       JSONObject wObj = getObject("wind", jsonObject);
-      Wind w = new Weather().new Wind(getFloat("speed", wObj),getFloat("deg", wObj));
+      Wind w = new Wind(getFloat("speed", wObj),getFloat("deg", wObj));
       windForecast.put(d,w);
     }catch (JSONException e){
       Log.e(TAG, "parseData: error parsing Json", e);

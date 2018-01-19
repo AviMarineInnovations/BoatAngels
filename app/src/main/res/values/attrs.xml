@@ -18,6 +18,11 @@
       <enum name="five" value="5" />
       <enum name="six" value="6" />
     </attr>
+    <attr name="speed_units">
+      <enum name="Knots" value="0"/>
+      <enum name="MPH" value="1"/>
+      <enum name="Meters_per_second" value="2"/>
+    </attr>
     <attr name="day0spd" format="integer" />
     <attr name="day1spd" format="integer" />
     <attr name="day2spd" format="integer" />

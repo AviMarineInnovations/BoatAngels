@@ -3,7 +3,6 @@ package in.avimarine.boatangels.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import in.avimarine.boatangels.CheckBoxTriState;
@@ -47,24 +44,32 @@ public class InspectBoatActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.message_linedEditText)
   EditText inspection_text;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_bow)
   CheckBoxTriState checkbox_bow;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_jib)
   CheckBoxTriState checkbox_jib;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_mainsail)
   CheckBoxTriState checkbox_main;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_stern)
   CheckBoxTriState checkbox_stern;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.moored_boat_body)
   ImageView boatBody;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.moored_boat_bowlines)
   ImageView boatBowLines;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.moored_boat_sternlines)
   ImageView boatSternLines;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspect_boat_title)
   TextView title;
-  Boat b;
-  User u = null;
+  private Boat b;
+  private User u = null;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,18 +83,15 @@ public class InspectBoatActivity extends AppCompatActivity {
       Log.e(TAG, "No UUID available");
       return;
     }
-    db.getBoat(uuid, new OnCompleteListener<DocumentSnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        if (task.isSuccessful()) {
-          DocumentSnapshot document = task.getResult();
-          if (document.exists()) {
-            b = document.toObject(Boat.class);
-            title.setText(getString(R.string.inspection_title, b.getName()));
-          } else {
-            Log.e(TAG, "No Boat found for this uuid available");
-            finish();
-          }
+    db.getBoat(uuid, task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (document.exists()) {
+          b = document.toObject(Boat.class);
+          title.setText(getString(R.string.inspection_title, b.getName()));
+        } else {
+          Log.e(TAG, "No Boat found for this uuid available");
+          finish();
         }
       }
     });
@@ -100,12 +102,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       finish();
     }
 
-    OnClickListener ocl = new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        colorBoat();
-      }
-    };
+    OnClickListener ocl = view -> colorBoat();
     checkbox_stern.setOnClickListener(ocl);
     checkbox_bow.setOnClickListener(ocl);
     checkbox_jib.setOnClickListener(ocl);

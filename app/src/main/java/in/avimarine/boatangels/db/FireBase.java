@@ -10,6 +10,7 @@ import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
+import in.avimarine.boatangels.geographical.Weather;
 
 /**
  * This file is part of an
@@ -97,4 +98,9 @@ public class FireBase implements iDb {
     return currentUser;
   }
 
+  @Override
+  public void updateWeather(String uuid, Weather w) {
+
+    mFirestore.collection("marinas").document(uuid).update("weather",w);
+  }
 }

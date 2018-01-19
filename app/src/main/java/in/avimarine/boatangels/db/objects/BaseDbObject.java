@@ -22,7 +22,7 @@ public abstract class BaseDbObject {
   @Exclude
   private UUID _uuid;
 
-  public BaseDbObject() {
+  protected BaseDbObject() {
     _uuid = UUID.randomUUID();
   }
 

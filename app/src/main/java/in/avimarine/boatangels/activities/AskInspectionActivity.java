@@ -9,10 +9,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Boat;
@@ -25,12 +23,15 @@ public class AskInspectionActivity extends AppCompatActivity {
   private User user;
   private String getBoatUid;
   private int yachtiePoint;
-  private FirebaseFirestore db = FirebaseFirestore.getInstance();
+  private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private String uid;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.show_point)
   TextView showPointTv;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.ask_inspection_btn)
   Button inspectMeBtn;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.yachtie_point_editxt)
   EditText yactiepointEditxt;
 
@@ -42,53 +43,47 @@ public class AskInspectionActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     uid = FirebaseAuth.getInstance().getUid();
     DocumentReference docRef = db.collection("users").document(uid);
-    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-      @Override
-      public void onSuccess(DocumentSnapshot documentSnapshot) {
-        user = documentSnapshot.toObject(User.class);
-        yachtiePoint = user.getYachtiePoint();
-        inspectBoat = documentSnapshot.toObject(Boat.class);
-        if (yachtiePoint <= 0) {
-          inspectMeBtn.setEnabled(false);
+    docRef.get().addOnSuccessListener(documentSnapshot -> {
+      user = documentSnapshot.toObject(User.class);
+      yachtiePoint = user.getYachtiePoint();
+      inspectBoat = documentSnapshot.toObject(Boat.class);
+      if (yachtiePoint <= 0) {
+        inspectMeBtn.setEnabled(false);
 
-        } else {
-          inspectMeBtn.setEnabled(true);
-        }
-        showPointTv.setText(getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint(),user.getYachtiePoint()));
-        getBoatUid = user.getBoats().toString().replaceAll("[]\\[]", "");
-
-
+      } else {
+        inspectMeBtn.setEnabled(true);
       }
+      showPointTv.setText(getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint(),user.getYachtiePoint()));
+      getBoatUid = user.getBoats().toString().replaceAll("[]\\[]", "");
+
+
     });
   }
 
   @OnClick(R.id.ask_inspection_btn)
   public void inspectMe(View v) {
     DocumentReference doc = db.collection("boats").document(getBoatUid);
-    doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-      @Override
-      public void onSuccess(DocumentSnapshot documentSnapshot) {
-        try {
-          int OfferPoints = Integer.parseInt(yactiepointEditxt.getText().toString());
-          if (OfferPoints > yachtiePoint) {
-            yactiepointEditxt.setError(getString(R.string.max_point_error_message));
-          } else if (OfferPoints <= 0) {
-            yactiepointEditxt.setError(getString(R.string.inspect_points_error_message));
-          } else {
-            yachtiePoint -= OfferPoints;
-            updateCollection("users", uid, "yachtiePoint", yachtiePoint);
-            updateCollection("boats", getBoatUid, "offerPoint", OfferPoints);
-            showPointTv.setText(
-                getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint(),user.getYachtiePoint()));
-          }
-
-        } catch (NumberFormatException nfe) {
+    doc.get().addOnSuccessListener(documentSnapshot -> {
+      try {
+        int OfferPoints = Integer.parseInt(yactiepointEditxt.getText().toString());
+        if (OfferPoints > yachtiePoint) {
+          yactiepointEditxt.setError(getString(R.string.max_point_error_message));
+        } else if (OfferPoints <= 0) {
           yactiepointEditxt.setError(getString(R.string.inspect_points_error_message));
-
+        } else {
+          yachtiePoint -= OfferPoints;
+          updateCollection("users", uid, "yachtiePoint", yachtiePoint);
+          updateCollection("boats", getBoatUid, "offerPoint", OfferPoints);
+          showPointTv.setText(
+              getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint(),user.getYachtiePoint()));
         }
-        finish();
+
+      } catch (NumberFormatException nfe) {
+        yactiepointEditxt.setError(getString(R.string.inspect_points_error_message));
 
       }
+      finish();
+
     });
 
   }

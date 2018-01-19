@@ -1,10 +1,11 @@
 package in.avimarine.boatangels.geographical;
 
-import android.location.Location;
-import android.view.Window;
+import android.support.annotation.Nullable;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.db.objects.BaseDbObject;
+import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,44 +17,28 @@ import java.util.TreeMap;
 
 public class Weather extends BaseDbObject{
 
-  private Location location;
+  private GeoPoint location;
   private Wind currentWind;
-  private String country;
-  private String city;
   private int sunrise;
   private int sunset;
-  private Map<Date,Wind> windForecast = new TreeMap<>();
+  @SuppressWarnings("WeakerAccess")
+  public Map<String, Wind> windForecast = new TreeMap<>();
 
-  public Location getLocation() {
+  @Nullable
+  public GeoPoint getLocation() {
     return location;
   }
 
-  public void setLocation(Location location) {
+  public void setLocation(GeoPoint location) {
     this.location = location;
   }
-
+  @Nullable
   public Wind getCurrentWind() {
     return currentWind;
   }
 
   public void setCurrentWind(Wind currentWind) {
     this.currentWind = currentWind;
-  }
-
-  public String getCountry() {
-    return country;
-  }
-
-  public void setCountry(String country) {
-    this.country = country;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
   }
 
   public int getSunrise() {
@@ -72,57 +57,40 @@ public class Weather extends BaseDbObject{
     this.sunset = sunset;
   }
 
-
+  @Exclude
+  @Nullable
+  public Map<Date, Wind> getWindForecast() {
+    Map<Date,Wind> ret = new TreeMap<>();
+    try {
+      for (Map.Entry<String, Wind> me : this.windForecast.entrySet()) {
+        if (me!=null) {
+          Long t = GeneralUtils.tryParseLong(me.getKey());
+          if (t!=null)
+            ret.put(new Date(t), me.getValue());
+        }
+      }
+    }catch (NullPointerException e){
+      return null;
+    }
+    return ret;
+  }
+  @Exclude
+  public void setWindForecast(Map<Date, Wind> windForecast) {
+    this.windForecast = new TreeMap<>();
+    for (Map.Entry<Date,Wind> me: windForecast.entrySet()) {
+      this.windForecast.put(String.valueOf(me.getKey().getTime()),me.getValue());
+    }
+  }
 
   @Override
   public String toString() {
     return "Weather{" +
         "location=" + location +
         ", currentWind=" + currentWind +
-        ", country='" + country + '\'' +
-        ", city='" + city + '\'' +
         ", sunrise=" + sunrise +
         ", sunset=" + sunset +
         '}';
   }
 
-  public Map<Date, Wind> getWindForecast() {
-    return windForecast;
-  }
 
-
-  public class Wind {
-    Float speed;
-    Float direction;
-
-    public Wind(double speed, double dir) {
-      this.speed = (float)speed;
-      this.direction = (float)dir;
-    }
-
-
-    public void setSpeed(Float speed) {
-      this.speed = speed;
-    }
-
-    public void setDirection(Float direction) {
-      this.direction = direction;
-    }
-
-    public Float getSpeed() {
-      return speed;
-    }
-
-    public Float getDirection() {
-      return direction;
-    }
-
-    @Override
-    public String toString() {
-      return "Wind{" +
-          "speed=" + speed +
-          ", direction=" + direction +
-          '}';
-    }
-  }
 }

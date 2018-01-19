@@ -3,7 +3,6 @@ package in.avimarine.boatangels.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.CheckBoxTriState.State;
@@ -30,22 +27,31 @@ import java.util.Map;
 public class InspectionResultActivity extends AppCompatActivity {
 
   private static final String TAG = "InspectionResultActivit";
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.message_linedEditText)
   TextView message;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspection_title)
   TextView title;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspection_subtitle)
   TextView subtitle;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_bow)
   CheckBoxTriState checkbox_bow;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_jib)
   CheckBoxTriState checkbox_jib;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_mainsail)
   CheckBoxTriState checkbox_main;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.checkBox_stern)
   CheckBoxTriState checkbox_stern;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.moored_boat_body)
   ImageView boatBody;
+  @SuppressWarnings("WeakerAccess")
   @BindView(R.id.moored_boat_bowlines)
   ImageView boatBowLines;
   @BindView(R.id.moored_boat_sternlines)
@@ -63,20 +69,17 @@ public class InspectionResultActivity extends AppCompatActivity {
     final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails, wrapper.getTheme());
     boatBody.setImageDrawable(drawable);
     iDb db = new FireBase();
-    db.getInspection(uuid, new OnCompleteListener<DocumentSnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-        if (task.isSuccessful()) {
-          DocumentSnapshot document = task.getResult();
-          if (document != null) {
-            Inspection i = document.toObject(Inspection.class);
-            updateUI(i);
-          } else {
-            Log.d(TAG, "No such document");
-          }
+    db.getInspection(uuid, task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (document != null) {
+          Inspection i1 = document.toObject(Inspection.class);
+          updateUI(i1);
         } else {
-          Log.d(TAG, "get failed with ", task.getException());
+          Log.d(TAG, "No such document");
         }
+      } else {
+        Log.d(TAG, "get failed with ", task.getException());
       }
     });
 
@@ -90,7 +93,7 @@ public class InspectionResultActivity extends AppCompatActivity {
     Log.d(TAG,"Checkbox clicked");
   }
 
-  public void updateUI(Inspection i){
+  private void updateUI(Inspection i){
     GeneralUtils.enableAndShowViews(title,subtitle,message,boatBody,boatBowLines,boatSternLines);
     GeneralUtils.showViews(checkbox_bow,checkbox_jib,checkbox_main,checkbox_stern);
     title.setText(getString(R.string.inspection_title,i.boatName));
@@ -179,7 +182,7 @@ public class InspectionResultActivity extends AppCompatActivity {
 
   private void setCheckBoxes(Inspection i) {
     if (i.finding==null){
-      GeneralUtils.disableAndHideViews(true,checkbox_bow,checkbox_jib,checkbox_main,checkbox_stern,boatBody,boatBowLines,boatSternLines);
+      GeneralUtils.disableAndHideViews(checkbox_bow,checkbox_jib,checkbox_main,checkbox_stern,boatBody,boatBowLines,boatSternLines);
       return;
     }
     setCheckBox(i.finding,"BOWLINES", checkbox_bow);

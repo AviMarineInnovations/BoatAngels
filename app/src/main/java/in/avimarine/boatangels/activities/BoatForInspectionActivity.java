@@ -28,7 +28,7 @@ public class BoatForInspectionActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.boats_for_inspection_recyclerview)
   RecyclerView boatsRv;
-  FirestoreRecyclerAdapter adapter;
+  private FirestoreRecyclerAdapter adapter;
   private OnClickListener mOnClickListener;
   private static final String TAG = "BoatForInspectionActivi";
 
@@ -61,16 +61,13 @@ public class BoatForInspectionActivity extends AppCompatActivity {
       }
     };
     boatsRv.setLayoutManager(new LinearLayoutManager(this));
-    mOnClickListener = new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        int itemPosition = boatsRv.getChildLayoutPosition(view);
-        Log.d(TAG, "In on click listener: " + itemPosition);
-        Boat item = (Boat) adapter.getItem(itemPosition);
-        Intent intent = new Intent(BoatForInspectionActivity.this, InspectBoatActivity.class);
-        intent.putExtra(getString(R.string.intent_extra_boat_uuid), item.getUuid());
-        startActivity(intent);
-      }
+    mOnClickListener = view -> {
+      int itemPosition = boatsRv.getChildLayoutPosition(view);
+      Log.d(TAG, "In on click listener: " + itemPosition);
+      Boat item = (Boat) adapter.getItem(itemPosition);
+      Intent intent = new Intent(BoatForInspectionActivity.this, InspectBoatActivity.class);
+      intent.putExtra(getString(R.string.intent_extra_boat_uuid), item.getUuid());
+      startActivity(intent);
     };
     boatsRv.setAdapter(adapter);
 
