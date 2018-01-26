@@ -1,6 +1,7 @@
 package in.avimarine.boatangels.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -37,7 +38,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
   private static final String TAG = "MainActivity";
   private static final int RC_SIGN_IN = 123;
@@ -157,25 +158,30 @@ public class MainActivity extends AppCompatActivity {
 
   @OnClick(R.id.add_boat_btn)
   public void addBoatBtnClick(View v) {
-    Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
+    Intent intent = new Intent(this, AddBoatActivity.class);
+    startActivity(intent);
+  }
+  @OnClick(R.id.settings_btn)
+  public void settingsBtnClick(View v) {
+    Intent intent = new Intent(this, SettingsActivity.class);
     startActivity(intent);
   }
 
   @OnClick(R.id.inspect_boat_btn)
   public void inspectBtnClick(View v) {
-    Intent intent = new Intent(MainActivity.this, BoatForInspectionActivity.class);
+    Intent intent = new Intent(this, BoatForInspectionActivity.class);
     startActivity(intent);
   }
 
   @OnClick(R.id.show_inspections_btn)
   public void showInspectionsBtnClick(View v) {
-    Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
+    Intent intent = new Intent(this, InspectionsListActivity.class);
     intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
   @OnClick(R.id.ask_inspection)
   public void ask(View v) {
-    Intent intent = new Intent(MainActivity.this, AskInspectionActivity.class);
+    Intent intent = new Intent(this, AskInspectionActivity.class);
     startActivity(intent);
 
   }
