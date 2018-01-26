@@ -59,12 +59,14 @@
 
   <string name="pref_title_locale">Change Locale</string>
   <string-array name="pref_locale_list_titles">
+    <item>Default</item>
     <item>Hebrew</item>
     <item>English</item>
   </string-array>
   <string-array name="pref_locale_list_values">
-    <item>1</item>
-    <item>0</item>
+    <item>default</item>
+    <item>iw</item>
+    <item>en</item>
   </string-array>
 
 

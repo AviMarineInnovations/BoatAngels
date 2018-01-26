@@ -1,8 +1,11 @@
 package in.avimarine.boatangels.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,7 @@ import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
+import in.avimarine.boatangels.general.LocaleUtils;
 import in.avimarine.boatangels.geographical.GeoUtils;
 import in.avimarine.boatangels.geographical.OpenWeatherMap;
 import in.avimarine.boatangels.geographical.Weather;
@@ -38,7 +42,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnSharedPreferenceChangeListener {
 
   private static final String TAG = "MainActivity";
   private static final int RC_SIGN_IN = 123;
@@ -92,38 +96,35 @@ public class MainActivity extends BaseActivity {
           RC_SIGN_IN);
     }
 
-
-
     //addMarinas();
   }
 
 
-
-  private Map<Integer,Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
-    Map<Integer,Wind> ret = new TreeMap<>();
+  private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
+    Map<Integer, Wind> ret = new TreeMap<>();
     int day = -1;
     double speed = 0;
     double dir;
-    for (Map.Entry<Date,Wind> w : windForecast.entrySet()){
+    for (Map.Entry<Date, Wind> w : windForecast.entrySet()) {
       Calendar cal = Calendar.getInstance();
       cal.setTime(w.getKey());
-      if (day == -1){
+      if (day == -1) {
         day = cal.get(Calendar.DAY_OF_MONTH);
         speed = w.getValue().getSpeed();
         dir = w.getValue().getDirection();
-        ret.put(day,new Wind(speed,dir));
-      }else{
-        if (day==cal.get(Calendar.DAY_OF_MONTH)){
-          if(w.getValue().getSpeed()>speed){
-            speed= w.getValue().getSpeed();
+        ret.put(day, new Wind(speed, dir));
+      } else {
+        if (day == cal.get(Calendar.DAY_OF_MONTH)) {
+          if (w.getValue().getSpeed() > speed) {
+            speed = w.getValue().getSpeed();
             dir = w.getValue().getDirection();
-            ret.put(day,new Wind(speed,dir));
+            ret.put(day, new Wind(speed, dir));
           }
-        } else{
-          speed= w.getValue().getSpeed();
+        } else {
+          speed = w.getValue().getSpeed();
           dir = w.getValue().getDirection();
           day = cal.get(Calendar.DAY_OF_MONTH);
-          ret.put(day,new Wind(speed,dir));
+          ret.put(day, new Wind(speed, dir));
         }
       }
     }
@@ -137,6 +138,30 @@ public class MainActivity extends BaseActivity {
       isUserRegistered(FirebaseAuth.getInstance().getUid());
     }
   }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    SharedPreferences prefs = PreferenceManager
+        .getDefaultSharedPreferences(getApplicationContext());
+    prefs.registerOnSharedPreferenceChangeListener(this);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    SharedPreferences prefs = PreferenceManager
+        .getDefaultSharedPreferences(getApplicationContext());
+    prefs.unregisterOnSharedPreferenceChangeListener(this);
+  }
+
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    if (s.equals("locale_list")) {
+      recreate();
+    }
+  }
+
 
   @OnClick(R.id.sign_out_btn)
   public void signoutBtnClick(View v) {
@@ -161,6 +186,7 @@ public class MainActivity extends BaseActivity {
     Intent intent = new Intent(this, AddBoatActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.settings_btn)
   public void settingsBtnClick(View v) {
     Intent intent = new Intent(this, SettingsActivity.class);
@@ -179,12 +205,14 @@ public class MainActivity extends BaseActivity {
     intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
+
   @OnClick(R.id.ask_inspection)
   public void ask(View v) {
     Intent intent = new Intent(this, AskInspectionActivity.class);
     startActivity(intent);
 
   }
+
   private void isUserRegistered(String uid) {
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {
@@ -192,19 +220,17 @@ public class MainActivity extends BaseActivity {
         if (!document.exists()) {
           Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
           startActivity(intent);
-        }
-        else{
+        } else {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
-          welcomeTv.setText(getString(R.string.welcome_message,currentUser.getDisplayName()));
+          welcomeTv.setText(getString(R.string.welcome_message, currentUser.getDisplayName()));
           if (!currentUser.getBoats().isEmpty()) {
             addBoatBtn.setEnabled(false);
             showInspectionBtn.setEnabled(true);
             askInspectionBtn.setEnabled(true);
             ownBoatUuid = currentUser.getBoats().get(0);
             getOwnBoat(ownBoatUuid);
-          }
-          else {
+          } else {
             addBoatBtn.setEnabled(true);
             showInspectionBtn.setEnabled(false);
             askInspectionBtn.setEnabled(false);
@@ -244,13 +270,14 @@ public class MainActivity extends BaseActivity {
   }
 
   private void updateWeather(Marina m) {
-    if (GeneralUtils.isNull(m,m.getLocation()))
+    if (GeneralUtils.isNull(m, m.getLocation())) {
       Log.e(TAG, "Current Marina is null");
+    }
     final OpenWeatherMap owp = new OpenWeatherMap();
-    if (checkWeather(m.getWeather()))
+    if (checkWeather(m.getWeather())) {
       updateWeatherWidget(m.getWeather());
-    else {
-      new WeatherHttpClient(this,output -> {
+    } else {
+      new WeatherHttpClient(this, output -> {
         Weather w = owp.parseData(output);
         if (w != null) {
           updateWeatherWidget(w);
@@ -258,15 +285,20 @@ public class MainActivity extends BaseActivity {
           currentMarina.setWeather(w);
           db.addMarina(currentMarina);
         }
-      }).execute(GeoUtils.createLocation(m.getLocation().getLatitude(), m.getLocation().getLongitude()));
+      }).execute(
+          GeoUtils.createLocation(m.getLocation().getLatitude(), m.getLocation().getLongitude()));
     }
   }
 
   private boolean checkWeather(Weather weather) {
-    if (weather==null) return false;
-    if (getMaxWindDaysArray(weather.getWindForecast()).size()==6)
-      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(),GeneralUtils.now())<120)
+    if (weather == null) {
+      return false;
+    }
+    if (getMaxWindDaysArray(weather.getWindForecast()).size() == 6) {
+      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120) {
         return true;
+      }
+    }
     return false;
   }
 

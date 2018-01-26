@@ -2,6 +2,7 @@ package in.avimarine.boatangels;
 
 import android.app.Application;
 import android.content.res.Configuration;
+import android.util.Log;
 import in.avimarine.boatangels.general.LocaleUtils;
 import java.util.Locale;
 
@@ -12,16 +13,17 @@ import java.util.Locale;
  */
 
 public class App extends Application {
+
+  private static final String TAG = "App";
   public void onCreate(){
     super.onCreate();
-
-    LocaleUtils.setLocale(new Locale("iw"));
     LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
   }
 
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
+    Log.d(TAG,"Config changed");
     LocaleUtils.updateConfig(this, newConfig);
   }
 }

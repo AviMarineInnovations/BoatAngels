@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import java.util.Locale;
 
@@ -15,6 +16,7 @@ import java.util.Locale;
 
 public class LocaleUtils {
 
+  private static final String TAG = "LocaleUtils";
   private static Locale sLocale;
 
   public static void setLocale(Locale locale) {
@@ -22,6 +24,15 @@ public class LocaleUtils {
     if(sLocale != null) {
       Locale.setDefault(sLocale);
     }
+  }
+
+  public static void restoreDefaultLocale(){
+    String s = Resources.getSystem().getConfiguration().locale.getLanguage();
+    if (s.isEmpty())
+     setLocale(new Locale("en"));
+    else
+      setLocale(new Locale(s));
+    Log.d(TAG, "Switched to defualt locale: "+ s);
   }
 
   public static void updateConfig(ContextThemeWrapper wrapper) {
@@ -34,6 +45,7 @@ public class LocaleUtils {
 
   public static void updateConfig(Application app, Configuration configuration) {
     if (sLocale != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+      Log.d(TAG, "In update config");
       //Wrapping the configuration to avoid Activity endless loop
       Configuration config = new Configuration(configuration);
       // We must use the now-deprecated config.locale and res.updateConfiguration here,
