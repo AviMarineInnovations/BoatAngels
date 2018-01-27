@@ -8,13 +8,18 @@
     android:title="@string/pref_header_general"/>
 
   <header
+    android:fragment="in.avimarine.boatangels.activities.SettingsActivity$AccountPreferenceFragment"
+    android:icon="@drawable/ic_account_circle_black_24dp"
+    android:title="@string/pref_header_account"/>
+
+  <header
     android:fragment="in.avimarine.boatangels.activities.SettingsActivity$NotificationPreferenceFragment"
     android:icon="@drawable/ic_notifications_black_24dp"
     android:title="@string/pref_header_notifications"/>
 
-  <header
-    android:fragment="in.avimarine.boatangels.activities.SettingsActivity$DataSyncPreferenceFragment"
-    android:icon="@drawable/ic_sync_black_24dp"
-    android:title="@string/pref_header_data_sync"/>
+  <!--<header-->
+    <!--android:fragment="in.avimarine.boatangels.activities.SettingsActivity$DataSyncPreferenceFragment"-->
+    <!--android:icon="@drawable/ic_sync_black_24dp"-->
+    <!--android:title="@string/pref_header_data_sync"/>-->
 
 </preference-headers>

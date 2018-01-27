@@ -19,8 +19,12 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.db.FireBase;
+import in.avimarine.boatangels.db.objects.User;
+import in.avimarine.boatangels.general.GeneralUtils;
 import in.avimarine.boatangels.general.LocaleUtils;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +43,7 @@ import java.util.Locale;
 public class SettingsActivity extends AppCompatPreferenceActivity implements
     OnSharedPreferenceChangeListener {
 
+  private static final String TAG = "SettingsActivity";
   /**
    * A preference value change listener that updates the preference's summary
    * to reflect its new value.
@@ -107,6 +112,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
    * @see #sBindPreferenceSummaryToValueListener
    */
   private static void bindPreferenceSummaryToValue(Preference preference) {
+    if (preference==null)
+    {
+      Log.e(TAG, "preference is null in bindPreferenceSummaryToValue");
+      return;
+    }
     // Set the listener to watch for value changes.
     preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -121,7 +131,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     setupActionBar();
   }
 
@@ -161,7 +170,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
     return PreferenceFragment.class.getName().equals(fragmentName)
         || GeneralPreferenceFragment.class.getName().equals(fragmentName)
         || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-        || NotificationPreferenceFragment.class.getName().equals(fragmentName);
+        || NotificationPreferenceFragment.class.getName().equals(fragmentName)
+        || AccountPreferenceFragment.class.getName().equals(fragmentName);
   }
 
   @Override
@@ -174,8 +184,59 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
       }
       else
         LocaleUtils.setLocale(new Locale(loc));
+      recreate();
     }
-    recreate();
+    else if (s.equals("display_name")){
+      String s1 = sharedPreferences.getString(s, "");
+      FireBase fb = new FireBase();
+      User u = fb.getCurrentUser();
+      u.setDisplayName(s1);
+      fb.setUser(u);
+    }
+    else if (s.equals("phone_number")){
+      String s1 = sharedPreferences.getString(s, "");
+      FireBase fb = new FireBase();
+      User u = fb.getCurrentUser();
+      u.setPhone(s1);
+      fb.setUser(u);
+    }
+    else if (s.equals("email_address")){
+      String s1 = sharedPreferences.getString(s, "");
+      FireBase fb = new FireBase();
+      User u = fb.getCurrentUser();
+      u.setMail(s1);
+      fb.setUser(u);
+    }
+    else if (s.equals("country")){
+      String s1 = sharedPreferences.getString(s, "");
+      FireBase fb = new FireBase();
+      User u = fb.getCurrentUser();
+      u.setCountry(s1);
+      fb.setUser(u);
+    }
+    else if (s.equals("timezone")){
+      String s1 = sharedPreferences.getString(s,"0");
+      FireBase fb = new FireBase();
+      User u = fb.getCurrentUser();
+      Float f = GeneralUtils.tryParseFloat(s1);
+      if (isTimeZone(f)) {
+        u.setTimeZone(f);
+        fb.setUser(u);
+      }
+    }
+    else if (s.equals("shabbath_observer")){
+      boolean b = sharedPreferences.getBoolean(s,false);
+      FireBase fb = new FireBase();
+      User u = fb.getCurrentUser();
+      u.setShabbathObserver(b);
+      fb.setUser(u);
+    }
+
+  }
+
+  private boolean isTimeZone(Float f) {
+    return ((f!=null)&&(f<=14)&&(f>=-12));
+
   }
 
   /**
@@ -191,12 +252,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
       addPreferencesFromResource(R.xml.pref_general);
       setHasOptionsMenu(true);
 
-      // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-      // to their values. When their values change, their summaries are
-      // updated to reflect the new value, per the Android Design
-      // guidelines.
-//      bindPreferenceSummaryToValue(findPreference("example_text"));
-//      bindPreferenceSummaryToValue(findPreference("example_list"));
+      bindPreferenceSummaryToValue(findPreference("locale_list"));
     }
 
     @Override
@@ -228,6 +284,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
       // updated to reflect the new value, per the Android Design
       // guidelines.
       bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+      bindPreferenceSummaryToValue(findPreference("locale_list"));
     }
 
     @Override
@@ -271,6 +328,38 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
       return super.onOptionsItemSelected(item);
     }
   }
+
+  /**
+   * This fragment shows account preferences only. It is used when the
+   * activity is showing a two-pane settings UI.
+   */
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+  public static class AccountPreferenceFragment extends PreferenceFragment {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      addPreferencesFromResource(R.xml.pref_account);
+      setHasOptionsMenu(true);
+      bindPreferenceSummaryToValue(findPreference("display_name"));
+      bindPreferenceSummaryToValue(findPreference("phone_number"));
+      bindPreferenceSummaryToValue(findPreference("timezone"));
+      bindPreferenceSummaryToValue(findPreference("email_address"));
+      bindPreferenceSummaryToValue(findPreference("country"));
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      int id = item.getItemId();
+      if (id == android.R.id.home) {
+        startActivity(new Intent(getActivity(), SettingsActivity.class));
+        return true;
+      }
+      return super.onOptionsItemSelected(item);
+    }
+  }
+
 
   @Override
   protected void onResume() {

@@ -1,8 +1,12 @@
 package in.avimarine.boatangels.db.objects;
 
+import com.google.firebase.firestore.Exclude;
+import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * This file is part of an
@@ -21,10 +25,12 @@ public class User extends BaseDbObject {
   private int yachtiePoint = 100;
   private Date firstJoinTime;
   private String uid;
-
-
-
+  private TimeZone timeZone;
   private List<String> boats = new ArrayList<>();
+
+
+
+  private boolean shabbathObserver;
 
   @Override
   public String toString() {
@@ -103,4 +109,20 @@ public class User extends BaseDbObject {
     this.boats = boats;
   }
 
+  public void setTimeZone(float timeZone) {
+    String s = "GMT"+(timeZone>0?"+":"-")+(long)timeZone+":"+String.format(new Locale("en"),"%02d", (long)((Math.abs(timeZone)-Math.abs((long)timeZone))*60));
+    this.timeZone = TimeZone.getTimeZone(s);
+  }
+  public void setShabbathObserver(boolean shabbathObserver) {
+    this.shabbathObserver = shabbathObserver;
+  }
+  public float getTimeZone() {
+    if (timeZone!=null)
+      return GeneralUtils.millisToHours(timeZone.getRawOffset());
+    return 0;
+  }
+
+  public boolean isShabbathObserver() {
+    return shabbathObserver;
+  }
 }

@@ -108,7 +108,6 @@
 
   <string name="pref_title_system_sync_settings">System sync settings</string>
 
-  <!-- Example settings for Notifications -->
   <string name="pref_header_notifications">Notifications</string>
 
   <string name="pref_title_new_message_notifications">New message notifications</string>
@@ -121,5 +120,16 @@
   <string name="pref_title_new_reply_notif">New Reply</string>
   <string name="pref_title_new_response_notif">New Response</string>
   <string name="pref_title_new_ask_for_inspection_notif">New Inspection Requested</string>
+
+
+  <string name="pref_header_account">Account Settings</string>
+
+  <string name="settings_btn">Settings</string>
+  <string name="pref_title_phone_number">Phone number</string>
+  <string name="pref_title_email">e-mail</string>
+  <string name="pref_title_country">Country</string>
+  <string name="pref_title_timezone">Time Zone</string>
+  <string name="pref_title_shabbath_observer">Shabbath Observer</string>
+  <string name="pref_description_shabbath_observer">If you do not want to be disturbed or disturb others on Shabbath</string>
 
 </resources>
