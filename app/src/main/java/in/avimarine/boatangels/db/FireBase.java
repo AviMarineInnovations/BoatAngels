@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import in.avimarine.boatangels.BuildConfig;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
@@ -27,7 +28,10 @@ public class FireBase implements iDb {
 
   public FireBase() {
       mFirestore = FirebaseFirestore.getInstance();
-      FirebaseFirestore.setLoggingEnabled(true);
+      if (BuildConfig.DEBUG)
+        FirebaseFirestore.setLoggingEnabled(true);
+      else
+        FirebaseFirestore.setLoggingEnabled(false);
   }
 
   @Override
@@ -72,7 +76,7 @@ public class FireBase implements iDb {
   }
 
   @Override
-  public void addUser(User user) {
+  public void setUser(User user) {
       mFirestore.collection("users").document(user.getUid()).set(user);
   }
   @Override

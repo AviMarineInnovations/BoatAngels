@@ -30,6 +30,7 @@ import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
 import in.avimarine.boatangels.general.LocaleUtils;
+import in.avimarine.boatangels.general.Setting;
 import in.avimarine.boatangels.geographical.GeoUtils;
 import in.avimarine.boatangels.geographical.OpenWeatherMap;
 import in.avimarine.boatangels.geographical.Weather;
@@ -223,6 +224,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
         } else {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
+          Setting.setUser(this,currentUser);
           welcomeTv.setText(getString(R.string.welcome_message, currentUser.getDisplayName()));
           if (!currentUser.getBoats().isEmpty()) {
             addBoatBtn.setEnabled(false);

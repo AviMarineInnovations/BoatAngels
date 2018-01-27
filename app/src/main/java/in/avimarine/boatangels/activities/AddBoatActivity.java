@@ -117,7 +117,7 @@ public class AddBoatActivity extends AppCompatActivity {
     b.users.add(FirebaseAuth.getInstance().getUid());
     User u = db.getCurrentUser();
     u.getBoats().add(b.getUuid());
-    db.addUser(u);
+    db.setUser(u);
     db.addBoat(b);
     finish();
   }

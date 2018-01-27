@@ -61,7 +61,7 @@ public class AddUserActivity extends AppCompatActivity {
          user.setFirstJoinTime(new Date());
          user.setLastUpdate(new Date());
          user.setUid(uid);
-         db.addUser(user);
+         db.setUser(user);
          finish();
        }
      });

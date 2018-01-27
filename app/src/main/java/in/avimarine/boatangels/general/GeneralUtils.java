@@ -228,4 +228,8 @@ public class GeneralUtils {
     }
   }
 
+  public static float millisToHours(long millis){
+    return millis/3600000f;
+  }
+
 }
