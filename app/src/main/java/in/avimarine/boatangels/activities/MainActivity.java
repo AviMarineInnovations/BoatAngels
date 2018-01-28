@@ -65,6 +65,9 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.ask_inspection)
   Button askInspectionBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.settings_btn)
+  Button settingsBtn;
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
@@ -226,6 +229,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
           db.setCurrentUser(currentUser);
           Setting.setUser(this,currentUser);
           welcomeTv.setText(getString(R.string.welcome_message, currentUser.getDisplayName()));
+          settingsBtn.setEnabled(true);
           if (!currentUser.getBoats().isEmpty()) {
             addBoatBtn.setEnabled(false);
             showInspectionBtn.setEnabled(true);
