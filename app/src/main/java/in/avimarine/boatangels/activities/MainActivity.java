@@ -79,7 +79,10 @@ public class MainActivity extends AppCompatActivity {
                       new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
               .build(),
           RC_SIGN_IN);
+
     }
+
+
     //addMarinas();
   }
 

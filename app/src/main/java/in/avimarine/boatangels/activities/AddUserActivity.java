@@ -3,6 +3,7 @@ package in.avimarine.boatangels.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,9 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class AddUserActivity extends AppCompatActivity {
+
+  private static final String TAG = "AddUserActivity";
+  private boolean indec = false;
   private String name;
   private String mail;
   private String phone;
@@ -63,12 +67,21 @@ public class AddUserActivity extends AppCompatActivity {
           user.setLastUpdate(new Date());
           user.setUid(uid);
           db.addUser(user);
+          indec = true;
           finish();
         }
       }
     });
   }
 
+  @Override
+  public void onBackPressed() {
+    if (!indec) {
+      Log.d(TAG, "Prevent btn back");
+    } else {
+      super.onBackPressed();
+    }
+  }
 
   private boolean isNotValidInput(String s) {
     return s == null || s.isEmpty();
