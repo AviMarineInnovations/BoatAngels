@@ -76,13 +76,8 @@ public class AddUserActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    if (!indec) {
-      Log.d(TAG, "Prevent btn back");
-    } else {
-      super.onBackPressed();
-    }
+    Log.d("CDA", "onBackPressed Called");
   }
-
   private boolean isNotValidInput(String s) {
     return s == null || s.isEmpty();
   }
