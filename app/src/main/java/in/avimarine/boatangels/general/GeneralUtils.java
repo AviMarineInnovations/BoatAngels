@@ -106,8 +106,8 @@ public class GeneralUtils {
         }
     }
 
-  public static boolean isValidEmail(CharSequence target) {
-    return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+  public static boolean isNotValidEmail(CharSequence target) {
+    return (TextUtils.isEmpty(target) || !Patterns.EMAIL_ADDRESS.matcher(target).matches());
   }
 
 

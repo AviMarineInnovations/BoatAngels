@@ -17,12 +17,14 @@ import java.util.Date;
 
 public class BoatHolder extends RecyclerView.ViewHolder {
   private final TextView mNameField;
+  private final TextView mSumOfferPoints;
   private final TextView mClubNameField;
   private final ImageView mStatusImage;
 
 
   public BoatHolder(View itemView) {
     super(itemView);
+    mSumOfferPoints = itemView.findViewById(R.id.sum_offer_points);
     mNameField = itemView.findViewById(R.id.boat_name_tv);
     mClubNameField = itemView.findViewById(R.id.club_name_tv);
     mStatusImage = itemView.findViewById(R.id.status_iv);
@@ -31,6 +33,9 @@ public class BoatHolder extends RecyclerView.ViewHolder {
   public void bind(Boat b) {
     setName(b.name);
     //DateUtils.getRelativeTimeSpanString(b.lastInspectionDate)
+    String sumOffer = Integer.toString(b.offerPoint);
+    setClubName(b.clubName);
+    setmSumOfferPoints("offer: " + sumOffer + " points");
     setClubName(b.clubName);
     setStatus(getStatus(b.lastInspectionDate));
   }
@@ -50,6 +55,9 @@ public class BoatHolder extends RecyclerView.ViewHolder {
 
   private void setName(String name) {
     mNameField.setText(name);
+  }
+  private void setmSumOfferPoints(String offerPoint) {
+    mSumOfferPoints.setText(offerPoint);
   }
 
   private void setClubName(String text) {

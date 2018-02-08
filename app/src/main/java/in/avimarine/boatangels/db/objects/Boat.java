@@ -18,6 +18,7 @@ public class Boat extends BaseDbObject {
   public GeoPoint location;
   public String marinaUuid;
   public String marinaName;
+  public int offerPoint = 0;
   public final List<String> users = new ArrayList<>();
   public String clubName;
   public String clubUuid;
@@ -25,13 +26,27 @@ public class Boat extends BaseDbObject {
 
   @Override
   public String toString() {
-    return "Boat{" +
-        "_uuid=" + getUuid() +
-        ", name='" + name + '\'' +
-        ", lastUpdateTime=" + lastUpdateTime +
-        ", firstAddedTime=" + firstAddedTime +
-        ", marina=" + marinaName +
-        '}';
+    return
+        "uuid: " + getUuid() + "\n"+
+        "Name: " + name +  "\n" +
+
+        "lastUpdateTime: " + lastUpdateTime +"\n"+
+        "firstAddedTime: " + firstAddedTime +"\n"+
+        "Marina: " + marinaName+"\n"+
+        "model: " + model+"\n"+
+        "location: " + location +"\n"+
+        "ClubName: " + clubName+"\n"+
+        "OfferPoint: " + offerPoint+"\n"+
+        "lastInspectionDate: " + lastInspectionDate
+        ;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getOfferPoint() {
+    return offerPoint;
   }
 
 }

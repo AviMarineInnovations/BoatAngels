@@ -29,6 +29,7 @@ import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
+import in.avimarine.boatangels.db.objects.User;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class InspectBoatActivity extends AppCompatActivity {
   @BindView(R.id.inspect_boat_title)
   TextView title;
   Boat b;
+  User u = null;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +93,12 @@ public class InspectBoatActivity extends AppCompatActivity {
         }
       }
     });
+    u = db.getCurrentUser();
+    if (u==null)
+    {
+      Log.e(TAG,"Current user is null!");
+      finish();
+    }
 
     OnClickListener ocl = new OnClickListener() {
       @Override
@@ -113,14 +121,14 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
+    inspection.pointsEarned = b.getOfferPoint();
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.name;
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
-    inspection.inspectorUid = FirebaseAuth.getInstance().getUid();
+    inspection.inspectorUid = u.getUid();
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-      inspection.inspectorName = FirebaseAuth.getInstance().getCurrentUser()
-          .getDisplayName(); //TODO: Switch to using name from User object
+      inspection.inspectorName = u.getDisplayName();
     }
     inspection.finding = getCheckBoxes();
     b.lastInspectionDate = inspection.inspectionTime;
@@ -128,7 +136,6 @@ public class InspectBoatActivity extends AppCompatActivity {
     db.addBoat(b);
     finish();
   }
-
 
   private void colorBoat() {
     if (checkbox_bow.getState() == State.VCHECKED) {

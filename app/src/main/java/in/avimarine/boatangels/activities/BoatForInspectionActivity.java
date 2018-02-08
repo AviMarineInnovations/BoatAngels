@@ -17,6 +17,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.Query.Direction;
 import in.avimarine.boatangels.BoatHolder;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Boat;
@@ -38,7 +39,7 @@ public class BoatForInspectionActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     Query query = FirebaseFirestore.getInstance()
         .collection("boats")
-//        .orderBy("lastInspectionTime")
+        .orderBy ("offerPoint",  Direction.DESCENDING)
         .limit(50);
 
     FirestoreRecyclerOptions<Boat> options = new FirestoreRecyclerOptions.Builder<Boat>()

@@ -43,10 +43,18 @@ public class MainActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.add_boat_btn)
   Button addBoatBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.show_inspections_btn)
+  Button showInspectionBtn;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.ask_inspection)
+  Button askInspectionBtn;
+
 
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
+  private User currentUser = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +79,23 @@ public class MainActivity extends AppCompatActivity {
                       new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
               .build(),
           RC_SIGN_IN);
+
     }
+
+
+    //addMarinas();
   }
 
   @Override
   protected void onStart() {
     super.onStart();
-    isUserRegistered(FirebaseAuth.getInstance().getUid());
+    if (FirebaseAuth.getInstance().getUid() != null) {
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
+    }
   }
 
   @OnClick(R.id.sign_out_btn)
-  public void signoutBtnClick(View v){
+  public void signoutBtnClick(View v) {
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -105,18 +119,25 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = new Intent(MainActivity.this, AddBoatActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.inspect_boat_btn)
   public void inspectBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, BoatForInspectionActivity.class);
     startActivity(intent);
   }
+
   @OnClick(R.id.show_inspections_btn)
   public void showInspectionsBtnClick(View v) {
     Intent intent = new Intent(MainActivity.this, InspectionsListActivity.class);
     intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
     startActivity(intent);
   }
+  @OnClick(R.id.ask_inspection)
+  public void ask(View v) {
+    Intent intent = new Intent(MainActivity.this, AskInspectionActivity.class);
+    startActivity(intent);
 
+  }
   public void isUserRegistered(String uid) {
     db.getUser(uid, new OnCompleteListener<DocumentSnapshot>() {
       @Override
@@ -128,24 +149,30 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
           }
           else{
-            User u = document.toObject(User.class);
-            db.setCurrentUser(u);
-            if (u.boats.size()>0) {
+            currentUser = document.toObject(User.class);
+            db.setCurrentUser(currentUser);
+            welcomeTv.setText(getString(R.string.welcome_message,currentUser.getDisplayName()));
+            if (!currentUser.getBoats().isEmpty()) {
               addBoatBtn.setEnabled(false);
-              ownBoatUuid = u.boats.get(0);
+              showInspectionBtn.setEnabled(true);
+              askInspectionBtn.setEnabled(true);
+              ownBoatUuid = currentUser.getBoats().get(0);
             }
-            else
+            else {
               addBoatBtn.setEnabled(true);
+              showInspectionBtn.setEnabled(false);
+              askInspectionBtn.setEnabled(false);
+            }
           }
         }
       }
     });
   }
 
-    /***
-     * For setting first marina db. Don't call!
-     */
-  private void addMarinas(){
+  /***
+   * For setting first marina db. Don't call!
+   */
+  private void addMarinas() {
     Marina m = new Marina();
     m.name = "Shavit, Haifa";
     m.country = "Israel";
@@ -184,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
   }
 
 
-
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -198,10 +224,8 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance() != null
             && FirebaseAuth.getInstance().getCurrentUser() != null) {
           isUserRegistered(FirebaseAuth.getInstance().getUid());
-          welcomeTv
-              .setText(String.format(getString(R.string.welcome_message),
-                  FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
-          //TODO: get boat name and save to variable. If no boat assigned to user disable boat related buttons (such as show inspections).
+
+
         }
         signoutBtn.setEnabled(true);
         return;
