@@ -36,7 +36,7 @@ public interface iDb {
 
   void addInspection(Inspection inspection);
 
-  void addUser(User user);
+  void setUser(User user);
 
   void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener);
 

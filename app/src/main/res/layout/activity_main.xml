@@ -15,7 +15,8 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/ask_inspection"/>
+    app:layout_constraintTop_toBottomOf="@+id/settings_btn"
+    app:layout_constraintVertical_bias="0.13"/>
   <Button
     android:id="@+id/sign_out_btn"
     android:layout_width="wrap_content"
@@ -91,4 +92,16 @@
     app:layout_constraintTop_toBottomOf="@+id/sign_out_btn"
     app:speed_units="Knots">
   </in.avimarine.boatangels.customViews.WeatherTableView>
+  <Button
+    android:id="@+id/settings_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:text="@string/settings_btn"
+    android:enabled="false"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/ask_inspection"/>
 </android.support.constraint.ConstraintLayout>
