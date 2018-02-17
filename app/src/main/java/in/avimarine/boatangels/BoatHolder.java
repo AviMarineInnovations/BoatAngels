@@ -1,9 +1,11 @@
 package in.avimarine.boatangels;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.Date;
@@ -17,22 +19,36 @@ import java.util.Date;
 
 public class BoatHolder extends RecyclerView.ViewHolder {
   private final TextView mNameField;
+  private final TextView mSumOfferPoints;
   private final TextView mClubNameField;
   private final ImageView mStatusImage;
+  private final ImageView mBoatPhoto;
+  private final Context c;
 
 
-  public BoatHolder(View itemView) {
+  public BoatHolder(Context c,View itemView) {
     super(itemView);
+    mSumOfferPoints = itemView.findViewById(R.id.sum_offer_points);
     mNameField = itemView.findViewById(R.id.boat_name_tv);
     mClubNameField = itemView.findViewById(R.id.club_name_tv);
     mStatusImage = itemView.findViewById(R.id.status_iv);
+    mBoatPhoto = itemView.findViewById(R.id.boat_iv);
+    this.c = c;
   }
 
   public void bind(Boat b) {
-    setName(b.name);
+    setName(b.getName());
     //DateUtils.getRelativeTimeSpanString(b.lastInspectionDate)
-    setClubName(b.clubName);
-    setStatus(getStatus(b.lastInspectionDate));
+    String sumOffer = Integer.toString(b.getOfferPoint());
+    setClubName(b.getClubName());
+    setmSumOfferPoints("offer: " + sumOffer + " points");
+    setClubName(b.getClubName());
+    setStatus(getStatus(b.getLastInspectionDate()));
+    setBoatPhoto(b.getPhotoName());
+  }
+
+  private void setBoatPhoto(String photoName) {
+    new FireBase().loadImgToImageView(c,mBoatPhoto,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
   }
 
   private int getStatus(Long lastInspectionDate) {
@@ -50,6 +66,9 @@ public class BoatHolder extends RecyclerView.ViewHolder {
 
   private void setName(String name) {
     mNameField.setText(name);
+  }
+  private void setmSumOfferPoints(String offerPoint) {
+    mSumOfferPoints.setText(offerPoint);
   }
 
   private void setClubName(String text) {

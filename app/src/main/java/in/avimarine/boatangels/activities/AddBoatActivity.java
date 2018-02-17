@@ -16,12 +16,9 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
@@ -69,19 +66,16 @@ public class AddBoatActivity extends AppCompatActivity {
     ButterKnife.bind(this);
     adapter  = new MarinaSpinnerAdapter(this, marinas);
     db = new FireBase();
-    db.getMarinasInCountry("Israel", new OnCompleteListener<QuerySnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<QuerySnapshot> task) {
-        if (task.isSuccessful()) {
-          Log.d(TAG, "Received " + task.getResult().size() + " boats");
-          for (DocumentSnapshot document : task.getResult()) {
-            marinas.add(document.toObject(Marina.class));
-          }
-          adapter.notifyDataSetChanged();
-        } else {
-          Log.d(TAG, "Error getting documents: ", task.getException());
-          Toast.makeText(AddBoatActivity.this, "Error connecting to online service!", Toast.LENGTH_LONG).show();
+    db.getMarinasInCountry("Israel", task -> {
+      if (task.isSuccessful()) {
+        Log.d(TAG, "Received " + task.getResult().size() + " boats");
+        for (DocumentSnapshot document : task.getResult()) {
+          marinas.add(document.toObject(Marina.class));
         }
+        adapter.notifyDataSetChanged();
+      } else {
+        Log.d(TAG, "Error getting documents: ", task.getException());
+        Toast.makeText(AddBoatActivity.this, "Error connecting to online service!", Toast.LENGTH_LONG).show();
       }
     });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -100,11 +94,11 @@ public class AddBoatActivity extends AppCompatActivity {
         Toast.makeText(this,"No marina was selected",Toast.LENGTH_SHORT).show();
       return;
     }
-    b.marinaUuid = ((Marina)marina_spinner.getSelectedItem()).getUuid();
-    b.marinaName = ((Marina)marina_spinner.getSelectedItem()).name;
-    b.name = boatNameEt.getText().toString();
-    b.model = boatModelEt.getText().toString();
-    b.clubName = boatClubEt.getText().toString();
+    b.setMarinaUuid(((Marina)marina_spinner.getSelectedItem()).getUuid());
+    b.setMarinaName(((Marina)marina_spinner.getSelectedItem()).getName());
+    b.setName(boatNameEt.getText().toString());
+    b.setModel(boatModelEt.getText().toString());
+    b.setClubName(boatClubEt.getText().toString());
     Double lat = GeneralUtils.tryParseDouble(boatLatEt.getText().toString());
     Double lon = GeneralUtils.tryParseDouble(boatLonEt.getText().toString());
     if (!isValidLat(lat)){
@@ -117,13 +111,13 @@ public class AddBoatActivity extends AppCompatActivity {
       boatLonEt.requestFocus();
       return;
     }
-    b.location = new GeoPoint(lat, lon);
+    b.setLocation(new GeoPoint(lat, lon));
     b.setLastUpdate(new Date());
     b.setFirstAddedTime(new Date());
     b.users.add(FirebaseAuth.getInstance().getUid());
     User u = db.getCurrentUser();
-    u.boats.add(b.getUuid());
-    db.addUser(u);
+    u.getBoats().add(b.getUuid());
+    db.setUser(u);
     db.addBoat(b);
     finish();
   }
@@ -194,7 +188,7 @@ public class AddBoatActivity extends AppCompatActivity {
       Marina marina = marinas.get(position);
 
       TextView name = listItem.findViewById(android.R.id.text1);
-      name.setText(marina.name);
+      name.setText(marina.getName());
 
       return listItem;
     }
