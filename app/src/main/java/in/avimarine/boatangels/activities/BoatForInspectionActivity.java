@@ -57,7 +57,7 @@ public class BoatForInspectionActivity extends AppCompatActivity {
         View view = LayoutInflater.from(group.getContext())
             .inflate(R.layout.boat_item, group, false);
         view.setOnClickListener(mOnClickListener);
-        return new BoatHolder(view);
+        return new BoatHolder(BoatForInspectionActivity.this,view);
       }
     };
     boatsRv.setLayoutManager(new LinearLayoutManager(this));

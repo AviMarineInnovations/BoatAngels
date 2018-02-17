@@ -1,11 +1,19 @@
 package in.avimarine.boatangels.db;
 
+import android.content.Context;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+//import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import in.avimarine.boatangels.BuildConfig;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
@@ -23,15 +31,18 @@ public class FireBase implements iDb {
 
   private static final String TAG = "FireBase";
   private final FirebaseFirestore mFirestore;
+  private final FirebaseStorage storage;
   private static User currentUser;
 
 
   public FireBase() {
-      mFirestore = FirebaseFirestore.getInstance();
-      if (BuildConfig.DEBUG)
-        FirebaseFirestore.setLoggingEnabled(true);
-      else
-        FirebaseFirestore.setLoggingEnabled(false);
+    mFirestore = FirebaseFirestore.getInstance();
+    storage = FirebaseStorage.getInstance();
+    if (BuildConfig.DEBUG) {
+      FirebaseFirestore.setLoggingEnabled(true);
+    } else {
+      FirebaseFirestore.setLoggingEnabled(false);
+    }
   }
 
   @Override
@@ -41,6 +52,28 @@ public class FireBase implements iDb {
     dr.set(b);
   }
 
+//  Reference paths and names can contain any sequence of valid Unicode characters, but certain restrictions are imposed including:
+//  Total length of reference.fullPath must be between 1 and 1024 bytes when UTF-8 encoded.
+//  No Carriage Return or Line Feed characters.
+//  Avoid using #, [, ], *, or ?, as these do not work well with other tools such as the Firebase Realtime Database or gsutil.
+//  @Override
+//  public void getPicture(String path, OnSuccessListener<byte[]> osl, OnFailureListener ofl, long maxSize){
+//    // Points to the root reference
+//    StorageReference storageRef = storage.getReference();
+//    StorageReference imageRef = storageRef.child(path);
+//    final long ONE_MEGABYTE = 1024 * 1024;
+//    imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(osl).addOnFailureListener(ofl);
+//  }
+
+  public void loadImgToImageView(Context c, ImageView iv, String path){
+    StorageReference storageRef = storage.getReference();
+    StorageReference imageRef = storageRef.child(path);
+    final long ONE_MEGABYTE = 1024 * 1024;
+    // Load the image using Glide
+    Glide.with(c)
+        .load(imageRef)
+        .into(iv);
+  }
 
   @Override
   public void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
@@ -54,19 +87,19 @@ public class FireBase implements iDb {
 
 
   @Override
-  public void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener ) {
-    mFirestore.collection("boats").whereEqualTo("marinaName", marina).get().addOnCompleteListener(listener);
+  public void getBoatsInMarina(String marina, OnCompleteListener<QuerySnapshot> listener) {
+    mFirestore.collection("boats").whereEqualTo("marinaName", marina).get()
+        .addOnCompleteListener(listener);
   }
 
   @Override
-  public void getBoats(OnCompleteListener<QuerySnapshot> listener){
+  public void getBoats(OnCompleteListener<QuerySnapshot> listener) {
     mFirestore.collection("boats").get().addOnCompleteListener(listener);
   }
 
 
-
   @Override
-  public void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener ) {
+  public void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
     mFirestore.collection("inspections").document(uuid).get().addOnCompleteListener(listener);
   }
 
@@ -77,8 +110,9 @@ public class FireBase implements iDb {
 
   @Override
   public void setUser(User user) {
-      mFirestore.collection("users").document(user.getUid()).set(user);
+    mFirestore.collection("users").document(user.getUid()).set(user);
   }
+
   @Override
   public void getUser(String uid, OnCompleteListener<DocumentSnapshot> listener) {
     mFirestore.collection("users").document(uid).get().addOnCompleteListener(listener);
@@ -86,25 +120,28 @@ public class FireBase implements iDb {
 
   @Override
   public void getMarinasInCountry(String country, OnCompleteListener<QuerySnapshot> listener) {
-    mFirestore.collection("marinas").whereEqualTo("country", country).get().addOnCompleteListener(listener);
+    mFirestore.collection("marinas").whereEqualTo("country", country).get()
+        .addOnCompleteListener(listener);
   }
+
   @Override
   public void addMarina(Marina m) {
     mFirestore.collection("marinas").document(m.getUuid()).set(m);
   }
 
   @Override
-  public void setCurrentUser(User u){
-      currentUser = u;
+  public void setCurrentUser(User u) {
+    currentUser = u;
   }
+
   @Override
-  public User getCurrentUser(){
+  public User getCurrentUser() {
     return currentUser;
   }
 
   @Override
   public void updateWeather(String uuid, Weather w) {
 
-    mFirestore.collection("marinas").document(uuid).update("weather",w);
+    mFirestore.collection("marinas").document(uuid).update("weather", w);
   }
 }

@@ -1,9 +1,11 @@
 package in.avimarine.boatangels;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.Date;
@@ -20,14 +22,18 @@ public class BoatHolder extends RecyclerView.ViewHolder {
   private final TextView mSumOfferPoints;
   private final TextView mClubNameField;
   private final ImageView mStatusImage;
+  private final ImageView mBoatPhoto;
+  private final Context c;
 
 
-  public BoatHolder(View itemView) {
+  public BoatHolder(Context c,View itemView) {
     super(itemView);
     mSumOfferPoints = itemView.findViewById(R.id.sum_offer_points);
     mNameField = itemView.findViewById(R.id.boat_name_tv);
     mClubNameField = itemView.findViewById(R.id.club_name_tv);
     mStatusImage = itemView.findViewById(R.id.status_iv);
+    mBoatPhoto = itemView.findViewById(R.id.boat_iv);
+    this.c = c;
   }
 
   public void bind(Boat b) {
@@ -38,6 +44,11 @@ public class BoatHolder extends RecyclerView.ViewHolder {
     setmSumOfferPoints("offer: " + sumOffer + " points");
     setClubName(b.getClubName());
     setStatus(getStatus(b.getLastInspectionDate()));
+    setBoatPhoto(b.getPhotoName());
+  }
+
+  private void setBoatPhoto(String photoName) {
+    new FireBase().loadImgToImageView(c,mBoatPhoto,"boats/"+photoName);
   }
 
   private int getStatus(Long lastInspectionDate) {

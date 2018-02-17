@@ -22,10 +22,11 @@ public class Boat extends BaseDbObject {
   private String clubName;
   private String clubUuid;
   private Long lastInspectionDate;
-
+  private String photoName;
 
 
   public List<String> users = new ArrayList<>();
+
 
   public String getName() {
     return name;
@@ -106,7 +107,13 @@ public class Boat extends BaseDbObject {
     this.lastInspectionDate = lastInspectionDate;
   }
 
+  public String getPhotoName() {
+    return photoName;
+  }
 
+  public void setPhotoName(String photoName) {
+    this.photoName = photoName;
+  }
 
 
 
@@ -129,4 +136,6 @@ public class Boat extends BaseDbObject {
             "lastInspectionDate: " + lastInspectionDate
         ;
   }
+
+
 }
