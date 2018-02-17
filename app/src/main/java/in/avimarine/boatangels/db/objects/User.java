@@ -1,6 +1,5 @@
 package in.avimarine.boatangels.db.objects;
 
-import com.google.firebase.firestore.Exclude;
 import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.ArrayList;
 import java.util.Date;

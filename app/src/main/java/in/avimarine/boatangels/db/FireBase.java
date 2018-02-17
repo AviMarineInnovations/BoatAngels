@@ -1,12 +1,10 @@
 package in.avimarine.boatangels.db;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
 //import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,6 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import in.avimarine.boatangels.BuildConfig;
+import in.avimarine.boatangels.GlideApp;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
@@ -65,13 +64,17 @@ public class FireBase implements iDb {
 //    imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(osl).addOnFailureListener(ofl);
 //  }
 
-  public void loadImgToImageView(Context c, ImageView iv, String path){
+  public void loadImgToImageView(Context c, ImageView iv, String path,@DrawableRes int loadingImg ,@DrawableRes int errorImg){
     StorageReference storageRef = storage.getReference();
     StorageReference imageRef = storageRef.child(path);
     final long ONE_MEGABYTE = 1024 * 1024;
+
+
     // Load the image using Glide
-    Glide.with(c)
+    GlideApp.with(c)
         .load(imageRef)
+        .error(errorImg)
+        .placeholder(loadingImg)
         .into(iv);
   }
 

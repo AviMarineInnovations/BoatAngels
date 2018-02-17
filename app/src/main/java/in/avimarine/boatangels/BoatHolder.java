@@ -48,7 +48,7 @@ public class BoatHolder extends RecyclerView.ViewHolder {
   }
 
   private void setBoatPhoto(String photoName) {
-    new FireBase().loadImgToImageView(c,mBoatPhoto,"boats/"+photoName);
+    new FireBase().loadImgToImageView(c,mBoatPhoto,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
   }
 
   private int getStatus(Long lastInspectionDate) {

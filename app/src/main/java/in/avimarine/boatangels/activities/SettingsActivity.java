@@ -176,60 +176,66 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-    if (s.equals("locale_list")) {
-      String loc = sharedPreferences.getString(s, "default");
-      if (loc.equals("default"))
-      {
-        LocaleUtils.restoreDefaultLocale();
-      }
-      else
-        LocaleUtils.setLocale(new Locale(loc));
-      recreate();
-    }
-    else if (s.equals("display_name")){
-      String s1 = sharedPreferences.getString(s, "");
-      FireBase fb = new FireBase();
-      User u = fb.getCurrentUser();
-      u.setDisplayName(s1);
-      fb.setUser(u);
-    }
-    else if (s.equals("phone_number")){
-      String s1 = sharedPreferences.getString(s, "");
-      FireBase fb = new FireBase();
-      User u = fb.getCurrentUser();
-      u.setPhone(s1);
-      fb.setUser(u);
-    }
-    else if (s.equals("email_address")){
-      String s1 = sharedPreferences.getString(s, "");
-      FireBase fb = new FireBase();
-      User u = fb.getCurrentUser();
-      u.setMail(s1);
-      fb.setUser(u);
-    }
-    else if (s.equals("country")){
-      String s1 = sharedPreferences.getString(s, "");
-      FireBase fb = new FireBase();
-      User u = fb.getCurrentUser();
-      u.setCountry(s1);
-      fb.setUser(u);
-    }
-    else if (s.equals("timezone")){
-      String s1 = sharedPreferences.getString(s,"0");
-      FireBase fb = new FireBase();
-      User u = fb.getCurrentUser();
-      Float f = GeneralUtils.tryParseFloat(s1);
-      if (isTimeZone(f)) {
-        u.setTimeZone(f);
+    switch (s) {
+      case "locale_list":
+        String loc = sharedPreferences.getString(s, "default");
+        if (loc.equals("default")) {
+          LocaleUtils.restoreDefaultLocale();
+        } else
+          LocaleUtils.setLocale(new Locale(loc));
+        recreate();
+        break;
+      case "display_name": {
+        String s1 = sharedPreferences.getString(s, "");
+        FireBase fb = new FireBase();
+        User u = fb.getCurrentUser();
+        u.setDisplayName(s1);
         fb.setUser(u);
+        break;
       }
-    }
-    else if (s.equals("shabbath_observer")){
-      boolean b = sharedPreferences.getBoolean(s,false);
-      FireBase fb = new FireBase();
-      User u = fb.getCurrentUser();
-      u.setShabbathObserver(b);
-      fb.setUser(u);
+      case "phone_number": {
+        String s1 = sharedPreferences.getString(s, "");
+        FireBase fb = new FireBase();
+        User u = fb.getCurrentUser();
+        u.setPhone(s1);
+        fb.setUser(u);
+        break;
+      }
+      case "email_address": {
+        String s1 = sharedPreferences.getString(s, "");
+        FireBase fb = new FireBase();
+        User u = fb.getCurrentUser();
+        u.setMail(s1);
+        fb.setUser(u);
+        break;
+      }
+      case "country": {
+        String s1 = sharedPreferences.getString(s, "");
+        FireBase fb = new FireBase();
+        User u = fb.getCurrentUser();
+        u.setCountry(s1);
+        fb.setUser(u);
+        break;
+      }
+      case "timezone": {
+        String s1 = sharedPreferences.getString(s, "0");
+        FireBase fb = new FireBase();
+        User u = fb.getCurrentUser();
+        Float f = GeneralUtils.tryParseFloat(s1);
+        if (isTimeZone(f)) {
+          u.setTimeZone(f);
+          fb.setUser(u);
+        }
+        break;
+      }
+      case "shabbath_observer": {
+        boolean b = sharedPreferences.getBoolean(s, false);
+        FireBase fb = new FireBase();
+        User u = fb.getCurrentUser();
+        u.setShabbathObserver(b);
+        fb.setUser(u);
+        break;
+      }
     }
 
   }

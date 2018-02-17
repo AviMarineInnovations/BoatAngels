@@ -35,7 +35,7 @@
     android:id="@+id/moored_boat_bowlines"
     android:layout_width="0dp"
     android:layout_height="60dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="20dp"
     android:layout_marginEnd="85dp"
     android:contentDescription="@string/boat_drawing_content_description"
     app:layout_constraintEnd_toEndOf="@+id/moored_boat_body"
@@ -195,5 +195,19 @@
     app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
     tools:visibility="visible"
     android:contentDescription="@string/addphotosbuton_content_description"/>
+  <de.hdodenhof.circleimageview.CircleImageView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/boat_image"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_no_picture_boat_icon"
+    android:padding="5dp"
+    app:civ_border_width="2dp"
+    app:civ_border_color="#7bbde6"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -68,6 +68,9 @@ public class InspectBoatActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspect_boat_title)
   TextView title;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.boat_image)
+  ImageView boatImage;
   private Boat b;
   private User u = null;
 
@@ -89,6 +92,7 @@ public class InspectBoatActivity extends AppCompatActivity {
         if (document.exists()) {
           b = document.toObject(Boat.class);
           title.setText(getString(R.string.inspection_title, b.getName()));
+          ((FireBase)db).loadImgToImageView(this,boatImage,"boats/"+b.getPhotoName(),R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
         } else {
           Log.e(TAG, "No Boat found for this uuid available");
           finish();

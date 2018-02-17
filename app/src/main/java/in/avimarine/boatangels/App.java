@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.res.Configuration;
 import android.util.Log;
 import in.avimarine.boatangels.general.LocaleUtils;
-import java.util.Locale;
 
 /**
  * This file is part of an
