@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   public void signoutBtnClick(View v) {
     AuthUI.getInstance()
         .signOut(MainActivity.this);
-    Intent intent = new Intent(this, login_activity.class);
+    Intent intent = new Intent(this, LoginActivity.class);
     startActivity(intent);
 
   }
