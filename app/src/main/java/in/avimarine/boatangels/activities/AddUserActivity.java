@@ -3,6 +3,7 @@ package in.avimarine.boatangels.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import butterknife.BindView;
@@ -75,5 +76,9 @@ public class AddUserActivity extends AppCompatActivity {
   private boolean isNotValidMobile(String phone) {
     return Pattern.matches("[a-zA-Z]+", phone) || (phone.length() < 6 || phone.length() > 13);
   }
+  @Override
+  public void onBackPressed() {
+    Log.d("CDA", "onBackPressed Called");
 
+  }
 }

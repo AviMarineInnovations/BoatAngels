@@ -3,10 +3,8 @@ package in.avimarine.boatangels.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,15 +27,13 @@ import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
-import in.avimarine.boatangels.general.LocaleUtils;
 import in.avimarine.boatangels.general.Setting;
 import in.avimarine.boatangels.geographical.GeoUtils;
 import in.avimarine.boatangels.geographical.OpenWeatherMap;
 import in.avimarine.boatangels.geographical.Weather;
-import in.avimarine.boatangels.geographical.Wind;
 import in.avimarine.boatangels.geographical.WeatherHttpClient;
+import in.avimarine.boatangels.geographical.Wind;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -88,18 +84,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       welcomeTv.setText(String
           .format(getString(R.string.welcome_message), auth.getCurrentUser().getDisplayName()));
       signoutBtn.setEnabled(true);
-    } else {
-      Log.d(TAG, "Not logged in");
-      startActivityForResult(
-          AuthUI.getInstance()
-              .createSignInIntentBuilder()
-              .setAvailableProviders(
-                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-              .build(),
-          RC_SIGN_IN);
     }
-
     //addMarinas();
   }
 
@@ -170,19 +155,10 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   @OnClick(R.id.sign_out_btn)
   public void signoutBtnClick(View v) {
     AuthUI.getInstance()
-        .signOut(MainActivity.this)
-        .addOnCompleteListener(task -> {
-          signoutBtn.setEnabled(false);
-          startActivityForResult(
-              AuthUI.getInstance()
-                  .createSignInIntentBuilder()
-                  .setAvailableProviders(
-                      Arrays
-                          .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                              new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                  .build(),
-              RC_SIGN_IN);
-        });
+        .signOut(MainActivity.this);
+    Intent intent = new Intent(this, login_activity.class);
+    startActivity(intent);
+
   }
 
   @OnClick(R.id.add_boat_btn)
@@ -227,7 +203,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
         } else {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
-          Setting.setUser(this,currentUser);
+          Setting.setUser(this, currentUser);
           welcomeTv.setText(getString(R.string.welcome_message, currentUser.getDisplayName()));
           settingsBtn.setEnabled(true);
           if (!currentUser.getBoats().isEmpty()) {
@@ -400,5 +376,16 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
 
       Log.d(TAG, "Log in failure: Unknown login response");
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    Log.d("CDA", "onBackPressed Called");
+    this.finish();
+    Intent intent = new Intent(Intent.ACTION_MAIN);
+    intent.addCategory(Intent.CATEGORY_HOME);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
+
   }
 }
