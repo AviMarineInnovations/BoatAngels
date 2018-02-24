@@ -78,8 +78,11 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    hiddenElements(true);
+
 
     if (auth.getCurrentUser() != null) {
+      hiddenElements(false);
       Log.d(TAG, "Logged in");
       isUserRegistered(FirebaseAuth.getInstance().getUid());
       welcomeTv.setText(String
@@ -95,6 +98,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
                       new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
               .build(),
           RC_SIGN_IN);
+
     }
 
     //addMarinas();
@@ -143,6 +147,23 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   @Override
   protected void onResume() {
     super.onResume();
+
+    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+      hiddenElements(false);
+      Log.d(TAG, "Logged in");
+    } else {
+      hiddenElements(true);
+      Log.d(TAG, "Not logged in");
+      startActivityForResult(
+          AuthUI.getInstance()
+              .createSignInIntentBuilder()
+              .setAvailableProviders(
+                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+              .build(),
+          RC_SIGN_IN);
+
+    }
     SharedPreferences prefs = PreferenceManager
         .getDefaultSharedPreferences(getApplicationContext());
     prefs.registerOnSharedPreferenceChangeListener(this);
@@ -163,9 +184,30 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     }
   }
 
+  public void hiddenElements(boolean hidde){
+    if (!hidde){
+      inspectBoatBtn.setVisibility(View.VISIBLE);
+      settingsBtn.setVisibility(View.VISIBLE);
+      askInspectionBtn.setVisibility(View.VISIBLE);
+      addBoatBtn.setVisibility(View.VISIBLE);
+      showInspectionBtn.setVisibility(View.VISIBLE);
+      signoutBtn.setVisibility(View.VISIBLE);
+      welcomeTv.setVisibility(View.VISIBLE);
+  } else{
+      welcomeTv.setVisibility(View.GONE);
+      signoutBtn.setVisibility(View.GONE);
+      inspectBoatBtn.setVisibility(View.GONE);
+      settingsBtn.setVisibility(View.GONE);
+      askInspectionBtn.setVisibility(View.GONE);
+      addBoatBtn.setVisibility(View.GONE);
+      showInspectionBtn.setVisibility(View.GONE);
+    }
+
+}
 
   @OnClick(R.id.sign_out_btn)
   public void signoutBtnClick(View v) {
+    hiddenElements(false);
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(task -> {
@@ -210,6 +252,13 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   @OnClick(R.id.ask_inspection)
   public void ask(View v) {
     Intent intent = new Intent(this, AskInspectionActivity.class);
+    startActivity(intent);
+
+  }
+
+  @OnClick(R.id.my_inspection)
+  public void myInspection(View v) {
+    Intent intent = new Intent(this, MyInspection.class);
     startActivity(intent);
 
   }

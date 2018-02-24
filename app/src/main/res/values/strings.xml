@@ -5,6 +5,7 @@
   <string name="inspection_for_yacht_title">Inspection for Yacht:</string>
   <string name="inspect_boat_btn_text">Inspect Boat</string>
   <string name="add_boat_btn_text">Add Boat</string>
+  <string name="inspect_by_me_btn">My Inspection</string>
   <string name="boat_name_text">Name</string>
   <string name="boat_model_text">Model</string>
   <string name="marina_text">Marina</string>
@@ -36,6 +37,10 @@
   <string name="show_yactie_point">you have:</string>
   <string name="ask_for_inspection_title">Ask for inspection</string>
   <string name="inspect_me">Inspect Me</string>
+  <string name="inspect_boat">Boat Name: </string>
+  <string name="points_earned">Points Earned: </string>
+  <string name="inspect_date">Inspect In: </string>
+  <string name="my_inspection_tv">My Inspection</string>
   <string name="inspect_points_error_message">Insert Points!</string>
   <string name="max_point_error_message">You do not have enough points!</string>
   <plurals name="points_txt">
@@ -68,7 +73,6 @@
     <item>iw</item>
     <item>en</item>
   </string-array>
-
 
 
   <!-- Example settings for Data & Sync -->

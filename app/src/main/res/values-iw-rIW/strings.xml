@@ -5,6 +5,7 @@
   <string name="inspection_for_yacht_title">"בדיקה עבור הסירה: "</string>
   <string name="inspect_boat_btn_text">בדוק סירה</string>
   <string name="add_boat_btn_text">הוסף סירה</string>
+  <string name="inspect_by_me_btn">הבדיקות שלי</string>
   <string name="boat_name_text">שם</string>
   <string name="boat_model_text">דגם</string>
   <string name="marina_text">מעגן</string>
