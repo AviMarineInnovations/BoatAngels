@@ -85,6 +85,8 @@ public class InspectionResultActivity extends AppCompatActivity {
 
   }
 
+
+
   @OnClick(R.id.checkBox_bow)
   public void onCheckBoxChanged(View v){
     final ContextThemeWrapper wrapper = new ContextThemeWrapper(this, R.style.XCheckedRopes);

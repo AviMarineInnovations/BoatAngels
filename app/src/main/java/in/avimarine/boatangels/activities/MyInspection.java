@@ -34,12 +34,12 @@ public class MyInspection extends AppCompatActivity {
   private String uid = FirebaseAuth.getInstance().getUid();
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private List<String> arrayInspe = new ArrayList<>();
-  private SparseArray<String> hashMap = new SparseArray<>();
+  private SparseArray<String> hashMapBoatUid = new SparseArray<>();
   private SparseArray<String> hashMapInspeUid = new SparseArray<>();
   private static final String TAG = "INSPECTION_LIST";
   private Integer indexList = 0;
   private Context context = this;
-  private String inspecUid;
+  private String inspectUid;
 
 
   @Override
@@ -69,7 +69,7 @@ public class MyInspection extends AppCompatActivity {
                       pointsEarned + inspec.pointsEarned);
                   Log.d(TAG, document.getId() + " => " + document.getData());
 
-                  hashMap.put(indexList, inspec.boatUuid);
+                  hashMapBoatUid.put(indexList, inspec.boatUuid);
                   hashMapInspeUid.put(indexList, inspec.getUuid());
                   indexList++;
                 }
@@ -85,8 +85,8 @@ public class MyInspection extends AppCompatActivity {
       public void onItemClick(AdapterView<?> arg0, View v, int position,
           long arg3) {
 
-        inspecUid = hashMapInspeUid.get(position);
-        String uid = hashMap.get(position);
+        inspectUid = hashMapInspeUid.get(position);
+        String uid = hashMapBoatUid.get(position);
         Log.d(TAG, "Name : " + uid + " " + position);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -111,7 +111,7 @@ public class MyInspection extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int id) {
                     Intent intent1 = new Intent(MyInspection.this, InspectionResultActivity.class);
-                    intent1.putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
+                    intent1.putExtra(getString(R.string.intent_extra_inspection_uuid), inspectUid);
                     startActivity(intent1);
                   }
                 });
@@ -126,11 +126,3 @@ public class MyInspection extends AppCompatActivity {
   }
 
 }
-
-
-
-
-
-
-
-
