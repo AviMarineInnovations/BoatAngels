@@ -249,6 +249,13 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     startActivity(intent);
   }
 
+  @OnClick(R.id.search_boat_btn)
+  public void searchBoatBtnClick(View v) {
+    Intent intent = new Intent(this, SearchBoatActivity.class);
+    startActivity(intent);
+  }
+
+
   @OnClick(R.id.ask_inspection)
   public void ask(View v) {
     Intent intent = new Intent(this, AskInspectionActivity.class);

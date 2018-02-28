@@ -41,6 +41,9 @@
   <string name="points_earned">Points Earned: </string>
   <string name="inspect_date">Inspect In: </string>
   <string name="my_inspection_tv">My Inspection</string>
+  <string name="what_you_like_to_do">What You Like To Do</string>
+  <string name="new_inspection">New Inspection</string>
+  <string name="view_inspection">View Inspection</string>
   <string name="inspect_points_error_message">Insert Points!</string>
   <string name="max_point_error_message">You do not have enough points!</string>
   <plurals name="points_txt">
