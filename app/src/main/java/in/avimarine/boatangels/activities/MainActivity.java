@@ -214,6 +214,13 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
 
   }
 
+  @OnClick(R.id.new_main_btn)
+  public void newMain(View v) {
+    Intent intent = new Intent(this, Main2Activity.class);
+    startActivity(intent);
+
+  }
+
   private void isUserRegistered(String uid) {
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {

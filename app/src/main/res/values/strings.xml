@@ -70,7 +70,6 @@
   </string-array>
 
 
-
   <!-- Example settings for Data & Sync -->
   <string name="pref_header_data_sync">Data &amp; sync</string>
 
@@ -132,5 +131,14 @@
   <string name="pref_title_shabbath_observer">Shabbath Observer</string>
   <string name="pref_description_shabbath_observer">If you do not want to be disturbed or disturb others on Shabbath</string>
   <string name="boat_photo_content_description">Boat photo</string>
+  <string name="title_activity_main2">Boat Angels</string>
+  <string name="tab_text_1">My Boat</string>
+  <string name="tab_text_2">Inspect Boat</string>
+  <string name="tab_text_3">Activity</string>
+  <string name="action_settings">Settings</string>
+  <string name="section_format">Hello World from section: %1$d</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -58,4 +58,8 @@
   <string name="pref_title_timezone">אזור זמן</string>
   <string name="pref_title_shabbath_observer">שומר שבת</string>
   <string name="pref_description_shabbath_observer">אם אינך רוצה לקבל התראות או לגרום להתראות אצל אחרים בשבת</string>
+  <string name="tab_text_1">הסירה שלי</string>
+  <string name="tab_text_2">בדוק סירה</string>
+  <string name="tab_text_3">פעילות</string>
+  <string name="action_settings">הגדרות</string>
 </resources>
