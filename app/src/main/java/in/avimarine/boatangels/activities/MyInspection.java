@@ -95,7 +95,7 @@ public class MyInspection extends AppCompatActivity {
 
         // set dialog message
         alertDialogBuilder
-            .setCancelable(false)
+            .setCancelable(true)
             .setPositiveButton(getString(R.string.new_inspection),
                 new DialogInterface.OnClickListener() {
 
