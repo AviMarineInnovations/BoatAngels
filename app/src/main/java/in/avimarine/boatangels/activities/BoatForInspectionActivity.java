@@ -85,5 +85,4 @@ public class BoatForInspectionActivity extends AppCompatActivity {
     adapter.stopListening();
   }
 
-
 }
