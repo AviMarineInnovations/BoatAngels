@@ -65,6 +65,8 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.settings_btn)
   Button settingsBtn;
+  @BindView(R.id.my_inspection)
+  Button myInspection;
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
@@ -186,6 +188,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
 
   public void hiddenElements(boolean hidde){
     if (!hidde){
+      myInspection.setVisibility(View.VISIBLE);
       inspectBoatBtn.setVisibility(View.VISIBLE);
       settingsBtn.setVisibility(View.VISIBLE);
       askInspectionBtn.setVisibility(View.VISIBLE);
@@ -194,6 +197,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       signoutBtn.setVisibility(View.VISIBLE);
       welcomeTv.setVisibility(View.VISIBLE);
   } else{
+      myInspection.setVisibility(View.GONE);
       welcomeTv.setVisibility(View.GONE);
       signoutBtn.setVisibility(View.GONE);
       inspectBoatBtn.setVisibility(View.GONE);
