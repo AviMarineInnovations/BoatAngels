@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Inspection;
@@ -48,13 +49,11 @@ public class MyInspection extends AppCompatActivity {
     setContentView(R.layout.activity_my_inspection);
     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, arrayInspe);
     ListView listView = findViewById(R.id.my_inspection_list);
-
     String inspecBoat = getString(R.string.inspect_boat);
-
     String inspecDate = getString(R.string.inspect_date);
     String pointsEarned = getString(R.string.points_earned);
 
-    db.collection("inspections")
+    db.collection("inspections").orderBy("inspectionTime", Direction.DESCENDING)
         .get()
         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
           @Override
