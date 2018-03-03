@@ -20,6 +20,7 @@
   <string name="addphotosbuton_content_description">כפתורהוספתתמונות</string>
   <string name="sendbutton_content_description">כפתור שלח</string>
   <string name="inspection_title">בדיקה עבור %s</string>
+  <string name="what_you_like_to_do">מה תרצה לעשות ?</string>
   <string name="inspection_subtitle">בוצעה על ידי %s ב- %s</string>
   <string name="add_user_name">שם</string>
   <string name="add_user_mail">דוא\"ל</string>
@@ -59,4 +60,10 @@
   <string name="pref_title_timezone">אזור זמן</string>
   <string name="pref_title_shabbath_observer">שומר שבת</string>
   <string name="pref_description_shabbath_observer">אם אינך רוצה לקבל התראות או לגרום להתראות אצל אחרים בשבת</string>
+  <string name="inspect_boat">שם הספינה:</string>
+  <string name="points_earned">נקודות שהורווחו:</string>
+  <string name="inspect_date">תאריך הבדיקה:</string>
+  <string name="my_inspection_tv">הבדיקות שלי</string>
+  <string name="new_inspection">בדיקה חדשה</string>
+  <string name="view_inspection">צפה בבדיקה</string>
 </resources>
