@@ -46,6 +46,7 @@
   <string name="view_inspection">View Inspection</string>
   <string name="inspect_points_error_message">Insert Points!</string>
   <string name="max_point_error_message">You do not have enough points!</string>
+  <string name="search_boat">Search Boat...</string>
   <plurals name="points_txt">
     <item quantity="one">One Point</item>
     <item quantity="other">%d Points</item>

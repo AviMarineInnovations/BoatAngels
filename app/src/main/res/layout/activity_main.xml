@@ -123,7 +123,7 @@
 
   <Button
     android:id="@+id/search_boat_btn"
-    android:layout_width="114dp"
+    android:layout_width="wrap_content"
     android:layout_height="50dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"

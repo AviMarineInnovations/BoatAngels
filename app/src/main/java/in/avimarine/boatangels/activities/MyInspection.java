@@ -49,6 +49,7 @@ public class MyInspection extends AppCompatActivity {
     setContentView(R.layout.activity_my_inspection);
     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, arrayInspe);
     ListView listView = findViewById(R.id.my_inspection_list);
+
     String inspecBoat = getString(R.string.inspect_boat);
     String inspecDate = getString(R.string.inspect_date);
     String pointsEarned = getString(R.string.points_earned);
