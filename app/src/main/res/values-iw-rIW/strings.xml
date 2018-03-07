@@ -67,4 +67,5 @@
   <string name="new_inspection">בדיקה חדשה</string>
   <string name="view_inspection">צפה בבדיקה</string>
   <string name="send_feedback">שלח משוב</string>
+  <string name="You_have_not_marked_message">תיבת סימון לא סומנה ולא נשלחה שום הודעה!</string>
 </resources>

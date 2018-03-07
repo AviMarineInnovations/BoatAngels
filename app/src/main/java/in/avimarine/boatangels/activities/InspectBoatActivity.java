@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.User;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,7 +95,8 @@ public class InspectBoatActivity extends AppCompatActivity {
         if (document.exists()) {
           b = document.toObject(Boat.class);
           title.setText(getString(R.string.inspection_title, b.getName()));
-          ((FireBase)db).loadImgToImageView(this,boatImage,"boats/"+b.getPhotoName(),R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
+          ((FireBase) db).loadImgToImageView(this, boatImage, "boats/" + b.getPhotoName(),
+              R.drawable.ic_no_picture_boat_icon, R.drawable.ic_no_picture_boat_icon);
         } else {
           Log.e(TAG, "No Boat found for this uuid available");
           finish();
@@ -100,9 +104,8 @@ public class InspectBoatActivity extends AppCompatActivity {
       }
     });
     u = db.getCurrentUser();
-    if (u==null)
-    {
-      Log.e(TAG,"Current user is null!");
+    if (u == null) {
+      Log.e(TAG, "Current user is null!");
       finish();
     }
 
@@ -131,11 +134,17 @@ public class InspectBoatActivity extends AppCompatActivity {
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       inspection.inspectorName = u.getDisplayName();
     }
-    inspection.finding = getCheckBoxes();
-    b.setLastInspectionDate(inspection.inspectionTime);
-    db.addInspection(inspection);
-    db.addBoat(b);
-    finish();
+    if (!checkInspection()) {
+      Toast.makeText(getApplicationContext(), getResources().getString(R.string.You_have_not_marked_message),
+          Toast.LENGTH_LONG).show();
+    } else {
+
+      inspection.finding = getCheckBoxes();
+      b.setLastInspectionDate(inspection.inspectionTime);
+      db.addInspection(inspection);
+      db.addBoat(b);
+      finish();
+    }
   }
 
   private void colorBoat() {
@@ -241,12 +250,34 @@ public class InspectBoatActivity extends AppCompatActivity {
   }
 
   private Map<String, String> getCheckBoxes() {
+
     Map<String, String> ret = new HashMap<>();
     ret.put("BOWLINES", checkbox_bow.getState().name());
     ret.put("JIB", checkbox_jib.getState().name());
     ret.put("MAIN", checkbox_main.getState().name());
     ret.put("STERNLINES", checkbox_stern.getState().name());
     return ret;
+  }
+
+  private boolean checkInspection() {
+    int counter = 0;
+    ArrayList<CheckBox> checkBoxs = new ArrayList<>();
+    checkBoxs.add(checkbox_bow);
+    checkBoxs.add(checkbox_jib);
+    checkBoxs.add(checkbox_main);
+    checkBoxs.add(checkbox_stern);
+    for (CheckBox checkBoxTest : checkBoxs) {
+      if (!checkBoxTest.isChecked()) {
+        counter++;
+        Log.d(TAG, "checkbox_bow: Not check !");
+      }
+    }
+    if (counter == 4 && inspection_text.getText().toString().equals("")) {
+      Log.d(TAG, "You must check the boat or send some test!");
+      return false;
+
+    }
+    return true;
   }
 }
 
