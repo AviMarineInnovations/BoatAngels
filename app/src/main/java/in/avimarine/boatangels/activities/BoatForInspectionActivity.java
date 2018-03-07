@@ -1,6 +1,5 @@
 package in.avimarine.boatangels.activities;
 
-import android.content.ClipData.Item;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -25,7 +23,6 @@ import com.google.firebase.firestore.Query.Direction;
 import in.avimarine.boatangels.BoatHolder;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Boat;
-import in.avimarine.boatangels.db.objects.Inspection;
 
 public class BoatForInspectionActivity extends AppCompatActivity {
 
@@ -46,68 +43,44 @@ public class BoatForInspectionActivity extends AppCompatActivity {
     setContentView(R.layout.activity_boat_for_inspection);
     ButterKnife.bind(this);
 
-    setInspectionList(false, "");
+    setInspectionList(false, false, "");
     mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 
       @Override
       public boolean onQueryTextSubmit(String boatName) {
-        setInspectionList(true, boatName);
+        setInspectionList(true, false, boatName);
         return false;
       }
 
       @Override
       public boolean onQueryTextChange(String s) {
-        String srarch = mSearchView.getQuery().toString();
-        if (srarch.isEmpty()) {
-          setInspectionList(false, "");
-          return false;
-        }
-        int test = boatsRv.getAdapter().getItemCount();
-        for (int i = 0; i < test; i++) {
-          String boatName = ((TextView) boatsRv.findViewHolderForAdapterPosition(i).itemView
-              .findViewById
-                  (R.id.boat_name_tv)).getText().toString();
-          //Log.d(TAG, "BoatName : " + boatName);
-          if (boatName.startsWith(srarch)) {
-            Log.d(TAG, "BoatName : Found");
-          } else {
-            Log.d(TAG, "BoatName : Not Found " + srarch);
-            adapter.getItem(i);
-
-          }
-
-        }
-
+        setInspectionList(false, true, s);
         return false;
       }
     });
   }
 
-  public void setInspectionList(boolean searchBoat, String boatName) {
+  public void setInspectionList(boolean searchBoat, boolean subTest, String boatName) {
 
-    Query query;
-    Log.d(TAG, "Test: " + boatName);
-    if (searchBoat == false && boatName.isEmpty()) {
-      query = FirebaseFirestore.getInstance()
-          .collection("boats")
-          .orderBy("offerPoint", Direction.DESCENDING)
-          .limit(50);
+    Query query = FirebaseFirestore.getInstance()
+        .collection("boats")
+        .orderBy("offerPoint", Direction.DESCENDING)
+        .limit(50);
+    Log.d(TAG, "Boat Name: " + boatName);
 
-    } else if (searchBoat) {
+    if (searchBoat && !subTest) {
       query = FirebaseFirestore.getInstance()
           .collection("boats").whereEqualTo("name", boatName)
           .limit(50);
-    } else {
+    } else if (subTest && !searchBoat) {
 
       query = FirebaseFirestore.getInstance()
-          .collection("boats").orderBy("name").endAt(boatName)
-          .limit(50);
+          .collection("boats").whereGreaterThanOrEqualTo("name", boatName);
     }
 
     FirestoreRecyclerOptions<Boat> options = new FirestoreRecyclerOptions.Builder<Boat>()
         .setQuery(query, Boat.class)
         .build();
-
 
     adapter = new FirestoreRecyclerAdapter<Boat, BoatHolder>(options) {
       @Override
