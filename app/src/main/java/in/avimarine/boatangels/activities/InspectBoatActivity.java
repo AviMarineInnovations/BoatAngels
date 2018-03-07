@@ -135,7 +135,8 @@ public class InspectBoatActivity extends AppCompatActivity {
       inspection.inspectorName = u.getDisplayName();
     }
     if (!checkInspection()) {
-      Toast.makeText(getApplicationContext(), getResources().getString(R.string.You_have_not_marked_message),
+      Toast.makeText(getApplicationContext(),
+          getResources().getString(R.string.You_have_not_marked_message),
           Toast.LENGTH_LONG).show();
     } else {
 
@@ -261,15 +262,18 @@ public class InspectBoatActivity extends AppCompatActivity {
 
   private boolean checkInspection() {
     int counter = 0;
-    ArrayList<CheckBox> checkBoxs = new ArrayList<>();
+    ArrayList<CheckBoxTriState> checkBoxs = new ArrayList<>();
     checkBoxs.add(checkbox_bow);
     checkBoxs.add(checkbox_jib);
     checkBoxs.add(checkbox_main);
     checkBoxs.add(checkbox_stern);
-    for (CheckBox checkBoxTest : checkBoxs) {
-      if (!checkBoxTest.isChecked()) {
+    for (CheckBoxTriState checkBoxTest : checkBoxs) {
+      if (checkBoxTest.getState().name().equals("UNCHECKED")) {
+        Log.d(TAG, "checkbox: UNCHECKED");
         counter++;
-        Log.d(TAG, "checkbox_bow: Not check !");
+      } else {
+
+        Log.d(TAG, "checkbox: " + checkBoxTest.getState().name());
       }
     }
     if (counter == 4 && inspection_text.getText().toString().equals("")) {
