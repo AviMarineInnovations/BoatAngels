@@ -69,6 +69,8 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   Button searchBoatBtn;
   @BindView(R.id.my_inspection)
   Button myInspectionBtn;
+  @BindView(R.id.send_feedback)
+  Button sendFeedBack;
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
@@ -192,6 +194,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
 
   public void hiddenElements(boolean hidde){
     if (!hidde){
+      sendFeedBack.setVisibility(View.VISIBLE);
       searchBoatBtn.setVisibility(View.VISIBLE);
       myInspectionBtn.setVisibility(View.VISIBLE);
       inspectBoatBtn.setVisibility(View.VISIBLE);
@@ -202,6 +205,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       signoutBtn.setVisibility(View.VISIBLE);
       welcomeTv.setVisibility(View.VISIBLE);
   } else{
+      sendFeedBack.setVisibility(View.GONE);
       searchBoatBtn.setVisibility(View.GONE);
       myInspectionBtn.setVisibility(View.GONE);
       welcomeTv.setVisibility(View.GONE);
@@ -239,6 +243,12 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     Intent intent = new Intent(this, AddBoatActivity.class);
     startActivity(intent);
   }
+  @OnClick(R.id.send_feedback)
+  public void sendFeedBackBtn(View v) {
+    Intent intent = new Intent(this, SendFeedBackActivity.class);
+    startActivity(intent);
+  }
+
 
   @OnClick(R.id.settings_btn)
   public void settingsBtnClick(View v) {
