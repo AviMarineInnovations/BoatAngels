@@ -16,7 +16,6 @@
     <activity android:name=".activities.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
@@ -50,11 +49,6 @@
     <activity android:name=".activities.MyInspection$activity_search_boat">
     </activity>
     <activity android:name=".activities.SearchBoatActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
     </activity>
     <activity android:name=".activities.SendFeedbackActivity">
     </activity>
