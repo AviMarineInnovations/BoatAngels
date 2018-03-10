@@ -10,42 +10,40 @@
     tools:context="in.avimarine.boatangels.activities.InspectionResultActivity"
     tools:visibility="visible">
 
-    <ImageView
-      android:id="@+id/moored_boat_bowlines"
-      android:layout_width="0dp"
-      android:layout_height="50dp"
-      android:contentDescription="@string/boat_drawing_content_description"
-      app:layout_constraintBottom_toTopOf="@+id/moored_boat_body"
-      app:layout_constraintEnd_toEndOf="@+id/moored_boat_body"
-      app:layout_constraintStart_toStartOf="@+id/moored_boat_body"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_monohull_mooring_bow"
-      tools:visibility="visible"/>
-    <ImageView
-      android:id="@+id/moored_boat_body"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:contentDescription="@string/boat_drawing_content_description"
-      app:layout_constraintBottom_toTopOf="@+id/moored_boat_sternlines"
-      app:layout_constraintDimensionRatio="h,1:1"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/moored_boat_bowlines"
-      app:layout_constraintVertical_chainStyle="spread_inside"
-      app:srcCompat="@drawable/ic_top_mv"
-      tools:visibility="visible"/>
-    <ImageView
-      android:id="@+id/moored_boat_sternlines"
-      android:layout_width="0dp"
-      android:layout_height="50dp"
-      android:layout_marginBottom="8dp"
-      android:contentDescription="@string/boat_drawing_content_description"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="@+id/moored_boat_body"
-      app:layout_constraintStart_toStartOf="@+id/moored_boat_body"
-      app:layout_constraintTop_toBottomOf="@+id/moored_boat_body"
-      app:srcCompat="@drawable/ic_monohull_dock_aft"
-      tools:visibility="visible"/>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+          android:id="@+id/moored_boat_bowlines"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:contentDescription="@string/boat_drawing_content_description"
+          app:srcCompat="@drawable/ic_monohull_mooring_bow"
+          tools:visibility="visible"/>
+        <ImageView
+          android:id="@+id/moored_boat_body"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginStart="50dp"
+          android:layout_marginEnd="50dp"
+          android:contentDescription="@string/boat_drawing_content_description"
+
+          app:srcCompat="@drawable/ic_top_mv"
+          tools:visibility="visible"/>
+        <ImageView
+          android:id="@+id/moored_boat_sternlines"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:contentDescription="@string/boat_drawing_content_description"
+          app:srcCompat="@drawable/ic_monohull_dock_aft"
+          tools:visibility="visible"/>
+
+
+      </LinearLayout>
+
+
+
 
   </android.support.constraint.ConstraintLayout>
 </merge>

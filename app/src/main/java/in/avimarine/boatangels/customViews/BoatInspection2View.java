@@ -26,20 +26,20 @@ public class BoatInspection2View extends ConstraintLayout {
 
 
   private LayoutInflater inflater;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.checkBox_bow)
-  CheckBoxTriState checkbox_bow;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.checkBox_jib)
-  CheckBoxTriState checkbox_jib;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.checkBox_mainsail)
-  CheckBoxTriState checkbox_main;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.checkBox_stern)
-  CheckBoxTriState checkbox_stern;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.moored_boat_body)
+//  @SuppressWarnings("WeakerAccess")
+//  @BindView(R.id.checkBox_bow)
+//  CheckBoxTriState checkbox_bow;
+//  @SuppressWarnings("WeakerAccess")
+//  @BindView(R.id.checkBox_jib)
+//  CheckBoxTriState checkbox_jib;
+//  @SuppressWarnings("WeakerAccess")
+//  @BindView(R.id.checkBox_mainsail)
+//  CheckBoxTriState checkbox_main;
+//  @SuppressWarnings("WeakerAccess")
+//  @BindView(R.id.checkBox_stern)
+//  CheckBoxTriState checkbox_stern;
+//  @SuppressWarnings("WeakerAccess")
+//  @BindView(R.id.moored_boat_body)
   ImageView boatBody;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.moored_boat_bowlines)
@@ -87,107 +87,107 @@ public class BoatInspection2View extends ConstraintLayout {
   }
 
 
-  private void colorBoat() {
-    if (checkbox_bow.getState() == State.VCHECKED) {
-      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedRopes);
-      final Drawable drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines,
-              wrapper.getTheme());
-      boatBowLines.setImageDrawable(drawable);
-    } else if (checkbox_bow.getState() == State.XCHECKED) {
-      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedRopes);
-      final Drawable drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines,
-              wrapper.getTheme());
-      boatBowLines.setImageDrawable(drawable);
-    } else {
-      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.UncheckedBoat);
-      final Drawable drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines,
-              wrapper.getTheme());
-      boatBowLines.setImageDrawable(drawable);
-    }
-    if (checkbox_stern.getState() == State.VCHECKED) {
-      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedRopes);
-      final Drawable drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines,
-              wrapper.getTheme());
-      boatSternLines.setImageDrawable(drawable);
-    } else if (checkbox_stern.getState() == State.XCHECKED) {
-      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedRopes);
-      final Drawable drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines,
-              wrapper.getTheme());
-      boatSternLines.setImageDrawable(drawable);
-    } else {
-      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.UncheckedBoat);
-      final Drawable drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines,
-              wrapper.getTheme());
-      boatSternLines.setImageDrawable(drawable);
-    }
-    ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.UncheckedBoat);
-    Drawable drawable = ResourcesCompat
-        .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-            wrapper.getTheme());
-    boatBody.setImageDrawable(drawable);
-    if (checkbox_jib.getState() == State.VCHECKED && checkbox_main.getState() == State.VCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedJibVCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.VCHECKED
-        && checkbox_main.getState() == State.XCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedJibXCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.XCHECKED
-        && checkbox_main.getState() == State.VCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedJibVCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.XCHECKED
-        && checkbox_main.getState() == State.XCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedJibXCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.UNCHECKED
-        && checkbox_main.getState() == State.XCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.UnCheckedJibXCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.UNCHECKED
-        && checkbox_main.getState() == State.VCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.UnCheckedJibVCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.XCHECKED
-        && checkbox_main.getState() == State.UNCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedJibUnCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    } else if (checkbox_jib.getState() == State.VCHECKED
-        && checkbox_main.getState() == State.UNCHECKED) {
-      wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedJibUnCheckedMain);
-      drawable = ResourcesCompat
-          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
-              wrapper.getTheme());
-      boatBody.setImageDrawable(drawable);
-    }
-  }
+//  private void colorBoat() {
+//    if (checkbox_bow.getState() == State.VCHECKED) {
+//      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedRopes);
+//      final Drawable drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines,
+//              wrapper.getTheme());
+//      boatBowLines.setImageDrawable(drawable);
+//    } else if (checkbox_bow.getState() == State.XCHECKED) {
+//      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedRopes);
+//      final Drawable drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines,
+//              wrapper.getTheme());
+//      boatBowLines.setImageDrawable(drawable);
+//    } else {
+//      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.UncheckedBoat);
+//      final Drawable drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_bowlines,
+//              wrapper.getTheme());
+//      boatBowLines.setImageDrawable(drawable);
+//    }
+//    if (checkbox_stern.getState() == State.VCHECKED) {
+//      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedRopes);
+//      final Drawable drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines,
+//              wrapper.getTheme());
+//      boatSternLines.setImageDrawable(drawable);
+//    } else if (checkbox_stern.getState() == State.XCHECKED) {
+//      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedRopes);
+//      final Drawable drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines,
+//              wrapper.getTheme());
+//      boatSternLines.setImageDrawable(drawable);
+//    } else {
+//      final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.UncheckedBoat);
+//      final Drawable drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_sternlines,
+//              wrapper.getTheme());
+//      boatSternLines.setImageDrawable(drawable);
+//    }
+//    ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.UncheckedBoat);
+//    Drawable drawable = ResourcesCompat
+//        .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//            wrapper.getTheme());
+//    boatBody.setImageDrawable(drawable);
+//    if (checkbox_jib.getState() == State.VCHECKED && checkbox_main.getState() == State.VCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedJibVCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.VCHECKED
+//        && checkbox_main.getState() == State.XCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedJibXCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.XCHECKED
+//        && checkbox_main.getState() == State.VCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedJibVCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.XCHECKED
+//        && checkbox_main.getState() == State.XCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedJibXCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.UNCHECKED
+//        && checkbox_main.getState() == State.XCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.UnCheckedJibXCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.UNCHECKED
+//        && checkbox_main.getState() == State.VCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.UnCheckedJibVCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.XCHECKED
+//        && checkbox_main.getState() == State.UNCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.XCheckedJibUnCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    } else if (checkbox_jib.getState() == State.VCHECKED
+//        && checkbox_main.getState() == State.UNCHECKED) {
+//      wrapper = new ContextThemeWrapper(getContext(), R.style.VCheckedJibUnCheckedMain);
+//      drawable = ResourcesCompat
+//          .getDrawable(getResources(), R.drawable.ic_moored_sailing_boat_body_sails,
+//              wrapper.getTheme());
+//      boatBody.setImageDrawable(drawable);
+//    }
+//  }
 
 
 

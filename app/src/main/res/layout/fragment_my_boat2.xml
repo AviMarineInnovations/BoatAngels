@@ -6,7 +6,7 @@
 
   <!-- TODO: Update blank fragment layout -->
   <in.avimarine.boatangels.customViews.BoatInspection2View
-    android:layout_width="50dp"
-    android:layout_height="400dp"/>
+    android:layout_width="100dp"
+    android:layout_height="150dp"/>
 
 </FrameLayout>
