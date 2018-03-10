@@ -58,3 +58,4 @@ freeline/
 freeline_project_description.json
 .idea/sonarIssues.xml
 app/release/output.json
+app/src/main/res/values/keys.xml

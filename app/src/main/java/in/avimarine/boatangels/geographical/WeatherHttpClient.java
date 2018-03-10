@@ -27,9 +27,9 @@ public class WeatherHttpClient extends AsyncTask<Location, Integer, String> {
   private static final String UNITS = "&units=metric";
 
   public WeatherHttpClient(Context c,AsyncResponse delegate) {
-    if (c!=null)
+    if (c!=null) {
       API_KEY = "&APPID="+c.getString(R.string.OPENWEATHERMAPAPPID);
-    else {
+    }else {
       Log.e(TAG, "Unable to set Open Weather map appid");
       return;
     }

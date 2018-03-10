@@ -5,13 +5,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="in.avimarine.boatangels.activities.InspectionsListActivity">
-
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/inspection_recyclerview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-  </android.support.v7.widget.RecyclerView>
+  tools:context="in.avimarine.boatangels.activities.SendFeedbackActivity">
 
 </android.support.constraint.ConstraintLayout>

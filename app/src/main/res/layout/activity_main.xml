@@ -36,13 +36,13 @@
     android:layout_marginTop="32dp"
     android:layout_marginBottom="8dp"
     android:layout_marginStart="2dp"
+    android:layout_marginLeft="2dp"
     android:text="@string/inspect_boat_btn_text"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@id/add_boat_btn"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.0"
-    android:layout_marginLeft="2dp"/>
+    app:layout_constraintVertical_bias="0.0"/>
   <Button
     android:id="@+id/add_boat_btn"
     android:layout_width="88dp"
@@ -61,12 +61,12 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="32dp"
     android:layout_marginEnd="2dp"
+    android:layout_marginRight="2dp"
     android:text="@string/show_inspections_btn_text"
-    app:layout_constraintStart_toEndOf="@+id/add_boat_btn"
-    app:layout_constraintTop_toTopOf="parent"
-	  app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.828"
-    android:layout_marginRight="2dp"/>
+    app:layout_constraintStart_toEndOf="@+id/add_boat_btn"
+    app:layout_constraintTop_toTopOf="parent"/>
   <Button
     android:id="@+id/ask_inspection"
     android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
     android:onClick="ask"
     android:text="@string/ask_for_inspection_btn"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.503"
+    app:layout_constraintHorizontal_bias="0.072"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/add_boat_btn"/>
   <in.avimarine.boatangels.customViews.WeatherTableView
@@ -99,8 +99,8 @@
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:text="@string/settings_btn"
     android:enabled="false"
+    android:text="@string/settings_btn"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/ask_inspection"/>
@@ -117,4 +117,32 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/tableLayout"/>
+  <Button
+    android:id="@+id/my_inspection"
+    android:enabled="true"
+    android:text="@string/inspect_by_me_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="@+id/sign_out_btn"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.966"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/show_inspections_btn"
+    app:layout_constraintVertical_bias="0.038"/>
+
+  <Button
+    android:id="@+id/search_boat_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:text="Search Boat"
+    app:layout_constraintBottom_toBottomOf="@+id/sign_out_btn"
+    app:layout_constraintEnd_toEndOf="@+id/my_inspection"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintStart_toEndOf="@+id/settings_btn"
+    app:layout_constraintTop_toBottomOf="@+id/my_inspection"
+    app:layout_constraintVertical_bias="0.0"/>
 </android.support.constraint.ConstraintLayout>

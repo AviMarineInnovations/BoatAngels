@@ -76,13 +76,13 @@ public class AskInspectionActivity extends AppCompatActivity {
           updateCollection("boats", getBoatUid, "offerPoint", OfferPoints);
           showPointTv.setText(
               getResources().getQuantityString(R.plurals.points_txt, user.getYachtiePoint(),user.getYachtiePoint()));
+        finish();
         }
 
       } catch (NumberFormatException nfe) {
         yactiepointEditxt.setError(getString(R.string.inspect_points_error_message));
 
       }
-      finish();
 
     });
 

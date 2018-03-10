@@ -5,6 +5,7 @@
   <string name="inspection_for_yacht_title">"בדיקה עבור הסירה: "</string>
   <string name="inspect_boat_btn_text">בדוק סירה</string>
   <string name="add_boat_btn_text">הוסף סירה</string>
+  <string name="inspect_by_me_btn">הבדיקות שלי</string>
   <string name="boat_name_text">שם</string>
   <string name="boat_model_text">דגם</string>
   <string name="marina_text">מעגן</string>
@@ -19,6 +20,7 @@
   <string name="addphotosbuton_content_description">כפתורהוספתתמונות</string>
   <string name="sendbutton_content_description">כפתור שלח</string>
   <string name="inspection_title">בדיקה עבור %s</string>
+  <string name="what_you_like_to_do">מה תרצה לעשות ?</string>
   <string name="inspection_subtitle">בוצעה על ידי %s ב- %s</string>
   <string name="add_user_name">שם</string>
   <string name="add_user_mail">דוא\"ל</string>
@@ -62,4 +64,11 @@
   <string name="tab_text_2">בדוק סירה</string>
   <string name="tab_text_3">פעילות</string>
   <string name="action_settings">הגדרות</string>
+  <string name="inspect_boat">שם הספינה:</string>
+  <string name="points_earned">נקודות שהורווחו:</string>
+  <string name="inspect_date">תאריך הבדיקה:</string>
+  <string name="my_inspection_tv">הבדיקות שלי</string>
+  <string name="new_inspection">בדיקה חדשה</string>
+  <string name="view_inspection">צפה בבדיקה</string>
+
 </resources>

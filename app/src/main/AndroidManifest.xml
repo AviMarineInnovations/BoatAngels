@@ -45,10 +45,21 @@
       android:label="@string/title_activity_settings"
       android:name=".activities.SettingsActivity">
     </activity>
+
     <activity
       android:label="@string/title_activity_main2"
       android:name=".activities.Main2Activity"
       android:theme="@style/AppTheme">
+	  </activity>
+
+    <activity android:name=".activities.MyInspection">
+    </activity>
+    <activity android:name=".activities.MyInspection$activity_search_boat">
+    </activity>
+    <activity android:name=".activities.SearchBoatActivity">
+    </activity>
+    <activity android:name=".activities.SendFeedbackActivity">
+
     </activity>
   </application>
 

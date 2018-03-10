@@ -1,6 +1,9 @@
 package in.avimarine.boatangels.db;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
 //import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -70,14 +73,34 @@ public class FireBase implements iDb {
     final long ONE_MEGABYTE = 1024 * 1024;
 
 
-    // Load the image using Glide
-    GlideApp.with(c)
-        .load(imageRef)
-        .error(errorImg)
-        .placeholder(loadingImg)
-        .into(iv);
+    if (isValidContextForGlide(c)) {
+      // Load the image using Glide
+      GlideApp.with(c)
+          .load(imageRef)
+          .error(errorImg)
+          .placeholder(loadingImg)
+          .into(iv);
+    }
   }
-
+  public static boolean isValidContextForGlide(final Context context) {
+    if (context == null) {
+      return false;
+    }
+    if (context instanceof Activity) {
+      final Activity activity = (Activity) context;
+      if(Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2){
+        if (activity.isDestroyed() || activity.isFinishing()) {
+          return false;
+        }
+      }
+      else {
+        if (activity.isChangingConfigurations() || activity.isFinishing()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   @Override
   public void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
     mFirestore.collection("boats").document(uuid).get().addOnCompleteListener(listener);
