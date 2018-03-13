@@ -24,6 +24,7 @@ public class User extends BaseDbObject {
   private int yachtiePoint = 100;
   private Date firstJoinTime;
   private String uid;
+  private String token;
   private TimeZone timeZone;
   private List<String> boats = new ArrayList<>();
 
@@ -31,10 +32,15 @@ public class User extends BaseDbObject {
 
   private boolean shabbathObserver;
 
+  public void setToken(String token) {
+    this.token = token;
+  }
+
   @Override
   public String toString() {
     return
         "Name =" + displayName + '\n' +
+        "Token =" + token + '\n' +
         "uid =" + uid + '\n' +
         "mail=" + mail +'\n' +
         "Phone=" + phone +'\n' +
@@ -47,6 +53,10 @@ public class User extends BaseDbObject {
 
   public String getDisplayName() {
     return displayName;
+  }
+
+  public String getToken() {
+    return token;
   }
 
   public String getMail() {

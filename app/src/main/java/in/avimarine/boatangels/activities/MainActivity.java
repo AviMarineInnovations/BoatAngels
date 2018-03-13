@@ -18,6 +18,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.iid.FirebaseInstanceId;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.customViews.WeatherTableView;
 import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
@@ -83,6 +84,8 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    Log.d(TAG, "Get Token : "+FirebaseInstanceId.getInstance().getToken());
+    String token = FirebaseInstanceId.getInstance().getToken();
 
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();

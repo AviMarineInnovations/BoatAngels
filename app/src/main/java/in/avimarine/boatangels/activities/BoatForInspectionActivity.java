@@ -70,12 +70,14 @@ public class BoatForInspectionActivity extends AppCompatActivity {
 
     if (searchBoat && !subTest) {
       query = FirebaseFirestore.getInstance()
-          .collection("boats").whereEqualTo("name", boatName)
+          .collection("boats").orderBy("name").startAt(boatName).endAt(boatName + "\uf78ff")
           .limit(50);
     } else if (subTest && !searchBoat) {
 
       query = FirebaseFirestore.getInstance()
-          .collection("boats").whereGreaterThanOrEqualTo("name", boatName);
+          .collection("boats").orderBy("name").startAt(boatName).endAt(boatName + "\uf78ff").
+              limit(50);
+
     }
 
     FirestoreRecyclerOptions<Boat> options = new FirestoreRecyclerOptions.Builder<Boat>()
@@ -86,7 +88,7 @@ public class BoatForInspectionActivity extends AppCompatActivity {
       @Override
       public void onBindViewHolder(@NonNull BoatHolder holder, int position, @NonNull Boat model) {
         holder.bind(model);
-
+        Log.d(TAG, "List: " + adapter.getItemCount());
       }
 
       @Override
@@ -94,6 +96,7 @@ public class BoatForInspectionActivity extends AppCompatActivity {
         View view = LayoutInflater.from(group.getContext())
             .inflate(R.layout.boat_item, group, false);
         view.setOnClickListener(mOnClickListener);
+
         return new BoatHolder(BoatForInspectionActivity.this, view);
       }
     };
@@ -108,7 +111,6 @@ public class BoatForInspectionActivity extends AppCompatActivity {
     };
     adapter.startListening();
     boatsRv.setAdapter(adapter);
-
 
   }
 

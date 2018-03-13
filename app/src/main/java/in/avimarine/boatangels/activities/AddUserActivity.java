@@ -8,6 +8,7 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hbb20.CountryCodePicker;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -58,6 +59,7 @@ public class AddUserActivity extends AppCompatActivity {
          user.setMail(mail);
          user.setPhone(phone);
          user.setCountry(country);
+         user.setToken(FirebaseInstanceId.getInstance().getToken());
          user.setFirstJoinTime(new Date());
          user.setLastUpdate(new Date());
          user.setUid(uid);
