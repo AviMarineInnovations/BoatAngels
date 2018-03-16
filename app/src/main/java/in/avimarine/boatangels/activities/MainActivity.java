@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,6 +35,7 @@ import in.avimarine.boatangels.geographical.OpenWeatherMap;
 import in.avimarine.boatangels.geographical.Weather;
 import in.avimarine.boatangels.geographical.WeatherHttpClient;
 import in.avimarine.boatangels.geographical.Wind;
+import io.doorbell.android.Doorbell;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -84,13 +86,12 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    Log.d(TAG, "Get Token : "+FirebaseInstanceId.getInstance().getToken());
+    Log.d(TAG, "Get Token : " + FirebaseInstanceId.getInstance().getToken());
     String token = FirebaseInstanceId.getInstance().getToken();
 
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();
     hiddenElements(true);
-
 
     if (auth.getCurrentUser() != null) {
       hiddenElements(false);
@@ -195,8 +196,8 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     }
   }
 
-  public void hiddenElements(boolean hidde){
-    if (!hidde){
+  public void hiddenElements(boolean hidde) {
+    if (!hidde) {
       sendFeedBack.setVisibility(View.VISIBLE);
       searchBoatBtn.setVisibility(View.VISIBLE);
       myInspectionBtn.setVisibility(View.VISIBLE);
@@ -207,7 +208,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       showInspectionBtn.setVisibility(View.VISIBLE);
       signoutBtn.setVisibility(View.VISIBLE);
       welcomeTv.setVisibility(View.VISIBLE);
-  } else{
+    } else {
       sendFeedBack.setVisibility(View.GONE);
       searchBoatBtn.setVisibility(View.GONE);
       myInspectionBtn.setVisibility(View.GONE);
@@ -220,7 +221,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       showInspectionBtn.setVisibility(View.GONE);
     }
 
-}
+  }
 
   @OnClick(R.id.sign_out_btn)
   public void signoutBtnClick(View v) {
@@ -246,12 +247,6 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     Intent intent = new Intent(this, AddBoatActivity.class);
     startActivity(intent);
   }
-  @OnClick(R.id.send_feedback)
-  public void sendFeedBackBtn(View v) {
-    Intent intent = new Intent(this, SendFeedBackActivity.class);
-    startActivity(intent);
-  }
-
 
   @OnClick(R.id.settings_btn)
   public void settingsBtnClick(View v) {
@@ -303,7 +298,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
         } else {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
-          Setting.setUser(this,currentUser);
+          Setting.setUser(this, currentUser);
           welcomeTv.setText(getString(R.string.welcome_message, currentUser.getDisplayName()));
           settingsBtn.setEnabled(true);
           if (!currentUser.getBoats().isEmpty()) {
@@ -477,4 +472,37 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       Log.d(TAG, "Log in failure: Unknown login response");
     }
   }
+
+  @OnClick(R.id.send_feedback)
+  public void sendFeedBackBtn(View v) {
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+
+    int appId = 7914; // Replace with your application's ID
+    String apiKey = "xIOx1N8vtj0SxdyT80hnSv0vBMn3pCmLj9fDsqH8gDpSPGrWl0v6PKsRuCNaXaQA"; // Replace with your application's API key
+    Doorbell doorbellDialog = new Doorbell(this, appId, apiKey); // Create the Doorbell object
+
+    doorbellDialog
+        .setEmail(auth.getCurrentUser().getEmail()); // Prepopulate the email address field
+    doorbellDialog
+        .setName(auth.getCurrentUser().getDisplayName()); // Set the name of the user (if known)
+    doorbellDialog.addProperty("User UID: ", auth.getCurrentUser().getUid());
+    doorbellDialog.setEmailFieldVisibility(
+        View.VISIBLE); // Hide the email field, since we've filled it in already
+    doorbellDialog.setPoweredByVisibility(View.GONE); // Hide the "Powered by Doorbell.io" text
+
+    // Callback for when a message is successfully sent
+    doorbellDialog
+        .setOnFeedbackSentCallback(new io.doorbell.android.callbacks.OnFeedbackSentCallback() {
+          @Override
+          public void handle(String message) {
+            // Show the message in a different way, or use your own message!
+            Toast.makeText(getApplicationContext(), "Your feedback was successfully submitted",
+                Toast.LENGTH_LONG).show();
+          }
+        });
+
+    doorbellDialog.show();
+  }
+
+
 }

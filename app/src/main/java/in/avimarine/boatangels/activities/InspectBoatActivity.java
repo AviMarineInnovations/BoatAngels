@@ -152,7 +152,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     inspection.boatName = b.getName();
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
-    inspection.inspectorUid = u.getUid();
+    inspection.inspectorUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       inspection.inspectorName = u.getDisplayName();
     }
@@ -313,7 +313,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     Log.d(TAG, "User Token: " + token);
     String FCM_PUSH_URL = "https://fcm.googleapis.com/fcm/send";
     String SERVER_KEY = "AAAAkCQyIFU:APA91bFjpy2vum5w1VQCmNGR6CGTp7kpxOTkgaxKSiMdfyQdXNNc36JFGlbcZ4KW0ZcnqqsA-E9u0S40Dgbp76dEP5HyqqXhQoYHhol9kas1kEGxGXfYmAcKluMDMDP_YYfrXq0ElQUi";
-    String msg = "new inspection from: " + u.getDisplayName();
+    String msg = "new inspection from: " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
     String title = "New Inspection";
     JSONObject obj = null;
     JSONObject objData = null;

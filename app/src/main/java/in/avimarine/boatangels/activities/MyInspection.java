@@ -62,6 +62,7 @@ public class MyInspection extends AppCompatActivity {
             if (task.isSuccessful()) {
               for (DocumentSnapshot document : task.getResult()) {
                 Inspection inspec = document.toObject(Inspection.class);
+                Log.d(TAG, "Ispect Test: " + inspec.inspectorUid.toString() + " " + inspec.boatName.toString());
                 if (inspec.inspectorUid.equals(uid)) {
                   String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
                   arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
