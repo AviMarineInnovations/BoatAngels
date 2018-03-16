@@ -165,9 +165,10 @@ public class InspectBoatActivity extends AppCompatActivity {
       inspection.finding = getCheckBoxes();
       b.setLastInspectionDate(inspection.inspectionTime);
       checkInspection();
-      sendNotification();
       db.addInspection(inspection);
+      String inspectionUuid = inspection.getUuid();
       db.addBoat(b);
+      sendNotification(inspectionUuid);
       finish();
     }
   }
@@ -308,7 +309,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     return true;
   }
 
-  private void sendNotification() {
+  private void sendNotification(String inspectionUuid) {
 
     Log.d(TAG, "User Token: " + token);
     String FCM_PUSH_URL = "https://fcm.googleapis.com/fcm/send";
@@ -332,7 +333,9 @@ public class InspectBoatActivity extends AppCompatActivity {
       dataobjData = new JSONObject();
       dataobjData.put("title", title);
       dataobjData.put("msg", msg);
-      Log.d(TAG, "User Token: " + token);
+      dataobjData.put("InspectionUid", inspectionUuid);
+      Log.d(TAG, "inspe Uid " + token);
+      Log.d(TAG, "User Token: " + inspectionUuid);
       obj.put("to", token);
       //obj.put("priority", "high");
 

@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import in.avimarine.boatangels.activities.MainActivity;
+import in.avimarine.boatangels.activities.InspectionResultActivity;
 import java.util.Random;
 
 /**
@@ -35,7 +35,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
       Log.d(TAG, "Message data payload: " + remoteMessage.getData());
       String msg = remoteMessage.getData().get("msg");
       String title = remoteMessage.getData().get("title");
-      sendNotification(msg, title);
+      String InspectUuid = remoteMessage.getData().get("InspectionUid");
+      Log.d(TAG,"InspecUidTest: "+ InspectUuid);
+      sendNotification(msg, title, InspectUuid);
     }
 
     // Check if message contains a notification payload.
@@ -48,11 +50,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     // message, here is where that should be initiated. See sendNotification method below.
   }
 
-  private void sendNotification(String messageBody, String title) {
+  private void sendNotification(String messageBody, String title, String inspetionUuid) {
     Random rand = new Random();
     int n = rand.nextInt(10000);
 
-    Intent intent = new Intent(this, MainActivity.class);
+    Intent intent = new Intent(this, InspectionResultActivity.class);
+    intent.putExtra(getString(R.string.intent_extra_inspection_uuid),inspetionUuid);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     PendingIntent pendingIntent = PendingIntent.getActivity(this, ID_SMALL_NOTIFICATION+n, intent,
         PendingIntent.FLAG_ONE_SHOT);
