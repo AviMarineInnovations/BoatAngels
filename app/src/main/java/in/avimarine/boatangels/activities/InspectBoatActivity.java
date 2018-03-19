@@ -334,6 +334,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       dataobjData.put("title", title);
       dataobjData.put("msg", msg);
       dataobjData.put("InspectionUid", inspectionUuid);
+      dataobjData.put("click_action","OPEN_ACTIVITY_1");
       Log.d(TAG, "inspe Uid " + token);
       Log.d(TAG, "User Token: " + inspectionUuid);
       obj.put("to", token);

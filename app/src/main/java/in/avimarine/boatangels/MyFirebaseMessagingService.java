@@ -58,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     intent.putExtra(getString(R.string.intent_extra_inspection_uuid),inspetionUuid);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     PendingIntent pendingIntent = PendingIntent.getActivity(this, ID_SMALL_NOTIFICATION+n, intent,
-        PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent.FLAG_UPDATE_CURRENT);
 
     String channelId = "fcm_default_channel";
     Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -75,6 +75,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
     notificationManager.notify(ID_SMALL_NOTIFICATION+n, notificationBuilder.build());
+
   }
 
 }
