@@ -147,6 +147,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
+    inspection.usersOwner = b.users.get(0);
     inspection.pointsEarned = b.getOfferPoint();
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.getName();

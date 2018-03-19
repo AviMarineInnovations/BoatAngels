@@ -12,6 +12,7 @@ import java.util.Map;
  */
 
 public class Inspection extends BaseDbObject {
+  public String usersOwner;
   public String inspectorUid;
   public String inspectorName;
   public String boatUuid;
@@ -27,6 +28,7 @@ public class Inspection extends BaseDbObject {
     return "Inspection{" +
         "inspectorUid='" + inspectorUid + '\'' +
         "getPoint='" + pointsEarned + '\'' +
+        "usersOwner='" + usersOwner+ '\'' +
         ", lastUpdateTime=" + lastUpdateTime +
         ", boatUuid='" + boatUuid + '\'' +
         ", boatName='" + boatName + '\'' +

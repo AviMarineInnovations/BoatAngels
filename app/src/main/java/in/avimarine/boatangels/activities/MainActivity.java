@@ -74,6 +74,9 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   Button myInspectionBtn;
   @BindView(R.id.send_feedback)
   Button sendFeedBack;
+  @BindView(R.id.show_new)
+  Button showNewInspection;
+
 
   private final iDb db = new FireBase();
   private String ownBoatUuid;
@@ -280,6 +283,14 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     startActivity(intent);
 
   }
+  @OnClick(R.id.show_new)
+  public void showNewInspe(View v) {
+    Intent intent = new Intent(this, ShowInspectionActivity.class);
+    startActivity(intent);
+
+  }
+
+
 
   @OnClick(R.id.my_inspection)
   public void myInspection(View v) {

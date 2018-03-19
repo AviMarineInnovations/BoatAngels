@@ -23,9 +23,9 @@ public class Boat extends BaseDbObject {
   private String clubUuid;
   private Long lastInspectionDate;
   private String photoName;
-
-
   public List<String> users = new ArrayList<>();
+
+
 
 
   public String getName() {
