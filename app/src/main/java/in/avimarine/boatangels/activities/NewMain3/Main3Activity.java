@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
 import in.avimarine.boatangels.fragments.MyBoat2Fragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
@@ -126,8 +127,8 @@ public class Main3Activity extends FragmentActivity implements OnFragmentInterac
 
     @Override
     public Fragment getItem(int position) {
-      if (position==0)
-        return new MyBoat2Fragment();
+      if (position==1)
+        return new BoatsForInspectionFragment();
       else
         return new MyBoatFragment();
     }

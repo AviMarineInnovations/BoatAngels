@@ -2,9 +2,11 @@ package in.avimarine.boatangels.geographical;
 
 import android.util.Log;
 import com.google.firebase.firestore.GeoPoint;
+import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,9 +21,12 @@ public class OpenWeatherMap implements iWeather {
 
   private static final String TAG = "OpenWeatherMap";
 
+  @Nullable
   public Weather parseData(String json) {
     Weather ret = new Weather();
+    if ((json==null)||(json.isEmpty())) return null;
     try {
+
       // We create out JSONObject from the data
 
       JSONObject jObj = new JSONObject(json);
