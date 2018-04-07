@@ -2,8 +2,6 @@ package in.avimarine.boatangels.activities;
 
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,7 +18,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 import in.avimarine.boatangels.R;
-import in.avimarine.boatangels.activities.MyBoatFragment.OnFragmentInteractionListener;
+import in.avimarine.boatangels.fragments.MyBoat2Fragment;
+import in.avimarine.boatangels.fragments.MyBoatFragment;
+import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
 import java.util.ArrayList;
 import java.util.List;
 

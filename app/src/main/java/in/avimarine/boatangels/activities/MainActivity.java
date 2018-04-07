@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.activities.NewMain3.Main3Activity;
 import in.avimarine.boatangels.customViews.WeatherTableView;
 import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
 import in.avimarine.boatangels.db.FireBase;
@@ -275,7 +276,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
 
   @OnClick(R.id.new_main_btn)
   public void newMain(View v) {
-    Intent intent = new Intent(this, Main2Activity.class);
+    Intent intent = new Intent(this, Main3Activity.class);
     startActivity(intent);
   }
   @OnClick(R.id.my_inspection)
