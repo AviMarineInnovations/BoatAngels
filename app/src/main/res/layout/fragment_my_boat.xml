@@ -1,16 +1,29 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   tools:context="in.avimarine.boatangels.fragments.MyBoatFragment">
 
-  <!-- TODO: Update blank fragment layout -->
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="@string/hello_blank_fragment"/>
+  <in.avimarine.boatangels.customViews.WeatherTableView
+    android:id="@+id/tableLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/boatInspectionView"
+    app:speed_units="Knots"/>
   <in.avimarine.boatangels.customViews.BoatInspectionView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+    android:id="@+id/boatInspectionView"
+    android:layout_width="250dp"
+    android:layout_height="370dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
 
-</FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

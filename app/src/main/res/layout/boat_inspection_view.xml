@@ -64,7 +64,8 @@
     app:layout_constraintEnd_toEndOf="@+id/moored_boat_sternlines"
     app:layout_constraintStart_toStartOf="@+id/moored_boat_sternlines"
     app:layout_constraintTop_toTopOf="@+id/moored_boat_sternlines"
-    tools:visibility="visible"/>
+    tools:visibility="visible"
+    android:buttonTint="@android:color/white"/>
   <in.avimarine.boatangels.CheckBoxTriState
     android:id="@+id/checkBox_bow"
     android:layout_width="wrap_content"
@@ -79,7 +80,8 @@
     app:layout_constraintTop_toTopOf="@+id/moored_boat_bowlines"
     android:layout_marginRight="5dp"
     android:layout_marginLeft="8dp"
-    tools:visibility="visible"/>
+    tools:visibility="visible"
+    android:buttonTint="@android:color/white"/>
   <in.avimarine.boatangels.CheckBoxTriState
     android:id="@+id/checkBox_jib"
     android:layout_width="wrap_content"
@@ -96,7 +98,8 @@
     app:layout_constraintVertical_bias="0.469"
     tools:visibility="visible"
     android:layout_marginLeft="8dp"
-    android:layout_marginRight="80dp"/>
+    android:layout_marginRight="80dp"
+    android:buttonTint="@android:color/white"/>
   <in.avimarine.boatangels.CheckBoxTriState
     android:id="@+id/checkBox_mainsail"
     android:layout_width="wrap_content"
@@ -112,6 +115,7 @@
     app:layout_constraintVertical_bias="0.63"
     tools:visibility="visible"
     android:layout_marginLeft="24dp"
-    android:layout_marginRight="20dp"/>
+    android:layout_marginRight="20dp"
+    android:buttonTint="@android:color/white"/>
 </android.support.constraint.ConstraintLayout>
 </merge>

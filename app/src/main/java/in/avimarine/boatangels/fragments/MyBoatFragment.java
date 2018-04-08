@@ -1,14 +1,41 @@
 package in.avimarine.boatangels.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.activities.AddUserActivity;
+import in.avimarine.boatangels.activities.MainActivity;
+import in.avimarine.boatangels.customViews.WeatherTableView;
+import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
+import in.avimarine.boatangels.db.FireBase;
+import in.avimarine.boatangels.db.iDb;
+import in.avimarine.boatangels.db.objects.Boat;
+import in.avimarine.boatangels.db.objects.Marina;
+import in.avimarine.boatangels.db.objects.User;
+import in.avimarine.boatangels.general.GeneralUtils;
+import in.avimarine.boatangels.general.Setting;
+import in.avimarine.boatangels.geographical.GeoUtils;
+import in.avimarine.boatangels.geographical.OpenWeatherMap;
+import in.avimarine.boatangels.geographical.Weather;
+import in.avimarine.boatangels.geographical.WeatherHttpClient;
+import in.avimarine.boatangels.geographical.Wind;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +46,12 @@ import in.avimarine.boatangels.R;
  * create an instance of this fragment.
  */
 public class MyBoatFragment extends Fragment {
+  private final iDb db = new FireBase();
+  private String ownBoatUuid;
+  private User currentUser = null;
+  private Boat currentBoat = null;
+  private Marina currentMarina = null;
+  private static final String TAG = "MyBoatFragment";
 
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,7 +98,24 @@ public class MyBoatFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    if (auth.getCurrentUser() != null) {
+      Log.d(TAG, "Logged in");
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
+
+    } else {
+      Log.d(TAG, "Not logged in");
+//      startActivityForResult(
+//          AuthUI.getInstance()
+//              .createSignInIntentBuilder()
+//              .setAvailableProviders(
+//                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+//                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+//              .build(),
+//          RC_SIGN_IN);
+
+
+    }
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
 
@@ -92,7 +142,129 @@ public class MyBoatFragment extends Fragment {
     super.onDetach();
     mListener = null;
   }
+  private void isUserRegistered(String uid) {
+    db.getUser(uid, task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (!document.exists()) {
+          Intent intent = new Intent(getActivity(), AddUserActivity.class);
+          startActivity(intent);
+        } else {
+          currentUser = document.toObject(User.class);
+          db.setCurrentUser(currentUser);
+          Setting.setUser(getActivity(),currentUser);
+          if (!currentUser.getBoats().isEmpty()) {
 
+            ownBoatUuid = currentUser.getBoats().get(0);
+            getOwnBoat(ownBoatUuid);
+          } else {
+
+          }
+        }
+      }
+    });
+  }
+  private void getOwnBoat(String uuid) {
+    if (currentBoat == null || !currentBoat.getUuid().equals(uuid)) {
+      db.getBoat(uuid, task -> {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult();
+          if (document.exists()) {
+            currentBoat = document.toObject(Boat.class);
+            if (!GeneralUtils.isNull(currentBoat, currentBoat.getMarinaUuid())) {
+              db.getMarina(currentBoat.getMarinaUuid(),
+                  task1 -> {
+                    DocumentSnapshot document1 = task1.getResult();
+                    if (document1.exists()) {
+                      currentMarina = document1.toObject(Marina.class);
+                      updateWeather(currentMarina);
+                    } else {
+                      Log.e(TAG, "Unable to get own marina");
+                    }
+                  });
+            } else {
+              Log.e(TAG, "Unable to get own boat");
+            }
+          } else {
+            Log.e(TAG, "Unable to get own boat");
+          }
+        }
+      });
+    }
+  }
+
+  private void updateWeather(Marina m) {
+    if (GeneralUtils.isNull(m, m.getLocation())) {
+      Log.e(TAG, "Current Marina is null");
+    }
+    final OpenWeatherMap owp = new OpenWeatherMap();
+    if (checkWeather(m.getWeather())) {
+      updateWeatherWidget(m.getWeather());
+    } else {
+      new WeatherHttpClient(getActivity(), output -> {
+        Weather w = owp.parseData(output);
+        if (w != null) {
+          updateWeatherWidget(w);
+          currentMarina.setWeather(w);
+          db.addMarina(currentMarina);
+        }
+      }).execute(
+          GeoUtils.createLocation(m.getLocation().getLatitude(), m.getLocation().getLongitude()));
+    }
+  }
+  private boolean checkWeather(Weather weather) {
+    if (weather == null) {
+      return false;
+    }
+    if (getMaxWindDaysArray(weather.getWindForecast()).size() == 6) {
+      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void updateWeatherWidget(Weather w) {
+    Map<Integer, Wind> daysArr = getMaxWindDaysArray(w.getWindForecast());
+    ArrayList<Wind> winds = new ArrayList<>();
+    for (Map.Entry<Integer, Wind> e : daysArr.entrySet()) {
+      winds.add(e.getValue());
+    }
+    ((WeatherTableView) getActivity().findViewById(R.id.tableLayout)).setWind(winds);
+    ((WeatherTableView) getActivity().findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
+    ((WeatherTableView) getActivity().findViewById(R.id.tableLayout)).setSpeedUnits(SpeedUnits.KNOTS);
+  }
+
+  private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
+    Map<Integer, Wind> ret = new TreeMap<>();
+    int day = -1;
+    double speed = 0;
+    double dir;
+    for (Map.Entry<Date, Wind> w : windForecast.entrySet()) {
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(w.getKey());
+      if (day == -1) {
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        speed = w.getValue().getSpeed();
+        dir = w.getValue().getDirection();
+        ret.put(day, new Wind(speed, dir));
+      } else {
+        if (day == cal.get(Calendar.DAY_OF_MONTH)) {
+          if (w.getValue().getSpeed() > speed) {
+            speed = w.getValue().getSpeed();
+            dir = w.getValue().getDirection();
+            ret.put(day, new Wind(speed, dir));
+          }
+        } else {
+          speed = w.getValue().getSpeed();
+          dir = w.getValue().getDirection();
+          day = cal.get(Calendar.DAY_OF_MONTH);
+          ret.put(day, new Wind(speed, dir));
+        }
+      }
+    }
+    return ret;
+  }
   /**
    * This interface must be implemented by activities that contain this
    * fragment to allow an interaction in this fragment to be communicated
