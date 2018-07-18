@@ -1,5 +1,8 @@
 package in.avimarine.boatangels.db.objects;
 
+import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.GOOD;
+import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.NotInspected;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +14,15 @@ import java.util.Map;
  * Inspection class represent a single inspection made to a boat by an inspector
  */
 
+
+
 public class Inspection extends BaseDbObject {
+
+  public enum StatusEnum
+  {
+    GOOD, BAD, VERY_BAD   //add to list inspectionActivity field of ""
+  }
+
   public String inspectorUid;
   public String inspectorName;
   public String boatUuid;
@@ -21,6 +32,9 @@ public class Inspection extends BaseDbObject {
   public Long inspectionTime;
   public List<Message> discussion;
   public int pointsEarned;
+  private StatusEnum status;  
+
+  public StatusEnum getStatus() { return this.status; }
 
   @Override
   public String toString() {
@@ -38,4 +52,5 @@ public class Inspection extends BaseDbObject {
         ", discussion=" + discussion +
         '}';
   }
+
 }
