@@ -77,14 +77,11 @@ public class Main3Activity extends FragmentActivity implements OnFragmentInterac
     navigationTabBar.setModels(models);
     navigationTabBar.setViewPager(mPager, 0);
 
-    navigationTabBar.post(new Runnable() {
-      @Override
-      public void run() {
-        final View viewPager = findViewById(R.id.vp_horizontal_ntb);
-        ((ViewGroup.MarginLayoutParams) viewPager.getLayoutParams()).topMargin =
-            (int) -navigationTabBar.getBadgeMargin();
-        viewPager.requestLayout();
-      }
+    navigationTabBar.post(() -> {
+      final View viewPager = findViewById(R.id.vp_horizontal_ntb);
+      ((ViewGroup.MarginLayoutParams) viewPager.getLayoutParams()).topMargin =
+          (int) -navigationTabBar.getBadgeMargin();
+      viewPager.requestLayout();
     });
 
     navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {

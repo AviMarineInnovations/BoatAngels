@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="horizontal">
+
+  <in.avimarine.boatangels.CheckBoxTriState
+    android:id="@+id/rowCheckBox"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+
+  <!--<ImageView-->
+    <!--android:id="@+id/rowImageView"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_width="48dp"-->
+    <!--android:layout_height="48dp" />-->
+
+  <TextView
+    android:id="@+id/rowTextView"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+</LinearLayout>

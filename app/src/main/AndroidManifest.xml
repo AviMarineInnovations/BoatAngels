@@ -16,50 +16,35 @@
     <activity android:name=".activities.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
     <activity
       android:name=".activities.InspectBoatActivity"
-      android:screenOrientation="portrait">
-    </activity>
+      android:screenOrientation="portrait"/>
     <activity
       android:name=".activities.AddBoatActivity"
-      android:theme="@style/AppTheme.NoActionBar">
-    </activity>
-    <activity android:name=".activities.InspectionsListActivity">
-    </activity>
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity android:name=".activities.InspectionsListActivity"/>
     <activity
       android:name=".activities.InspectionResultActivity"
-      android:screenOrientation="portrait">
-    </activity>
-    <activity android:name=".activities.AddUserActivity">
-    </activity>
-    <activity android:name=".activities.BoatForInspectionActivity">
-    </activity>
-    <activity android:name=".activities.AskInspectionActivity">
-    </activity>
+      android:screenOrientation="portrait"/>
+    <activity android:name=".activities.AddUserActivity"/>
+    <activity android:name=".activities.BoatForInspectionActivity"/>
+    <activity android:name=".activities.AskInspectionActivity"/>
     <activity
       android:configChanges="layoutDirection|locale"
       android:label="@string/title_activity_settings"
-      android:name=".activities.SettingsActivity">
-    </activity>
+      android:name=".activities.SettingsActivity"/>
     <activity
       android:label="@string/title_activity_main2"
       android:name=".activities.Main2Activity"
-      android:theme="@style/AppTheme">
-    </activity>
-    <activity android:name=".activities.MyInspection">
-    </activity>
-    <activity android:name=".activities.MyInspection$activity_search_boat">
-    </activity>
-    <activity android:name=".activities.SearchBoatActivity">
-    </activity>
-    <activity android:name=".activities.SendFeedbackActivity">
-    </activity>
-    <activity android:name=".activities.NewMain3.Main3Activity">
-    </activity>
+      android:theme="@style/AppTheme"/>
+    <activity android:name=".activities.MyInspection"/>
+    <activity android:name=".activities.MyInspection$activity_search_boat"/>
+    <activity android:name=".activities.SearchBoatActivity"/>
+    <activity android:name=".activities.SendFeedbackActivity"/>
+    <activity android:name=".activities.NewMain3.Main3Activity"/>
   </application>
 
 </manifest>
