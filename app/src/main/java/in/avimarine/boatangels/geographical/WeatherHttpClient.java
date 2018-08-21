@@ -132,6 +132,7 @@ public class WeatherHttpClient extends AsyncTask<Location, Integer, String> {
 
   @Override
   protected void onPostExecute(String s) {
-    delegate.processFinish(s);
+    if (delegate!=null)
+      delegate.processFinish(s);
   }
 }
