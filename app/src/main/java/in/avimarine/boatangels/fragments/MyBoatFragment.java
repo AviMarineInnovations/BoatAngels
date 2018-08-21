@@ -4,22 +4,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import de.hdodenhof.circleimageview.CircleImageView;
+import in.avimarine.boatangels.CheckBoxTriState;
+import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.activities.AddBoatActivity;
 import in.avimarine.boatangels.activities.AddUserActivity;
+import in.avimarine.boatangels.activities.AskInspectionActivity;
+import in.avimarine.boatangels.activities.InspectBoatActivity;
+import in.avimarine.boatangels.activities.InspectBoatActivity.Item;
+import in.avimarine.boatangels.activities.InspectBoatActivity.ItemsListAdapter;
 import in.avimarine.boatangels.activities.MainActivity;
 import in.avimarine.boatangels.customViews.WeatherTableView;
 import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
+import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
@@ -33,8 +52,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.w3c.dom.Text;
 
 
 /**
@@ -87,12 +108,23 @@ public class MyBoatFragment extends Fragment {
   }
 
   @Override
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    Button ask = getActivity().findViewById(R.id.ask_inspection);
+    ask.setOnClickListener(view -> {
+      Intent intent = new Intent(getActivity(), AskInspectionActivity.class);
+      startActivity(intent);
+    });
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (getArguments() != null) {
       mParam1 = getArguments().getString(ARG_PARAM1);
       mParam2 = getArguments().getString(ARG_PARAM2);
     }
+
   }
 
   @Override
@@ -105,16 +137,6 @@ public class MyBoatFragment extends Fragment {
 
     } else {
       Log.d(TAG, "Not logged in");
-//      startActivityForResult(
-//          AuthUI.getInstance()
-//              .createSignInIntentBuilder()
-//              .setAvailableProviders(
-//                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-//                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-//              .build(),
-//          RC_SIGN_IN);
-
-
     }
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
@@ -154,7 +176,6 @@ public class MyBoatFragment extends Fragment {
           db.setCurrentUser(currentUser);
           Setting.setUser(getActivity(),currentUser);
           if (!currentUser.getBoats().isEmpty()) {
-
             ownBoatUuid = currentUser.getBoats().get(0);
             getOwnBoat(ownBoatUuid);
           } else {
@@ -171,6 +192,18 @@ public class MyBoatFragment extends Fragment {
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             currentBoat = document.toObject(Boat.class);
+              db.getLatestInspection(currentBoat.getUuid(),
+                  task12 -> {
+                    if (task.isSuccessful()) {
+                      for (DocumentSnapshot d : task12.getResult()) {
+                        updateInspectionView(d.toObject(Inspection.class));
+                        break;
+                      }
+                    } else {
+                      Log.e(TAG, "Error getting documents: ", task.getException());
+                      updateInspectionView(null);
+                    }
+                  });
             if (!GeneralUtils.isNull(currentBoat, currentBoat.getMarinaUuid())) {
               db.getMarina(currentBoat.getMarinaUuid(),
                   task1 -> {
@@ -191,6 +224,43 @@ public class MyBoatFragment extends Fragment {
         }
       });
     }
+  }
+
+  private void updateInspectionView(Inspection inspection) {
+    if (inspection==null) {
+      Log.d(TAG, "Inspection is null");
+      return;
+    }
+    if (getActivity()!=null)
+    {
+      TextView title = getActivity().findViewById(R.id.inspect_boat_title);
+      TextView subTitle = getActivity().findViewById(R.id.inspection_subtitle);
+      ListView listView = getActivity().findViewById(R.id.listview);
+      List<Item> items = initItems(inspection);
+      TextView message = getActivity().findViewById(R.id.message_TextView);
+      CircleImageView civ = getActivity().findViewById(R.id.boat_image);
+      title.setText(inspection.boatName);
+      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(getActivity(),new Date(inspection.inspectionTime)) + "\nby "
+          + inspection.inspectorName);
+      message.setText(inspection.message);
+      setBoatPhoto(civ, currentBoat.getPhotoName());
+      ItemsListAdapter myItemsListAdapter;
+      myItemsListAdapter = new ItemsListAdapter(getActivity(), items);
+      listView.setAdapter(myItemsListAdapter);
+    }
+
+  }
+
+  private void setBoatPhoto(CircleImageView civ, String photoName) {
+    new FireBase().loadImgToImageView(getActivity(),civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
+  }
+  private List<Item> initItems(Inspection i) {
+    List<Item> ret = new ArrayList<>();
+    for (Map.Entry<String,String> me: i.finding.entrySet()) {
+      Item item = new Item(me.getKey(), CheckBoxTriState.State.valueOf(me.getValue()));
+      ret.add(item);
+    }
+    return ret;
   }
 
   private void updateWeather(Marina m) {

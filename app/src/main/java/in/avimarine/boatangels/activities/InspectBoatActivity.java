@@ -177,13 +177,13 @@ public class InspectBoatActivity extends AppCompatActivity {
   }
 
 
-  public class Item {
+  public static class Item {
 
     State checked;
     //    Drawable ItemDrawable;
     String ItemString;
 
-    Item(String t, State b) {
+    public Item(String t, State b) {
 //      ItemDrawable = drawable;
       ItemString = t;
       checked = b;
@@ -201,12 +201,12 @@ public class InspectBoatActivity extends AppCompatActivity {
     TextView text;
   }
 
-  public class ItemsListAdapter extends BaseAdapter {
+  public static class ItemsListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Item> list;
 
-    ItemsListAdapter(Context c, List<Item> l) {
+    public ItemsListAdapter(Context c, List<Item> l) {
       context = c;
       list = l;
     }

@@ -34,6 +34,8 @@ public interface iDb {
 
   void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
+  void getLatestInspection(String boatUuid, OnCompleteListener<QuerySnapshot> listener);
+
   void addInspection(Inspection inspection);
 
   void setUser(User user);

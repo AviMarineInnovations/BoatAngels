@@ -3,7 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="in.avimarine.boatangels.fragments.MyBoatFragment">
+  tools:context="in.avimarine.boatangels.fragments.MyBoatFragment"
+  android:background="#393045">
   <LinearLayout
     android:id="@+id/linearLayout"
     android:layout_width="0dp"
@@ -24,6 +25,7 @@
       android:layout_marginLeft="8dp"
       android:text="@string/inspection_for_yacht_title"
       android:textSize="18sp"
+      android:textColor="#ffffff"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
   </LinearLayout>
@@ -33,6 +35,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:textSize="18sp"
+    android:textColor="#ffffff"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_marginLeft="8dp"
@@ -45,13 +48,21 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/inspection_title"
     android:layout_marginLeft="8dp"
+    android:textColor="#ffffff"
     tools:visibility="visible"/>
   <ListView
     android:id="@+id/listview"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:textColor="#ffffff"
     app:layout_constraintBottom_toTopOf="@id/message_linedEditText"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/boat_image"/>
   <EditText
     android:id="@+id/message_linedEditText"
@@ -64,6 +75,8 @@
     android:background="@android:color/transparent"
     android:hint="@string/message_hint"
     android:inputType="textMultiLine"
+    android:textColor="#ffffff"
+    android:textColorHint="#ffffff"
     app:layout_constraintBottom_toTopOf="@+id/send_inspection_btn"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +97,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/message_linedEditText"
     app:srcCompat="@drawable/ic_send_black_24dp"
+    android:tint="#ffffff"
     tools:visibility="visible"
     android:contentDescription="@string/sendbutton_content_description"/>
   <ImageButton
@@ -97,6 +111,7 @@
     app:layout_constraintStart_toEndOf="@+id/send_inspection_btn"
     app:layout_constraintTop_toTopOf="@+id/send_inspection_btn"
     app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
+    android:tint="#ffffff"
     tools:visibility="visible"
     android:contentDescription="@string/addphotosbuton_content_description"/>
   <de.hdodenhof.circleimageview.CircleImageView

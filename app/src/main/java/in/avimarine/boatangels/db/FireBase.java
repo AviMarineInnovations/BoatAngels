@@ -12,6 +12,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -127,6 +128,12 @@ public class FireBase implements iDb {
   @Override
   public void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
     mFirestore.collection("inspections").document(uuid).get().addOnCompleteListener(listener);
+  }
+
+  @Override
+  public void getLatestInspection(String boatUuid, OnCompleteListener<QuerySnapshot> listener) {
+    mFirestore.collection("inspections").whereEqualTo("boatUuid", boatUuid).orderBy("inspectionTime",
+        Direction.DESCENDING).limit(1).get().addOnCompleteListener(listener);
   }
 
   @Override

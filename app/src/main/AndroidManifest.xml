@@ -36,10 +36,10 @@
       android:configChanges="layoutDirection|locale"
       android:label="@string/title_activity_settings"
       android:name=".activities.SettingsActivity"/>
-    <activity
-      android:label="@string/title_activity_main2"
-      android:name=".activities.Main2Activity"
-      android:theme="@style/AppTheme"/>
+    <!--<activity-->
+      <!--android:label="@string/title_activity_main2"-->
+      <!--android:name=".activities.Main2Activity"-->
+      <!--android:theme="@style/AppTheme"/>-->
     <activity android:name=".activities.MyInspection"/>
     <activity android:name=".activities.MyInspection$activity_search_boat"/>
     <activity android:name=".activities.SearchBoatActivity"/>
