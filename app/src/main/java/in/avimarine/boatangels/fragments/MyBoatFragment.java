@@ -1,5 +1,6 @@
 package in.avimarine.boatangels.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -84,6 +85,7 @@ public class MyBoatFragment extends Fragment {
   private String mParam2;
 
   private OnFragmentInteractionListener mListener;
+  private Context mContext;
 
   public MyBoatFragment() {
     // Required empty public constructor
@@ -110,9 +112,17 @@ public class MyBoatFragment extends Fragment {
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    Button ask = getActivity().findViewById(R.id.ask_inspection);
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    if (auth.getCurrentUser() != null) {
+      Log.d(TAG, "Logged in");
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
+
+    } else {
+      Log.d(TAG, "Not logged in");
+    }
+    Button ask = ((Activity)mContext).findViewById(R.id.ask_inspection);
     ask.setOnClickListener(view -> {
-      Intent intent = new Intent(getActivity(), AskInspectionActivity.class);
+      Intent intent = new Intent(((Activity)mContext), AskInspectionActivity.class);
       startActivity(intent);
     });
   }
@@ -127,17 +137,11 @@ public class MyBoatFragment extends Fragment {
 
   }
 
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    if (auth.getCurrentUser() != null) {
-      Log.d(TAG, "Logged in");
-      isUserRegistered(FirebaseAuth.getInstance().getUid());
 
-    } else {
-      Log.d(TAG, "Not logged in");
-    }
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
 
@@ -151,6 +155,7 @@ public class MyBoatFragment extends Fragment {
   @Override
   public void onAttach(Context context) {
     super.onAttach(context);
+    mContext = context;
     if (context instanceof OnFragmentInteractionListener) {
       mListener = (OnFragmentInteractionListener) context;
     } else {
@@ -163,18 +168,19 @@ public class MyBoatFragment extends Fragment {
   public void onDetach() {
     super.onDetach();
     mListener = null;
+    mContext = null;
   }
   private void isUserRegistered(String uid) {
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
         if (!document.exists()) {
-          Intent intent = new Intent(getActivity(), AddUserActivity.class);
+          Intent intent = new Intent(mContext, AddUserActivity.class);
           startActivity(intent);
         } else {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
-          Setting.setUser(getActivity(),currentUser);
+          Setting.setUser(mContext,currentUser);
           if (!currentUser.getBoats().isEmpty()) {
             ownBoatUuid = currentUser.getBoats().get(0);
             getOwnBoat(ownBoatUuid);
@@ -233,26 +239,26 @@ public class MyBoatFragment extends Fragment {
     }
     if (getActivity()!=null)
     {
-      TextView title = getActivity().findViewById(R.id.inspect_boat_title);
-      TextView subTitle = getActivity().findViewById(R.id.inspection_subtitle);
-      ListView listView = getActivity().findViewById(R.id.listview);
+      TextView title = ((Activity)mContext).findViewById(R.id.inspect_boat_title);
+      TextView subTitle = ((Activity)mContext).findViewById(R.id.inspection_subtitle);
+      ListView listView = ((Activity)mContext).findViewById(R.id.listview);
       List<Item> items = initItems(inspection);
-      TextView message = getActivity().findViewById(R.id.message_TextView);
-      CircleImageView civ = getActivity().findViewById(R.id.boat_image);
+      TextView message = ((Activity)mContext).findViewById(R.id.message_TextView);
+      CircleImageView civ = ((Activity)mContext).findViewById(R.id.boat_image);
       title.setText(inspection.boatName);
-      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(getActivity(),new Date(inspection.inspectionTime)) + "\nby "
+      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(((Activity)mContext),new Date(inspection.inspectionTime)) + "\nby "
           + inspection.inspectorName);
       message.setText(inspection.message);
       setBoatPhoto(civ, currentBoat.getPhotoName());
       ItemsListAdapter myItemsListAdapter;
-      myItemsListAdapter = new ItemsListAdapter(getActivity(), items);
+      myItemsListAdapter = new ItemsListAdapter(((Activity)mContext), items);
       listView.setAdapter(myItemsListAdapter);
     }
 
   }
 
   private void setBoatPhoto(CircleImageView civ, String photoName) {
-    new FireBase().loadImgToImageView(getActivity(),civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
+    new FireBase().loadImgToImageView(((Activity)mContext),civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
   }
   private List<Item> initItems(Inspection i) {
     List<Item> ret = new ArrayList<>();
@@ -271,7 +277,7 @@ public class MyBoatFragment extends Fragment {
     if (checkWeather(m.getWeather())) {
       updateWeatherWidget(m.getWeather());
     } else {
-      new WeatherHttpClient(getActivity(), output -> {
+      new WeatherHttpClient(((Activity)mContext), output -> {
         Weather w = owp.parseData(output);
         if (w != null) {
           updateWeatherWidget(w);
@@ -300,9 +306,9 @@ public class MyBoatFragment extends Fragment {
     for (Map.Entry<Integer, Wind> e : daysArr.entrySet()) {
       winds.add(e.getValue());
     }
-    ((WeatherTableView) getActivity().findViewById(R.id.tableLayout)).setWind(winds);
-    ((WeatherTableView) getActivity().findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
-    ((WeatherTableView) getActivity().findViewById(R.id.tableLayout)).setSpeedUnits(SpeedUnits.KNOTS);
+    ((WeatherTableView) ((Activity)mContext).findViewById(R.id.tableLayout)).setWind(winds);
+    ((WeatherTableView) ((Activity)mContext).findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
+    ((WeatherTableView) ((Activity)mContext).findViewById(R.id.tableLayout)).setSpeedUnits(SpeedUnits.KNOTS);
   }
 
   private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {

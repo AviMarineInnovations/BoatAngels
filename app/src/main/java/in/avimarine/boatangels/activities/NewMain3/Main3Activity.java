@@ -34,7 +34,7 @@ public class Main3Activity extends FragmentActivity implements OnFragmentInterac
    * The pager adapter, which provides the pages to the view pager widget.
    */
   private PagerAdapter mPagerAdapter;
-  private static final int NUM_PAGES = 3;
+  private static final int NUM_PAGES = 2;
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -67,13 +67,13 @@ public class Main3Activity extends FragmentActivity implements OnFragmentInterac
             .title(getResources().getString(R.string.tab_text_2))
             .build()
     );
-    models.add(
-        new NavigationTabBar.Model.Builder(
-            getResources().getDrawable(R.drawable.ic_traffic_yellow_24px),
-            Color.parseColor(colors[2]))
-            .title(getResources().getString(R.string.tab_text_3))
-            .build()
-    );
+//    models.add(
+//        new NavigationTabBar.Model.Builder(
+//            getResources().getDrawable(R.drawable.ic_traffic_yellow_24px),
+//            Color.parseColor(colors[2]))
+//            .title(getResources().getString(R.string.tab_text_3))
+//            .build()
+//    );
     navigationTabBar.setModels(models);
     navigationTabBar.setViewPager(mPager, 0);
 
