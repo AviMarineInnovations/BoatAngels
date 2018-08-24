@@ -18,21 +18,20 @@ import java.util.Date;
 public class InspectionHolder extends RecyclerView.ViewHolder {
   private final TextView mDateField;
   private final TextView mTextField;
-  private final ImageView mstatusIcon;
-
+  private final ImageView statusIcon;
 
   public InspectionHolder(View itemView) {
     super(itemView);
     mDateField = itemView.findViewById(R.id.date_time);
     mTextField = itemView.findViewById(R.id.inspection_text);
-    mstatusIcon = itemView.findViewById(R.id.status_iv); //TODO: find how to define the R.id.inspection_icon
+    statusIcon = itemView.findViewById(R.id.inspection_status_icon);
   }
 
   public void bind(Inspection i) {
     Date date = new Date(i.inspectionTime);
     setDate(DateFormat.format("dd.MM.yyyy HH:mm", date).toString());
     setText(i.message);
-    setIconColour(i.getStatus()); //TODO
+    setInspectionIcon(i.getStatus());
   }
 
   private void setDate(String name) {
@@ -43,37 +42,19 @@ public class InspectionHolder extends RecyclerView.ViewHolder {
     mTextField.setText(text);
   }
 
-  private void setIconColour(StatusEnum inspectionStatus) //TODO:set Icon Image in different colours
+  private void setInspectionIcon(StatusEnum inspectionStatus)
   {
     switch (inspectionStatus) {
-      case NotInspected:
-        mstatusIcon.setImageResource(R.drawable.ic_traffic_red_24px); //green Icon
+      case GOOD:
+       statusIcon.setImageResource(R.drawable.ic_good_inspection_status_24px);
         break;
-      case Good:
-       mstatusIcon.setImageResource(R.drawable.ic_traffic_green_24px); //green Icon
+      case BAD:
+       statusIcon.setImageResource(R.drawable.ic_bad_inspection_status_24px);
         break;
-      case Bad:
-       mstatusIcon.setImageResource(R.drawable.ic_traffic_yellow_24px); //orange Icon
-        break;
-      case VeryBad:
-       mstatusIcon.setImageResource(R.drawable.ic_traffic_red_24px); //red Icon
+      case VERY_BAD:
+       statusIcon.setImageResource(R.drawable.ic_very_bad_inspection_status_24px);
         break;
     }
-
   }
 
-
 }
-
-
-/*
-TODO:
-  0.Add to Inspection obj inspection status field and getCurrentInspectionStatus func
-  1.Add Icon field
-  2.Initialize Icon from itemView - find how to define its R.id, how to connect Icon Image to this field
-  3.Write setIconColour function + set it by that func in Bind
-  4.Write getInspectionStatus function - check the inspection current status of a boat and compare it to the prev one
-      if there's a change - change colour accordingly
-  5.Integrate this with BoatForInspectionActivity somehow (?)
-
- */

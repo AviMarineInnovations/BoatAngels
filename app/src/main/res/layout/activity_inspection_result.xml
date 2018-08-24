@@ -198,4 +198,21 @@
     tools:visibility="visible"
     android:contentDescription="@string/addphotosbuton_content_description"/>
 
+  <ImageView
+    android:id="@+id/inspection_status_icon_for_result"
+    android:layout_width="55dp"
+    android:layout_height="39dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    app:layout_constraintBottom_toBottomOf="@+id/moored_boat_body"
+    app:layout_constraintEnd_toEndOf="@+id/moored_boat_body"
+    app:layout_constraintStart_toEndOf="@+id/checkBox_mainsail"
+    app:layout_constraintTop_toBottomOf="@+id/moored_boat_bowlines"
+    app:layout_constraintVertical_bias="1.0"
+    app:srcCompat="@drawable/ic_good_inspection_status_24px"/>
+
 </android.support.constraint.ConstraintLayout>
