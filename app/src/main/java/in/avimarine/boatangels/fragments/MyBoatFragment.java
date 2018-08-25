@@ -135,6 +135,7 @@ public class MyBoatFragment extends Fragment {
       mParam2 = getArguments().getString(ARG_PARAM2);
     }
 
+
   }
 
 
@@ -306,9 +307,13 @@ public class MyBoatFragment extends Fragment {
     for (Map.Entry<Integer, Wind> e : daysArr.entrySet()) {
       winds.add(e.getValue());
     }
-    ((WeatherTableView) ((Activity)mContext).findViewById(R.id.tableLayout)).setWind(winds);
-    ((WeatherTableView) ((Activity)mContext).findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
-    ((WeatherTableView) ((Activity)mContext).findViewById(R.id.tableLayout)).setSpeedUnits(SpeedUnits.KNOTS);
+    if (mContext!=null){
+      ((WeatherTableView) ((Activity) mContext).findViewById(R.id.tableLayout)).setWind(winds);
+      ((WeatherTableView) ((Activity) mContext).findViewById(R.id.tableLayout))
+          .setDateTime(w.getLastUpdate());
+      ((WeatherTableView) ((Activity) mContext).findViewById(R.id.tableLayout))
+          .setSpeedUnits(SpeedUnits.KNOTS);
+    }
   }
 
   private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {

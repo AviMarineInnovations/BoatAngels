@@ -14,10 +14,7 @@
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
     <activity android:name=".activities.MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
+
     </activity>
     <activity
       android:name=".activities.InspectBoatActivity"
@@ -44,7 +41,12 @@
     <activity android:name=".activities.MyInspection$activity_search_boat"/>
     <activity android:name=".activities.SearchBoatActivity"/>
     <activity android:name=".activities.SendFeedbackActivity"/>
-    <activity android:name=".activities.NewMain3.Main3Activity"/>
+    <activity android:name=".activities.Main3Activity">
+    <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+    </activity>
   </application>
 
 </manifest>

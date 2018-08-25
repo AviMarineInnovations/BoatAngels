@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 
 
-
+@com.google.firebase.firestore.IgnoreExtraProperties
 public abstract class BaseDbObject {
 
 

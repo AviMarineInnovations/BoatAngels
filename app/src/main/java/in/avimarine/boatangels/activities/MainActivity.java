@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.R;
-import in.avimarine.boatangels.activities.NewMain3.Main3Activity;
 import in.avimarine.boatangels.customViews.WeatherTableView;
 import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
 import in.avimarine.boatangels.db.FireBase;
@@ -81,13 +80,9 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
-
     ButterKnife.bind(this);
     FirebaseAuth auth = FirebaseAuth.getInstance();
     hiddenElements(true);
-
-
     if (auth.getCurrentUser() != null) {
       hiddenElements(false);
       Log.d(TAG, "Logged in");
@@ -105,7 +100,6 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
                       new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
               .build(),
           RC_SIGN_IN);
-
     }
 
     //addMarinas();
