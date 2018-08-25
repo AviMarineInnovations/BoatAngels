@@ -4,6 +4,8 @@ import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.GOOD;
 import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.BAD;
 import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.VERY_BAD;
 
+import android.widget.ImageView;
+import in.avimarine.boatangels.R;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,19 @@ public class Inspection extends BaseDbObject {
 
   public void setStatus(StatusEnum status) {this.status = status;}
   public StatusEnum getStatus() { return  status;}
-
+  public void setInspectionIcon(ImageView icon){
+    switch (status) {
+      case GOOD:
+        icon.setImageResource(R.drawable.ic_good_inspection_status_24px);
+        break;
+      case BAD:
+        icon.setImageResource(R.drawable.ic_bad_inspection_status_24px);
+        break;
+      case VERY_BAD:
+        icon.setImageResource(R.drawable.ic_very_bad_inspection_status_24px);
+        break;
+    }
+  }
   @Override
   public String toString() {
     return "Inspection{" +

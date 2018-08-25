@@ -31,30 +31,14 @@ public class InspectionHolder extends RecyclerView.ViewHolder {
     Date date = new Date(i.inspectionTime);
     setDate(DateFormat.format("dd.MM.yyyy HH:mm", date).toString());
     setText(i.message);
-    setInspectionIcon(i.getStatus());
+    i.setInspectionIcon(statusIcon);
   }
 
   private void setDate(String name) {
     mDateField.setText(name);
   }
-
   private void setText(String text) {
     mTextField.setText(text);
-  }
-
-  private void setInspectionIcon(StatusEnum inspectionStatus)
-  {
-    switch (inspectionStatus) {
-      case GOOD:
-       statusIcon.setImageResource(R.drawable.ic_good_inspection_status_24px);
-        break;
-      case BAD:
-       statusIcon.setImageResource(R.drawable.ic_bad_inspection_status_24px);
-        break;
-      case VERY_BAD:
-       statusIcon.setImageResource(R.drawable.ic_very_bad_inspection_status_24px);
-        break;
-    }
   }
 
 }
