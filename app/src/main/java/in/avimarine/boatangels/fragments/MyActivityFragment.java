@@ -124,7 +124,7 @@ public class MyActivityFragment extends Fragment {
     String pointsEarned = getString(R.string.points_earned);
     FireBase fb = new FireBase();
     final String myBoatUuid;
-    if (!GeneralUtils.isNull(fb.getCurrentUser(),fb.getCurrentUser().getBoats())&&!fb.getCurrentUser().getBoats().isEmpty()){
+    if (fb.getCurrentUser()!=null && fb.getCurrentUser().getBoats()!= null && !fb.getCurrentUser().getBoats().isEmpty()){
        myBoatUuid = fb.getCurrentUser().getBoats().get(0);
     } else{
       myBoatUuid = "";

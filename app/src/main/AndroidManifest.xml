@@ -13,9 +13,6 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".activities.MainActivity">
-
-    </activity>
     <activity
       android:name=".activities.InspectBoatActivity"
       android:screenOrientation="portrait"/>
@@ -33,15 +30,12 @@
       android:configChanges="layoutDirection|locale"
       android:label="@string/title_activity_settings"
       android:name=".activities.SettingsActivity"/>
-    <!--<activity-->
-      <!--android:label="@string/title_activity_main2"-->
-      <!--android:name=".activities.Main2Activity"-->
-      <!--android:theme="@style/AppTheme"/>-->
+
     <activity android:name=".activities.MyInspection"/>
     <activity android:name=".activities.MyInspection$activity_search_boat"/>
     <activity android:name=".activities.SearchBoatActivity"/>
     <activity android:name=".activities.SendFeedbackActivity"/>
-    <activity android:name=".activities.Main3Activity">
+    <activity android:name=".activities.MainActivity">
     <intent-filter>
       <action android:name="android.intent.action.MAIN"/>
       <category android:name="android.intent.category.LAUNCHER"/>

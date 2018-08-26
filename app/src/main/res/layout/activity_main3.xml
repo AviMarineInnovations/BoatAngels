@@ -28,19 +28,18 @@
         android:id="@+id/ntb_horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:ntb_bg_color="#605271"
-        app:ntb_title_size="12sp"
+        app:ntb_bg_color="@color/background"
+        app:ntb_badge_title_color="#ffffffff"
         app:ntb_badge_bg_color="#ffff0000"
+        app:ntb_title_size="12sp"
         app:ntb_badge_gravity="bottom"
         app:ntb_badge_position="left"
-        app:ntb_badge_title_color="#ffffffff"
         app:ntb_badge_use_typeface="true"
         app:ntb_badged="true"
         app:ntb_title_mode="all"
         app:ntb_titled="true"
         app:ntb_scaled="false"
         app:ntb_typeface="fonts/agency.ttf"/>
-
     </FrameLayout>
 
   </android.support.design.widget.AppBarLayout>

@@ -3,93 +3,65 @@ package in.avimarine.boatangels.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import android.view.ViewGroup;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.GeoPoint;
+import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
-import in.avimarine.boatangels.customViews.WeatherTableView;
-import in.avimarine.boatangels.customViews.WeatherTableView.SpeedUnits;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
-import in.avimarine.boatangels.db.objects.Boat;
-import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
-import in.avimarine.boatangels.general.GeneralUtils;
+import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
+import in.avimarine.boatangels.fragments.MyActivityFragment;
+import in.avimarine.boatangels.fragments.MyBoatFragment;
+import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
+import in.avimarine.boatangels.fragments.SettingsFragment;
 import in.avimarine.boatangels.general.Setting;
-import in.avimarine.boatangels.geographical.GeoUtils;
-import in.avimarine.boatangels.geographical.OpenWeatherMap;
-import in.avimarine.boatangels.geographical.Weather;
-import in.avimarine.boatangels.geographical.WeatherHttpClient;
-import in.avimarine.boatangels.geographical.Wind;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
 
-public class MainActivity extends BaseActivity implements OnSharedPreferenceChangeListener {
-
+/**
+ * Created by GIGAMOLE on 28.03.2016.
+ */
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,OnSharedPreferenceChangeListener {
   private static final String TAG = "MainActivity";
-  private static final int RC_SIGN_IN = 123;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.welcome_message_textview)
-  TextView welcomeTv;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.sign_out_btn)
-  Button signoutBtn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.inspect_boat_btn)
-  Button inspectBoatBtn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.add_boat_btn)
-  Button addBoatBtn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.show_inspections_btn)
-  Button showInspectionBtn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.ask_inspection)
-  Button askInspectionBtn;
-  @SuppressWarnings("WeakerAccess")
-  @BindView(R.id.settings_btn)
-  Button settingsBtn;
-  @BindView(R.id.search_boat_btn)
-  Button searchBoatBtn;
-  @BindView(R.id.my_inspection)
-  Button myInspectionBtn;
-
+  private ViewPager mPager;
+  private PagerAdapter mPagerAdapter;
   private final iDb db = new FireBase();
-  private String ownBoatUuid;
   private User currentUser = null;
-  private Boat currentBoat = null;
-  private Marina currentMarina = null;
+//  private Boat currentBoat = null;
+//  private Marina currentMarina = null;
+
+  private static final int NUM_PAGES = 4;
+  private static final int RC_SIGN_IN = 123;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    ButterKnife.bind(this);
+    setContentView(R.layout.activity_main3);
+    initUI();
     FirebaseAuth auth = FirebaseAuth.getInstance();
-    hiddenElements(true);
     if (auth.getCurrentUser() != null) {
-      hiddenElements(false);
       Log.d(TAG, "Logged in");
       isUserRegistered(FirebaseAuth.getInstance().getUid());
-      welcomeTv.setText(String
-          .format(getString(R.string.welcome_message), auth.getCurrentUser().getDisplayName()));
-      signoutBtn.setEnabled(true);
+//      signoutBtn.setEnabled(true);
     } else {
       Log.d(TAG, "Not logged in");
       startActivityForResult(
@@ -101,40 +73,151 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
               .build(),
           RC_SIGN_IN);
     }
-
-    //addMarinas();
   }
 
-
-  private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
-    Map<Integer, Wind> ret = new TreeMap<>();
-    int day = -1;
-    double speed = 0;
-    double dir;
-    for (Map.Entry<Date, Wind> w : windForecast.entrySet()) {
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(w.getKey());
-      if (day == -1) {
-        day = cal.get(Calendar.DAY_OF_MONTH);
-        speed = w.getValue().getSpeed();
-        dir = w.getValue().getDirection();
-        ret.put(day, new Wind(speed, dir));
-      } else {
-        if (day == cal.get(Calendar.DAY_OF_MONTH)) {
-          if (w.getValue().getSpeed() > speed) {
-            speed = w.getValue().getSpeed();
-            dir = w.getValue().getDirection();
-            ret.put(day, new Wind(speed, dir));
-          }
+  private void isUserRegistered(String uid) {
+    db.getUser(uid, task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (!document.exists()) {
+          Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+          startActivity(intent);
         } else {
-          speed = w.getValue().getSpeed();
-          dir = w.getValue().getDirection();
-          day = cal.get(Calendar.DAY_OF_MONTH);
-          ret.put(day, new Wind(speed, dir));
+          currentUser = document.toObject(User.class);
+          db.setCurrentUser(currentUser);
+          Setting.setUser(this,currentUser);
+//          settingsBtn.setEnabled(true);
+//          if (!currentUser.getBoats().isEmpty()) {
+//            addBoatBtn.setEnabled(false);
+//            showInspectionBtn.setEnabled(true);
+//            askInspectionBtn.setEnabled(true);
+//            ownBoatUuid = currentUser.getBoats().get(0);
+//            getOwnBoat(ownBoatUuid);
+//          } else {
+//            addBoatBtn.setEnabled(true);
+//            showInspectionBtn.setEnabled(false);
+//            askInspectionBtn.setEnabled(false);
+//          }
         }
       }
+    });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+
+    Log.d(TAG,"OnCreateOptionsMenu");
+    getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      // When the user clicks START ALARM, set the alarm.
+      case R.id.add_boat:
+        Intent intent = new Intent(this, AddBoatActivity.class);
+        startActivity(intent);
+        return true;
+      // When the user clicks CANCEL ALARM, cancel the alarm.
+      case R.id.logout:
+        signout();
+        return true;
     }
-    return ret;
+    return super.onOptionsItemSelected(item);
+  }
+
+  private void signout() {
+    AuthUI.getInstance()
+        .signOut(MainActivity.this)
+        .addOnCompleteListener(task -> {
+          startActivityForResult(
+              AuthUI.getInstance()
+                  .createSignInIntentBuilder()
+                  .setAvailableProviders(
+                      Arrays
+                          .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                              new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                  .build(),
+              RC_SIGN_IN);
+        });
+  }
+
+  private void initUI() {
+    // Instantiate a ViewPager and a PagerAdapter.
+    mPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+    mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+    mPager.setAdapter(mPagerAdapter);
+
+
+    final String[] colors = getResources().getStringArray(R.array.default_preview);
+
+    final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
+    final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+    models.add(
+        new NavigationTabBar.Model.Builder(
+            getResources().getDrawable(R.drawable.ic_traffic_red_24px),
+            Color.parseColor(colors[0]))
+            .title(getResources().getString(R.string.tab_text_1))
+            .build()
+    );
+    models.add(
+        new NavigationTabBar.Model.Builder(
+            getResources().getDrawable(R.drawable.ic_traffic_green_24px),
+            Color.parseColor(colors[1]))
+            .title(getResources().getString(R.string.tab_text_2))
+            .build()
+    );
+    models.add(
+        new NavigationTabBar.Model.Builder(
+            getResources().getDrawable(R.drawable.ic_directions_run_black_24dp),
+            Color.parseColor(colors[2]))
+            .title(getResources().getString(R.string.tab_text_3))
+            .build()
+    );
+    models.add(
+        new NavigationTabBar.Model.Builder(
+            getResources().getDrawable(R.drawable.ic_settings_black_24dp),
+            Color.parseColor(colors[3]))
+            .title(getResources().getString(R.string.tab_text_4))
+            .build()
+    );
+    navigationTabBar.setModels(models);
+    navigationTabBar.setViewPager(mPager, 0);
+
+    navigationTabBar.post(() -> {
+      final View viewPager = findViewById(R.id.vp_horizontal_ntb);
+      ((ViewGroup.MarginLayoutParams) viewPager.getLayoutParams()).topMargin =
+          (int) -navigationTabBar.getBadgeMargin();
+      viewPager.requestLayout();
+    });
+
+    navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
+      @Override
+      public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
+
+      }
+
+      @Override
+      public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
+        model.hideBadge();
+      }
+    });
+  }
+
+  @Override
+  public void onFragmentInteraction(Uri uri) {
+
+  }
+  @Override
+  public void onBackPressed() {
+    if (mPager.getCurrentItem() == 0) {
+      // If the user is currently looking at the first step, allow the system to handle the
+      // Back button. This calls finish() on this activity and pops the back stack.
+      super.onBackPressed();
+    } else {
+      // Otherwise, select the previous step.
+      mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+    }
   }
 
   @Override
@@ -150,10 +233,10 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
     super.onResume();
 
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-      hiddenElements(false);
+//      hiddenElements(false);
       Log.d(TAG, "Logged in");
     } else {
-      hiddenElements(true);
+//      hiddenElements(true);
       Log.d(TAG, "Not logged in");
       startActivityForResult(
           AuthUI.getInstance()
@@ -169,261 +252,12 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
         .getDefaultSharedPreferences(getApplicationContext());
     prefs.registerOnSharedPreferenceChangeListener(this);
   }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    SharedPreferences prefs = PreferenceManager
-        .getDefaultSharedPreferences(getApplicationContext());
-    prefs.unregisterOnSharedPreferenceChangeListener(this);
-  }
-
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
     if (s.equals("locale_list")) {
       recreate();
     }
   }
-
-  public void hiddenElements(boolean hidde){
-    if (!hidde){
-      searchBoatBtn.setVisibility(View.VISIBLE);
-      myInspectionBtn.setVisibility(View.VISIBLE);
-      inspectBoatBtn.setVisibility(View.VISIBLE);
-      settingsBtn.setVisibility(View.VISIBLE);
-      askInspectionBtn.setVisibility(View.VISIBLE);
-      addBoatBtn.setVisibility(View.VISIBLE);
-      showInspectionBtn.setVisibility(View.VISIBLE);
-      signoutBtn.setVisibility(View.VISIBLE);
-      welcomeTv.setVisibility(View.VISIBLE);
-  } else{
-      searchBoatBtn.setVisibility(View.GONE);
-      myInspectionBtn.setVisibility(View.GONE);
-      welcomeTv.setVisibility(View.GONE);
-      signoutBtn.setVisibility(View.GONE);
-      inspectBoatBtn.setVisibility(View.GONE);
-      settingsBtn.setVisibility(View.GONE);
-      askInspectionBtn.setVisibility(View.GONE);
-      addBoatBtn.setVisibility(View.GONE);
-      showInspectionBtn.setVisibility(View.GONE);
-    }
-
-}
-
-  @OnClick(R.id.sign_out_btn)
-  public void signoutBtnClick(View v) {
-    hiddenElements(false);
-    AuthUI.getInstance()
-        .signOut(MainActivity.this)
-        .addOnCompleteListener(task -> {
-          signoutBtn.setEnabled(false);
-          startActivityForResult(
-              AuthUI.getInstance()
-                  .createSignInIntentBuilder()
-                  .setAvailableProviders(
-                      Arrays
-                          .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                              new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                  .build(),
-              RC_SIGN_IN);
-        });
-  }
-
-  @OnClick(R.id.add_boat_btn)
-  public void addBoatBtnClick(View v) {
-    Intent intent = new Intent(this, AddBoatActivity.class);
-    startActivity(intent);
-  }
-
-  @OnClick(R.id.settings_btn)
-  public void settingsBtnClick(View v) {
-    Intent intent = new Intent(this, SettingsActivity.class);
-    startActivity(intent);
-  }
-
-  @OnClick(R.id.inspect_boat_btn)
-  public void inspectBtnClick(View v) {
-    Intent intent = new Intent(this, BoatForInspectionActivity.class);
-    startActivity(intent);
-  }
-
-  @OnClick(R.id.show_inspections_btn)
-  public void showInspectionsBtnClick(View v) {
-    Intent intent = new Intent(this, InspectionsListActivity.class);
-    intent.putExtra(getString(R.string.intent_extra_boat_uuid), ownBoatUuid);
-    startActivity(intent);
-  }
-
-  @OnClick(R.id.search_boat_btn)
-  public void searchBoatBtnClick(View v) {
-    Intent intent = new Intent(this, SearchBoatActivity.class);
-    startActivity(intent);
-  }
-
-
-  @OnClick(R.id.ask_inspection)
-  public void ask(View v) {
-    Intent intent = new Intent(this, AskInspectionActivity.class);
-    startActivity(intent);
-
-  }
-
-  @OnClick(R.id.new_main_btn)
-  public void newMain(View v) {
-    Intent intent = new Intent(this, Main3Activity.class);
-    startActivity(intent);
-  }
-  @OnClick(R.id.my_inspection)
-  public void myInspection(View v) {
-    Intent intent = new Intent(this, MyInspection.class);
-    startActivity(intent);
-
-  }
-
-  private void isUserRegistered(String uid) {
-    db.getUser(uid, task -> {
-      if (task.isSuccessful()) {
-        DocumentSnapshot document = task.getResult();
-        if (!document.exists()) {
-          Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
-          startActivity(intent);
-        } else {
-          currentUser = document.toObject(User.class);
-          db.setCurrentUser(currentUser);
-          Setting.setUser(this,currentUser);
-          welcomeTv.setText(getString(R.string.welcome_message, currentUser.getDisplayName()));
-          settingsBtn.setEnabled(true);
-          if (!currentUser.getBoats().isEmpty()) {
-            addBoatBtn.setEnabled(false);
-            showInspectionBtn.setEnabled(true);
-            askInspectionBtn.setEnabled(true);
-            ownBoatUuid = currentUser.getBoats().get(0);
-            getOwnBoat(ownBoatUuid);
-          } else {
-            addBoatBtn.setEnabled(true);
-            showInspectionBtn.setEnabled(false);
-            askInspectionBtn.setEnabled(false);
-          }
-        }
-      }
-    });
-  }
-
-  private void getOwnBoat(String uuid) {
-    if (currentBoat == null || !currentBoat.getUuid().equals(uuid)) {
-      db.getBoat(uuid, task -> {
-        if (task.isSuccessful()) {
-          DocumentSnapshot document = task.getResult();
-          if (document.exists()) {
-            currentBoat = document.toObject(Boat.class);
-            if (!GeneralUtils.isNull(currentBoat, currentBoat.getMarinaUuid())) {
-              db.getMarina(currentBoat.getMarinaUuid(),
-                  task1 -> {
-                    DocumentSnapshot document1 = task1.getResult();
-                    if (document1.exists()) {
-                      currentMarina = document1.toObject(Marina.class);
-                      updateWeather(currentMarina);
-                    } else {
-                      Log.e(TAG, "Unable to get own marina");
-                    }
-                  });
-            } else {
-              Log.e(TAG, "Unable to get own boat");
-            }
-          } else {
-            Log.e(TAG, "Unable to get own boat");
-          }
-        }
-      });
-    }
-  }
-
-  private void updateWeather(Marina m) {
-    if (GeneralUtils.isNull(m, m.getLocation())) {
-      Log.e(TAG, "Current Marina is null");
-    }
-    final OpenWeatherMap owp = new OpenWeatherMap();
-    if (checkWeather(m.getWeather())) {
-      updateWeatherWidget(m.getWeather());
-    } else {
-      new WeatherHttpClient(this, output -> {
-        Weather w = owp.parseData(output);
-        if (w != null) {
-          updateWeatherWidget(w);
-//          db.updateWeather(m.getUuid(),w);
-          currentMarina.setWeather(w);
-          db.addMarina(currentMarina);
-        }
-      }).execute(
-          GeoUtils.createLocation(m.getLocation().getLatitude(), m.getLocation().getLongitude()));
-    }
-  }
-
-  private boolean checkWeather(Weather weather) {
-    if (weather == null) {
-      return false;
-    }
-    if (getMaxWindDaysArray(weather.getWindForecast()).size() == 6) {
-      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private void updateWeatherWidget(Weather w) {
-    Map<Integer, Wind> daysArr = getMaxWindDaysArray(w.getWindForecast());
-    ArrayList<Wind> winds = new ArrayList<>();
-    for (Map.Entry<Integer, Wind> e : daysArr.entrySet()) {
-      winds.add(e.getValue());
-    }
-    ((WeatherTableView) findViewById(R.id.tableLayout)).setWind(winds);
-    ((WeatherTableView) findViewById(R.id.tableLayout)).setDateTime(w.getLastUpdate());
-    ((WeatherTableView) findViewById(R.id.tableLayout)).setSpeedUnits(SpeedUnits.KNOTS);
-  }
-
-  /***
-   * For setting first marina db. Don't call!
-   */
-  private void addMarinas() {
-    Marina m = new Marina();
-    m.setName("Shavit, Haifa");
-    m.setCountry("Israel");
-    m.setLocation(new GeoPoint(32.805672, 35.030550));
-    m.setFirstAddedTime(new Date());
-    m.setLastUpdate(new Date());
-    db.addMarina(m);
-    m = new Marina();
-    m.setName("Herzliya");
-    m.setCountry("Israel");
-    m.setLocation(new GeoPoint(32.162881, 34.795601));
-    m.setFirstAddedTime(new Date());
-    m.setLastUpdate(new Date());
-    db.addMarina(m);
-    m = new Marina();
-    m.setName("Tel-Aviv");
-    m.setCountry("Israel");
-    m.setLocation(new GeoPoint(32.086349, 34.767430));
-    m.setFirstAddedTime(new Date());
-    m.setLastUpdate(new Date());
-    db.addMarina(m);
-    m = new Marina();
-    m.setName("Ashdod");
-    m.setCountry("Israel");
-    m.setLocation(new GeoPoint(31.795030, 34.627701));
-    m.setFirstAddedTime(new Date());
-    m.setLastUpdate(new Date());
-    db.addMarina(m);
-    m = new Marina();
-    m.setName("Ashkelon");
-    m.setCountry("Israel");
-    m.setLocation(new GeoPoint(31.682364, 34.555713));
-    m.setFirstAddedTime(new Date());
-    m.setLastUpdate(new Date());
-    db.addMarina(m);
-  }
-
-
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -440,7 +274,7 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
 
 
         }
-        signoutBtn.setEnabled(true);
+//        signoutBtn.setEnabled(true);
         return;
       } else {
         // Sign in failed
@@ -462,6 +296,33 @@ public class MainActivity extends BaseActivity implements OnSharedPreferenceChan
       }
 
       Log.d(TAG, "Log in failure: Unknown login response");
+    }
+  }
+
+  /**
+   * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+   * sequence.
+   */
+  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+    public ScreenSlidePagerAdapter(FragmentManager fm) {
+      super(fm);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+      if (position==1)
+        return new BoatsForInspectionFragment();
+      else if (position == 0)
+        return new MyBoatFragment();
+      else if (position == 2)
+        return new MyActivityFragment();
+      else
+        return new SettingsFragment();
+    }
+
+    @Override
+    public int getCount() {
+      return NUM_PAGES;
     }
   }
 }

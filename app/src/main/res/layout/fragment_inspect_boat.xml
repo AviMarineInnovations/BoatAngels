@@ -80,7 +80,7 @@
     app:layout_constraintBottom_toTopOf="@+id/send_inspection_btn"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/listview"
+    app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
     tools:visibility="visible"
     android:lines="3"/>
 
@@ -88,18 +88,17 @@
     android:id="@+id/send_inspection_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
+    android:contentDescription="@string/sendbutton_content_description"
+    android:tint="#ffffff"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/message_linedEditText"
     app:srcCompat="@drawable/ic_send_black_24dp"
-    android:tint="#ffffff"
-    tools:visibility="visible"
-    android:contentDescription="@string/sendbutton_content_description"/>
+    tools:visibility="visible"/>
   <ImageButton
     android:id="@+id/add_photos_btn"
     android:layout_width="wrap_content"
@@ -128,54 +127,35 @@
     android:padding="5dp"
     app:civ_border_width="2dp"
     app:civ_border_color="#7bbde6"/>
-  <ImageButton
-    android:id="@+id/good_inspection_btn"
-    android:layout_width="wrap_content"
+  <LinearLayout
+    android:id="@+id/linearLayout2"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    app:layout_constraintBottom_toTopOf="@+id/send_inspection_btn"
-    app:layout_constraintEnd_toEndOf="@+id/message_linedEditText"
-    app:layout_constraintHorizontal_bias="0.11"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/checkBox_stern"
-    app:layout_constraintVertical_bias="0.9"
+    app:layout_constraintTop_toBottomOf="@id/listview">
+  <ImageButton
+    android:id="@+id/good_inspection_btn"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
     app:srcCompat="@drawable/good_inspection_button_states"/>
   <ImageButton
     android:id="@+id/bad_inspection_btn"
-    android:layout_width="76dp"
-    android:layout_height="56dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    app:layout_constraintBottom_toTopOf="@+id/send_inspection_btn"
-    app:layout_constraintEnd_toEndOf="@+id/message_linedEditText"
-    app:layout_constraintHorizontal_bias="0.18"
-    app:layout_constraintStart_toEndOf="@+id/good_inspection_btn"
-    app:layout_constraintTop_toBottomOf="@+id/checkBox_stern"
-    app:layout_constraintVertical_bias="0.71000004"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
     app:srcCompat="@drawable/bad_inspection_button_states"/>
   <ImageButton
     android:id="@+id/very_bad_inspection_btn"
-    android:layout_width="81dp"
-    android:layout_height="67dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    app:layout_constraintBottom_toTopOf="@+id/add_photos_btn"
-    app:layout_constraintEnd_toEndOf="@+id/message_linedEditText"
-    app:layout_constraintHorizontal_bias="0.56"
-    app:layout_constraintStart_toEndOf="@+id/bad_inspection_btn"
-    app:layout_constraintTop_toBottomOf="@+id/checkBox_stern"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
     app:srcCompat="@drawable/very_bad_inspection_button_status"/>
+  </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
