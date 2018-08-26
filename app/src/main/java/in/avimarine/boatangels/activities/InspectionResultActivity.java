@@ -56,6 +56,9 @@ public class InspectionResultActivity extends AppCompatActivity {
   ImageView boatBowLines;
   @BindView(R.id.moored_boat_sternlines)
   ImageView boatSternLines;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.inspection_status_icon_for_result)
+  ImageView inspectionResultIcon;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +104,7 @@ public class InspectionResultActivity extends AppCompatActivity {
     message.setText(i.message);
     setCheckBoxes(i);
     colorBoat();
-
+    i.setInspectionIcon(inspectionResultIcon);
   }
 
   private void colorBoat() {

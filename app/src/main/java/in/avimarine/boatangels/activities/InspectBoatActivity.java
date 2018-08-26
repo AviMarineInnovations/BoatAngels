@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
+import in.avimarine.boatangels.db.objects.Inspection.StatusEnum;
 import in.avimarine.boatangels.db.objects.User;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +62,8 @@ public class InspectBoatActivity extends AppCompatActivity {
   ListView listView;
   private Boat b;
   private User u = null;
+  private StatusEnum inspectionStatus; //pazit
+
 
   List<Item> items;
   ItemsListAdapter myItemsListAdapter;
@@ -111,12 +115,25 @@ public class InspectBoatActivity extends AppCompatActivity {
       }
     });
 
-//    OnClickListener ocl = view -> colorBoat();
-//    checkbox_stern.setOnClickListener(ocl);
-//    checkbox_bow.setOnClickListener(ocl);
-//    checkbox_jib.setOnClickListener(ocl);
-//    checkbox_main.setOnClickListener(ocl);
-//    colorBoat();
+    // TODO : fix code duplications
+    ImageButton goodBtn  = findViewById(R.id.good_inspection_btn);
+    goodBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        sumInspectionAsGood();
+      }
+    });
+    ImageButton badBtn  = findViewById(R.id.bad_inspection_btn);
+    badBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        sumInspectionAsBad();
+      }
+    });
+    ImageButton veryBadBtn  = findViewById(R.id.very_bad_inspection_btn);
+    veryBadBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        sumInspectionAsVeryBad();
+      }
+    });
 
   }
 
@@ -139,9 +156,14 @@ public class InspectBoatActivity extends AppCompatActivity {
       items.add(item);
     }
 
-//    arrayDrawable.recycle();
-//    arrayText.recycle();
   }
+
+  private void sumInspectionAsGood() { inspectionStatus = StatusEnum.GOOD; }
+  private void sumInspectionAsBad()
+  {
+    inspectionStatus = StatusEnum.BAD;
+  }
+  private void sumInspectionAsVeryBad() { inspectionStatus = StatusEnum.VERY_BAD; }
 
   @OnClick(R.id.send_inspection_btn)
   public void onClick(View v) {
@@ -150,12 +172,13 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
-    inspection.pointsEarned = b.getOfferPoint();
+    inspection.pointsEarned = b.getOfferPoint();  //TODO: fix direct access to Inspection field by using setters instead
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.getName();
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
     inspection.inspectorUid = u.getUid();
+    inspection.setStatus(inspectionStatus); //pazit
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       inspection.inspectorName = u.getDisplayName();
     }
