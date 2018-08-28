@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-//        //Required for firebase-auth-ui
+       //Required for firebase-auth-ui
         maven {
             url 'https://maven.fabric.io/public'
 
