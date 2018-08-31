@@ -1,5 +1,6 @@
 package in.avimarine.boatangels.activities;
 
+import android.app.DownloadManager.Request;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -21,8 +22,13 @@ import android.view.ViewGroup;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.common.api.Response;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -34,8 +40,15 @@ import in.avimarine.boatangels.fragments.MyBoatFragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
 import in.avimarine.boatangels.fragments.SettingsFragment;
 import in.avimarine.boatangels.general.Setting;
+import io.fabric.sdk.android.services.concurrency.internal.DefaultRetryPolicy;
+import io.fabric.sdk.android.services.concurrency.internal.RetryPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by GIGAMOLE on 28.03.2016.
@@ -60,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     FirebaseAuth auth = FirebaseAuth.getInstance();
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
+
       isUserRegistered(FirebaseAuth.getInstance().getUid());
 //      signoutBtn.setEnabled(true);
     } else {
@@ -84,8 +98,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           startActivity(intent);
         } else {
           currentUser = document.toObject(User.class);
+
           db.setCurrentUser(currentUser);
           Setting.setUser(this,currentUser);
+          checkIfTokens();
 //          settingsBtn.setEnabled(true);
 //          if (!currentUser.getBoats().isEmpty()) {
 //            addBoatBtn.setEnabled(false);
@@ -98,9 +114,44 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 //            showInspectionBtn.setEnabled(false);
 //            askInspectionBtn.setEnabled(false);
 //          }
+
+
         }
       }
     });
+
+
+  }
+
+  /*
+    A method that handles tokens (tokens usage for notify user)
+    and a list of devices by user,
+    If a device does not exist,
+    the method will set it to db.
+   */
+  private void checkIfTokens() {
+
+    String token = FirebaseInstanceId.getInstance().getToken();
+    if(currentUser.getTokens().contains(token))
+    {
+      Log.d(TAG,"token already exists: " + token);
+
+    }
+    else {
+      Log.d(TAG, "token not exists: " + token);
+      String Token = FirebaseInstanceId.getInstance().getToken();
+      List<String> userTokens = currentUser.getTokens();
+      userTokens.add(Token);
+      currentUser.setTokens(userTokens);
+      FirebaseFirestore db = FirebaseFirestore.getInstance();
+      db.collection("Users").document(currentUser.getUid())
+          .update(
+              "tokens", currentUser.getTokens());
+      updateToken("users",currentUser.getUid(),"tokens", currentUser.getTokens());
+      Log.d(TAG, "adding tokens success: " + currentUser.getTokens());
+    }
+
+
   }
 
   @Override
@@ -127,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   }
 
   private void signout() {
+    currentUser.getTokens().remove(FirebaseInstanceId.getInstance().getToken());
+    updateToken("users",currentUser.getUid(),"tokens", currentUser.getTokens());
+
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(task -> {
@@ -150,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
 
     final String[] colors = getResources().getStringArray(R.array.default_preview);
-
+    Log.d(TAG, "moti Token" + FirebaseInstanceId.getInstance().getToken());
     final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
     final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
     models.add(
@@ -325,4 +379,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
       return NUM_PAGES;
     }
   }
+
+  /*
+  Update user tokens devices
+   */
+  private void updateToken(String collection, String doc, String field, List<String> value) {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    db.collection(collection).document(doc)
+        .update(
+            field, value);
+  }
+
+
 }
