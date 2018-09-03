@@ -8,13 +8,16 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hbb20.CountryCodePicker;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.general.GeneralUtils;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class AddUserActivity extends AppCompatActivity {
@@ -23,6 +26,7 @@ public class AddUserActivity extends AppCompatActivity {
   private String phone;
   private String country;
   private String uid;
+  private ArrayList<String> tokens = new ArrayList<>();
   private final iDb db = new FireBase();
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.ccp)
@@ -43,6 +47,7 @@ public class AddUserActivity extends AppCompatActivity {
        phone = editTextPhone.getText().toString();
        country = countryCodePicker.getSelectedCountryName();
 
+
        if (isNotValidInput(name)) {
          editTextName.setError(getString(R.string.name_error_message));
        } else if (isNotValidInput(mail)|| GeneralUtils.isNotValidEmail(mail)) {
@@ -52,6 +57,7 @@ public class AddUserActivity extends AppCompatActivity {
        } else {
 
          uid = FirebaseAuth.getInstance().getUid();
+         tokens.add(FirebaseInstanceId.getInstance().getToken());
 
          User user = new User();
          user.setDisplayName(name);
@@ -61,11 +67,13 @@ public class AddUserActivity extends AppCompatActivity {
          user.setFirstJoinTime(new Date());
          user.setLastUpdate(new Date());
          user.setUid(uid);
+         user.setTokens(tokens);
          db.setUser(user);
          finish();
        }
      });
   }
+
 
 
   private boolean isNotValidInput(String s) {

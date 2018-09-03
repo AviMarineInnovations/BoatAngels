@@ -50,5 +50,6 @@ public interface iDb {
 
   User getCurrentUser();
 
+
   void updateWeather(String uuid, Weather w);
 }
