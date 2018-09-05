@@ -26,9 +26,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
-    // ...
 
-    // TODO(developer): Handle FCM messages here.
 
     Log.d(TAG, "From: " + remoteMessage.getFrom());
     Log.d(TAG, "From2: " + FirebaseInstanceId.getInstance().getToken());

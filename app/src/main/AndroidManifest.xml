@@ -14,6 +14,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
+
     <activity
       android:name=".activities.InspectBoatActivity"
       android:screenOrientation="portrait"/>
@@ -67,5 +68,6 @@
 
 
   </application>
+  <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

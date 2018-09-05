@@ -1,7 +1,6 @@
 package in.avimarine.boatangels.activities;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -9,8 +8,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -22,10 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import com.android.volley.DefaultRetryPolicy;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,38 +33,22 @@ import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
-import in.avimarine.boatangels.db.objects.Notifications;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
 import in.avimarine.boatangels.fragments.MyActivityFragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
 import in.avimarine.boatangels.fragments.SettingsFragment;
-import in.avimarine.boatangels.general.MyFirebaseInstanceIDService;
 import in.avimarine.boatangels.general.Setting;
-
-import io.fabric.sdk.android.services.concurrency.internal.RetryPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 
 
 /**
  * Created by GIGAMOLE on 28.03.2016.
  */
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,OnSharedPreferenceChangeListener {
+
   private static final String TAG = "MainActivity";
   private ViewPager mPager;
   private PagerAdapter mPagerAdapter;
@@ -115,27 +96,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
           String token = FirebaseInstanceId.getInstance().getToken();
 
-          if(!currentUser.tokens.contains(token)){
+          if (!currentUser.tokens.contains(token)) {
             currentUser.tokens.add(token);
             Log.d(TAG, "Add new token user " + token);
             FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
 
             DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
             tokensRef.set(currentUser, SetOptions.merge());
-//            tokensRef
-//                .update("tokens", currentUser.tokens)
-//                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully updated token!" + currentUser.tokens))
-//                .addOnFailureListener(e -> Log.w(TAG, "Error updating token", e));
 
           }
-          if(task.isSuccessful()){
+          if (task.isSuccessful()) {
 
-          db.setCurrentUser(currentUser);
-          Setting.setUser(this,currentUser);
-//            Notifications notif = new Notifications(currentUser.tokens, "Test", "Message", getApplicationContext());
-//
-//            boolean test = notif.sendNotification(notif);
-//            Log.d(TAG, "dwfwfww" + test);
+            db.setCurrentUser(currentUser);
+            Setting.setUser(this, currentUser);
 
           }
 
@@ -151,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 //            showInspectionBtn.setEnabled(false);
 //            askInspectionBtn.setEnabled(false);
 //          }
-
 
         }
       }
@@ -171,10 +143,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    Log.d(TAG,"OnCreateOptionsMenu");
+    Log.d(TAG, "OnCreateOptionsMenu");
     getMenuInflater().inflate(R.menu.menu_main_activity, menu);
     return super.onCreateOptionsMenu(menu);
   }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
@@ -192,49 +165,48 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   }
 
   private void signout() {
-      boolean test = false;
-      db.getUser(currentUser.getUid(), task -> {
-            if (task.isSuccessful()) {
-              DocumentSnapshot document = task.getResult();
 
-              currentUser = document.toObject(User.class);
+    db.getUser(currentUser.getUid(), (Task<DocumentSnapshot> task) -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
 
-              String token = FirebaseInstanceId.getInstance().getToken();
+        currentUser = document.toObject(User.class);
 
-              if (currentUser.tokens.contains(token)) {
-                currentUser.tokens.remove(token);
-                Log.d(TAG, "remove  token from user " + token);
-                FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
+        String token = FirebaseInstanceId.getInstance().getToken();
 
-                DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
-                tokensRef.set(currentUser, SetOptions.merge());
+        if (currentUser.tokens.contains(token)) {
+          currentUser.tokens.remove(token);
+          Log.d(TAG, "remove  token from user " + token);
+          FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
+
+          DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
+          tokensRef.set(currentUser, SetOptions.merge());
 //                    .update("tokens", currentUser.tokens)
 //                    .addOnSuccessListener(aVoid -> Log
 //                        .d(TAG, "DocumentSnapshot successfully remove token!" + currentUser.tokens))
 //                    .addOnFailureListener(e -> Log.w(TAG, "Error removing token", e));
-              }
+        }
 
-            }
-                while (task.isSuccessful()) {
+      }
+      while (task.isSuccessful()) {
+        AuthUI.getInstance()
+            .signOut(MainActivity.this)
+            .addOnCompleteListener(taskSignOut -> {
+              startActivityForResult(
                   AuthUI.getInstance()
-                      .signOut(MainActivity.this)
-                      .addOnCompleteListener(taskSignOut -> {
-                        startActivityForResult(
-                            AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setAvailableProviders(
-                                    Arrays
-                                        .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                                .build(),
-                            RC_SIGN_IN);
-                      });
+                      .createSignInIntentBuilder()
+                      .setAvailableProviders(
+                          Arrays
+                              .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                  new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                      .build(),
+                  RC_SIGN_IN);
+            });
 
-                    break;
-                }
+        break;
+      }
 
-          });
-
+    });
 
 
   }
@@ -244,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     mPager = findViewById(R.id.vp_horizontal_ntb);
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
-
 
     final String[] colors = getResources().getStringArray(R.array.default_preview);
 
@@ -288,23 +259,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
       viewPager.requestLayout();
     });
 
-    navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
-      @Override
-      public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
+    navigationTabBar
+        .setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
+          @Override
+          public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
 
-      }
+          }
 
-      @Override
-      public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-        model.hideBadge();
-      }
-    });
+          @Override
+          public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
+            model.hideBadge();
+          }
+        });
   }
 
   @Override
   public void onFragmentInteraction(Uri uri) {
 
   }
+
   @Override
   public void onBackPressed() {
     if (mPager.getCurrentItem() == 0) {
@@ -349,12 +322,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         .getDefaultSharedPreferences(getApplicationContext());
     prefs.registerOnSharedPreferenceChangeListener(this);
   }
+
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
     if (s.equals("locale_list")) {
       recreate();
     }
   }
+
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -401,13 +376,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
    * sequence.
    */
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+
     public ScreenSlidePagerAdapter(FragmentManager fm) {
       super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-      if (position==1)
+      if (position == 1)
         return new BoatsForInspectionFragment();
       else if (position == 0)
         return new MyBoatFragment();
@@ -421,70 +397,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public int getCount() {
       return NUM_PAGES;
     }
+
   }
 
-
-//  private void sendNotification(ArrayList<String> tokens) {
-//
-//    for (String token:tokens) {
-//
-//
-//        Log.d(TAG, "User Token: " + token);
-//        String FCM_PUSH_URL = "https://fcm.googleapis.com/fcm/send";
-//        String SERVER_KEY = "AAAAkCQyIFU:APA91bFjpy2vum5w1VQCmNGR6CGTp7kpxOTkgaxKSiMdfyQdXNNc36JFGlbcZ4KW0ZcnqqsA-E9u0S40Dgbp76dEP5HyqqXhQoYHhol9kas1kEGxGXfYmAcKluMDMDP_YYfrXq0ElQUi";
-//
-//        String msg = "new inspection from: " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-//        String title = "New Inspection";
-//
-//        JSONObject obj = null;
-//        JSONObject objData = null;
-//        JSONObject dataobjData = null;
-//
-//        try {
-//          obj = new JSONObject();
-//          objData = new JSONObject();
-//
-//          objData.put("body", msg);
-//          objData.put("sound", "default");
-//          objData.put("icon", "icon_name"); //   icon_name
-//          objData.put("tag", token);
-//          objData.put("priority", "high");
-//
-//          dataobjData = new JSONObject();
-//          dataobjData.put("title", title);
-//          dataobjData.put("msg", msg);
-//          dataobjData.put("InspectionUid", "123456");
-//          dataobjData.put("click_action", "OPEN_ACTIVITY_1");
-//          Log.d(TAG, "inspe Uid " + token);
-//          Log.d(TAG, "User Token: " + "123456");
-//          obj.put("to", token);
-//          //obj.put("priority", "high");
-//
-//          obj.put("notification", objData);
-//          obj.put("data", dataobjData);
-//          Log.e("return here>>", obj.toString());
-//
-//        } catch (JSONException e) {
-//          e.printStackTrace();
-//        }
-//        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, FCM_PUSH_URL, obj,
-//            response -> Log.e("True", response + ""),
-//            error -> Log.e("False", error + "")) {
-//          @Override
-//          public Map<String, String> getHeaders() {
-//            Map<String, String> params = new HashMap<String, String>();
-//            params.put("Authorization", "key=" + SERVER_KEY);
-//            params.put("Content-Type", "application/json");
-//            return params;
-//          }
-//        };
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        int socketTimeout = 1000 * 60;// 60 seconds
-//        DefaultRetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
-//            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-//        jsObjRequest.setRetryPolicy(policy);
-//        requestQueue.add(jsObjRequest);
-//
-//    }
-//  }
 }
+
