@@ -115,6 +115,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       }
     });
 
+    /*
     // TODO : fix code duplications
     ImageButton goodBtn  = findViewById(R.id.good_inspection_btn);
     goodBtn.setOnClickListener(new View.OnClickListener() {
@@ -134,8 +135,24 @@ public class InspectBoatActivity extends AppCompatActivity {
         sumInspectionAsVeryBad();
       }
     });
+*/
+    setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
+    setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
+    setInspectionSeverityIcon(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
 
   }
+
+    void setInspectionSeverityIcon(ImageButton button, StatusEnum status){
+      button.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        findViewById(R.id.good_inspection_btn).setSelected(false); //cancel another pressed button before pressing another
+        findViewById(R.id.bad_inspection_btn).setSelected(false);
+        findViewById(R.id.very_bad_inspection_btn).setSelected(false);
+        v.setSelected(true);
+        inspectionStatus = status;
+      }
+    });
+    }
 
   private void initItems() {
     items = new ArrayList<Item>();
@@ -157,13 +174,11 @@ public class InspectBoatActivity extends AppCompatActivity {
     }
 
   }
-
+/*
   private void sumInspectionAsGood() { inspectionStatus = StatusEnum.GOOD; }
-  private void sumInspectionAsBad()
-  {
-    inspectionStatus = StatusEnum.BAD;
-  }
+  private void sumInspectionAsBad() { inspectionStatus = StatusEnum.BAD; }
   private void sumInspectionAsVeryBad() { inspectionStatus = StatusEnum.VERY_BAD; }
+*/
 
   @OnClick(R.id.send_inspection_btn)
   public void onClick(View v) {
