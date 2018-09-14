@@ -62,8 +62,7 @@ public class InspectBoatActivity extends AppCompatActivity {
   ListView listView;
   private Boat b;
   private User u = null;
-  private StatusEnum inspectionStatus; //pazit
-
+  private StatusEnum inspectionStatus;
 
   List<Item> items;
   ItemsListAdapter myItemsListAdapter;
@@ -115,27 +114,6 @@ public class InspectBoatActivity extends AppCompatActivity {
       }
     });
 
-    /*
-    // TODO : fix code duplications
-    ImageButton goodBtn  = findViewById(R.id.good_inspection_btn);
-    goodBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        sumInspectionAsGood();
-      }
-    });
-    ImageButton badBtn  = findViewById(R.id.bad_inspection_btn);
-    badBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        sumInspectionAsBad();
-      }
-    });
-    ImageButton veryBadBtn  = findViewById(R.id.very_bad_inspection_btn);
-    veryBadBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        sumInspectionAsVeryBad();
-      }
-    });
-*/
     setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
     setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
     setInspectionSeverityIcon(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
@@ -174,11 +152,6 @@ public class InspectBoatActivity extends AppCompatActivity {
     }
 
   }
-/*
-  private void sumInspectionAsGood() { inspectionStatus = StatusEnum.GOOD; }
-  private void sumInspectionAsBad() { inspectionStatus = StatusEnum.BAD; }
-  private void sumInspectionAsVeryBad() { inspectionStatus = StatusEnum.VERY_BAD; }
-*/
 
   @OnClick(R.id.send_inspection_btn)
   public void onClick(View v) {
@@ -187,7 +160,7 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
-    inspection.pointsEarned = b.getOfferPoint();  //TODO: fix direct access to Inspection field by using setters instead
+    inspection.pointsEarned = b.getOfferPoint();
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.getName();
     inspection.message = inspection_text.getText().toString();
