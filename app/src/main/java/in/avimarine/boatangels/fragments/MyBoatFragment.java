@@ -61,16 +61,6 @@ public class MyBoatFragment extends Fragment {
   private Boat currentBoat = null;
   private Marina currentMarina = null;
   private static final String TAG = "MyBoatFragment";
-
-  // TODO: Rename parameter arguments, choose names that match
-  // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-  private static final String ARG_PARAM1 = "param1";
-  private static final String ARG_PARAM2 = "param2";
-
-  // TODO: Rename and change types of parameters
-  private String mParam1;
-  private String mParam2;
-
   private OnFragmentInteractionListener mListener;
   private Context mContext;
 
@@ -81,18 +71,12 @@ public class MyBoatFragment extends Fragment {
   /**
    * Use this factory method to create a new instance of
    * this fragment using the provided parameters.
-   *
-   * @param param1 Parameter 1.
-   * @param param2 Parameter 2.
+
    * @return A new instance of fragment MyBoatFragment.
    */
   // TODO: Rename and change types and number of parameters
-  public static MyBoatFragment newInstance(String param1, String param2) {
+  public static MyBoatFragment newInstance() {
     MyBoatFragment fragment = new MyBoatFragment();
-    Bundle args = new Bundle();
-    args.putString(ARG_PARAM1, param1);
-    args.putString(ARG_PARAM2, param2);
-    fragment.setArguments(args);
     return fragment;
   }
 
@@ -109,7 +93,7 @@ public class MyBoatFragment extends Fragment {
     }
     Button ask = ((Activity)mContext).findViewById(R.id.ask_inspection);
     ask.setOnClickListener(view -> {
-      Intent intent = new Intent(((Activity)mContext), AskInspectionActivity.class);
+      Intent intent = new Intent(mContext, AskInspectionActivity.class);
       startActivity(intent);
     });
   }
@@ -117,12 +101,6 @@ public class MyBoatFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-      mParam1 = getArguments().getString(ARG_PARAM1);
-      mParam2 = getArguments().getString(ARG_PARAM2);
-    }
-
-
   }
 
 
@@ -234,19 +212,19 @@ public class MyBoatFragment extends Fragment {
       TextView message = ((Activity)mContext).findViewById(R.id.message_TextView);
       CircleImageView civ = ((Activity)mContext).findViewById(R.id.boat_image);
       title.setText(inspection.boatName);
-      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(((Activity)mContext),new Date(inspection.inspectionTime)) + "\nby "
+      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)) + "\nby "
           + inspection.inspectorName);
       message.setText(inspection.message);
       setBoatPhoto(civ, currentBoat.getPhotoName());
       ItemsListAdapter myItemsListAdapter;
-      myItemsListAdapter = new ItemsListAdapter(((Activity)mContext), items);
+      myItemsListAdapter = new ItemsListAdapter(mContext, items, false);
       listView.setAdapter(myItemsListAdapter);
     }
 
   }
 
   private void setBoatPhoto(CircleImageView civ, String photoName) {
-    new FireBase().loadImgToImageView(((Activity)mContext),civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
+    new FireBase().loadImgToImageView(mContext,civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
   }
   private List<Item> initItems(Inspection i) {
     List<Item> ret = new ArrayList<>();
@@ -265,7 +243,7 @@ public class MyBoatFragment extends Fragment {
     if (checkWeather(m.getWeather())) {
       updateWeatherWidget(m.getWeather());
     } else {
-      new WeatherHttpClient(((Activity)mContext), output -> {
+      new WeatherHttpClient(mContext, output -> {
         Weather w = owp.parseData(output);
         if (w != null) {
           updateWeatherWidget(w);
@@ -344,7 +322,6 @@ public class MyBoatFragment extends Fragment {
    * >Communicating with Other Fragments</a> for more information.
    */
   public interface OnFragmentInteractionListener {
-
     // TODO: Update argument type and name
     void onFragmentInteraction(Uri uri);
   }

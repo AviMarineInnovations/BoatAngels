@@ -18,7 +18,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import in.avimarine.boatangels.BuildConfig;
 import in.avimarine.boatangels.GlideApp;
+import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Boat;
+import in.avimarine.boatangels.db.objects.GlobalSettings;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
@@ -176,5 +178,15 @@ public class FireBase implements iDb {
   public void updateWeather(String uuid, Weather w) {
 
     mFirestore.collection("marinas").document(uuid).update("weather", w);
+  }
+
+  @Override
+  public void getSupportedVersion(OnCompleteListener<DocumentSnapshot> listener) {
+    mFirestore.collection("globalSettings").document("versions").get().addOnCompleteListener(listener);
+  }
+
+  @Override
+  public void setSupportedVersion(long version) {
+    mFirestore.collection("globalSettings").document("versions").set(new GlobalSettings(version));
   }
 }

@@ -1,6 +1,7 @@
 package in.avimarine.boatangels.db.objects;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
  */
 
 
-@com.google.firebase.firestore.IgnoreExtraProperties
+@IgnoreExtraProperties
 public abstract class BaseDbObject {
 
 
