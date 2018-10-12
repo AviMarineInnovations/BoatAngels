@@ -5,5 +5,6 @@
     <color name="colorAccent">#ff4081</color>
     <color name="weather_table_back">#9e77c0d9</color>
   <color name="list_item_text_color">#FFFFFF</color>
+  <color name="pref_text_summary">#d7d2d2</color>
   <color name="background">#605271</color>
 </resources>
