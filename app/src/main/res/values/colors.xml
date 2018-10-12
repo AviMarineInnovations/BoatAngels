@@ -7,4 +7,6 @@
   <color name="list_item_text_color">#FFFFFF</color>
   <color name="pref_text_summary">#d7d2d2</color>
   <color name="background">#605271</color>
+  <color name="titlebackgroundcolor">#443656</color>
+  <color name="lightbackground">#9f90af</color>
 </resources>

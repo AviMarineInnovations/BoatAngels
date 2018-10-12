@@ -3,12 +3,18 @@
   <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.Light">
     <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <item name="colorPrimary">@color/titlebackgroundcolor</item>
+    <item name="android:textColorPrimary">@color/lightbackground</item>
     <item name="colorPrimaryDark">@color/background</item>
     <item name="colorAccent">@color/colorAccent</item>
     <item name="preferenceTheme">
       @style/AppTheme.Preference
     </item>
+    <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+  </style>
+  <style name="WindowTitleBackground">
+    <item name="android:background">@color/titlebackgroundcolor</item>
   </style>
 
   <style name="AppTheme.Preference" parent="@style/PreferenceThemeOverlay.v14.Material">
@@ -79,7 +85,7 @@
     <item name="main">@color/colorPrimaryDark</item>
   </style>
 
-  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+  <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>-->
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
