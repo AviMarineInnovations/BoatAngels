@@ -7,11 +7,16 @@
     <item name="colorPrimaryDark">@color/background</item>
     <item name="colorAccent">@color/colorAccent</item>
     <item name="preferenceTheme">
-      @style/PreferenceThemeOverlay.v14.Material
+      @style/AppTheme.Preference
     </item>
   </style>
 
+  <style name="AppTheme.Preference" parent="@style/PreferenceThemeOverlay.v14.Material">
+    <item name="android:textColorPrimary">@color/list_item_text_color</item>
+    <item name="android:textColor">@color/list_item_text_color</item>
+    <item name="android:textColorSecondary">@color/pref_text_summary</item>
 
+  </style>
 
 
   <style name="AppTheme.NoActionBar">
@@ -77,7 +82,6 @@
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
 
 
 </resources>

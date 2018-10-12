@@ -37,7 +37,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-     addPreferencesFromResource(R.xml.app_preferences);
+    //Style is set by "@style/preferenceTheme"
+    addPreferencesFromResource(R.xml.app_preferences);
   }
 
   @Override
