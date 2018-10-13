@@ -24,8 +24,9 @@ public class SplashActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     Versioning versioning = new Versioning(this);
     versioning.getSupportedVersion(result -> {
-      if (versioning.getInstalledVersion()<result)
+      if (versioning.getInstalledVersionCode()<result)
       {
+        Log.d(TAG,"Installed version, "+versioning.getInstalledVersionCode()+" is earlier than the supported version: " + result);
         alertOnUnsupportedVersion();
       } else {
         Intent intent = new Intent(this, MainActivity.class);

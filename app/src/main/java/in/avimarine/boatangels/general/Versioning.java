@@ -32,11 +32,14 @@ public class Versioning {
           long supportedVersion;
           if (!document.exists()) {
             Log.d(TAG,"No supported version value found in DB");
-            supportedVersion = getInstalledVersion();
+            supportedVersion = getInstalledVersionCode();
             commManager.setSupportedVersion(supportedVersion);
             Log.d(TAG,"Setting the minimal supported version to current version: " + supportedVersion);
           } else {
             supportedVersion = document.getLong("compatibleVersion");
+            if (supportedVersion<0){
+              supportedVersion = 0;
+            }
           }
           listener.onComplete(supportedVersion);
         }
@@ -46,7 +49,7 @@ public class Versioning {
     }
   }
 
-  public int getInstalledVersion() {
+  public int getInstalledVersionCode() {
     try {
       PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
       return pInfo.versionCode;

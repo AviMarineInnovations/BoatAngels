@@ -70,11 +70,10 @@ public class MyBoatFragment extends Fragment {
 
   /**
    * Use this factory method to create a new instance of
-   * this fragment using the provided parameters.
+   * this fragment.
 
    * @return A new instance of fragment MyBoatFragment.
    */
-  // TODO: Rename and change types and number of parameters
   public static MyBoatFragment newInstance() {
     MyBoatFragment fragment = new MyBoatFragment();
     return fragment;
