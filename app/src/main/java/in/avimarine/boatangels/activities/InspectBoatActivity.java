@@ -100,7 +100,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     }
 
     initItems();
-    myItemsListAdapter = new ItemsListAdapter(this, items);
+    myItemsListAdapter = new ItemsListAdapter(this, items, true);
     listView.setAdapter(myItemsListAdapter);
 
     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -208,18 +208,19 @@ public class InspectBoatActivity extends AppCompatActivity {
   static class ViewHolder {
 
     CheckBoxTriState checkBox;
-    //    ImageView icon;
     TextView text;
   }
 
   public static class ItemsListAdapter extends BaseAdapter {
 
+    private final boolean editable;
     private Context context;
     private List<Item> list;
 
-    public ItemsListAdapter(Context c, List<Item> l) {
+    public ItemsListAdapter(Context c, List<Item> l,boolean editable) {
       context = c;
       list = l;
+      this.editable = editable;
     }
 
     @Override
@@ -251,26 +252,29 @@ public class InspectBoatActivity extends AppCompatActivity {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         rowView = inflater.inflate(R.layout.item_inspection_finding, null);
 
-        viewHolder.checkBox = (CheckBoxTriState) rowView.findViewById(R.id.rowCheckBox);
-//        viewHolder.icon = (ImageView) rowView.findViewById(R.id.rowImageView);
-        viewHolder.text = (TextView) rowView.findViewById(R.id.rowTextView);
+        viewHolder.checkBox = rowView.findViewById(R.id.rowCheckBox);
+        viewHolder.text = rowView.findViewById(R.id.rowTextView);
         rowView.setTag(viewHolder);
       } else {
         viewHolder = (ViewHolder) rowView.getTag();
       }
 
-//      viewHolder.icon.setImageDrawable(list.get(position).ItemDrawable);
       viewHolder.checkBox.setState(list.get(position).checked);
-
       final String itemStr = list.get(position).ItemString;
       viewHolder.text.setText(itemStr);
       viewHolder.checkBox.setTag(position);
-      viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          list.get(position).checked = ((CheckBoxTriState) view).getState();
-        }
-      });
+      if (editable) {
+        viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            list.get(position).checked = ((CheckBoxTriState) view).getState();
+          }
+        });
+        viewHolder.checkBox.setEnabled(true);
+      }
+      else{
+        viewHolder.checkBox.setEnabled(false);
+      }
 
       viewHolder.checkBox.setState(getFindingStat(position));
 

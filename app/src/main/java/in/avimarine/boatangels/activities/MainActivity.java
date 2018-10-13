@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   private PagerAdapter mPagerAdapter;
   private final iDb db = new FireBase();
   private User currentUser = null;
-//  private Boat currentBoat = null;
-//  private Marina currentMarina = null;
-
   private static final int NUM_PAGES = 4;
   private static final int RC_SIGN_IN = 123;
 
@@ -86,18 +83,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
           Setting.setUser(this,currentUser);
-//          settingsBtn.setEnabled(true);
-//          if (!currentUser.getBoats().isEmpty()) {
-//            addBoatBtn.setEnabled(false);
-//            showInspectionBtn.setEnabled(true);
-//            askInspectionBtn.setEnabled(true);
-//            ownBoatUuid = currentUser.getBoats().get(0);
-//            getOwnBoat(ownBoatUuid);
-//          } else {
-//            addBoatBtn.setEnabled(true);
-//            showInspectionBtn.setEnabled(false);
-//            askInspectionBtn.setEnabled(false);
-//          }
         }
       }
     });
@@ -233,10 +218,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     super.onResume();
 
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-//      hiddenElements(false);
       Log.d(TAG, "Logged in");
     } else {
-//      hiddenElements(true);
       Log.d(TAG, "Not logged in");
       startActivityForResult(
           AuthUI.getInstance()

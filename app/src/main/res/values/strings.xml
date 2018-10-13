@@ -47,6 +47,11 @@
   <string name="inspect_points_error_message">Insert Points!</string>
   <string name="max_point_error_message">You do not have enough points!</string>
   <string name="search_boat">Search Boat...</string>
+  <string name="db_compatible_version">CompatibleVersion</string>
+  <string name="version_not_supported_dialog_title">Version not supported</string>
+  <string name="version_not_supported_dialog_message">The version installed is not supported any more. Press OK to open Play store and download a newer version.</string>
+  <string name="dlg_ok">OK</string>
+  <string name="dlg_cancel">Cancel</string>
   <plurals name="points_txt">
     <item quantity="one">One Point</item>
     <item quantity="other">%d Points</item>
