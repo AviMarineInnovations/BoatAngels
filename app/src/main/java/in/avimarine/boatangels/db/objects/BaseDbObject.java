@@ -18,8 +18,8 @@ import java.util.UUID;
 public abstract class BaseDbObject {
 
 
-  Long lastUpdateTime;
-  Long firstAddedTime;
+  public  Long lastUpdateTime;
+  public Long firstAddedTime;
   @Exclude
   private UUID _uuid;
 

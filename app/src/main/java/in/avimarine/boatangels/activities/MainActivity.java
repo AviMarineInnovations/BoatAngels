@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -27,6 +28,7 @@ import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
+import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
 import in.avimarine.boatangels.fragments.MyActivityFragment;
@@ -40,14 +42,17 @@ import java.util.Arrays;
 /**
  * Created by GIGAMOLE on 28.03.2016.
  */
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,
+    OnSharedPreferenceChangeListener {
+
   private static final String TAG = "MainActivity";
-  private ViewPager mPager;
-  private PagerAdapter mPagerAdapter;
-  private final iDb db = new FireBase();
-  private User currentUser = null;
   private static final int NUM_PAGES = 4;
   private static final int RC_SIGN_IN = 123;
+  private final iDb db = new FireBase();
+  private ViewPager mPager;
+  private PagerAdapter mPagerAdapter;
+  private User currentUser = null;
+  private Menu menu;
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -81,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         } else {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
-          Setting.setUser(this,currentUser);
+          Setting.setUser(this, currentUser);
+          setMenuItems(menu);
         }
       }
     });
@@ -89,18 +95,70 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    Log.d(TAG,"OnCreateOptionsMenu");
+    Log.d(TAG, "OnCreateOptionsMenu");
+    this.menu = menu;
     getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+    setMenuItems(menu);
     return super.onCreateOptionsMenu(menu);
   }
+
+  private void setMenuItems(Menu menu) {
+    if (menu == null) {
+      Log.e(TAG, "menu is null");
+      return;
+    }
+    if ((currentUser != null) && (currentUser.getBoats() != null) && (!currentUser.getBoats()
+        .isEmpty())) {
+      menu.getItem(0).setEnabled(true);
+      menu.getItem(0).setVisible(true);
+    } else {
+      menu.getItem(0).setEnabled(false);
+      menu.getItem(0).setVisible(false);
+    }
+  }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.logout:
         signout();
         return true;
+      case R.id.add_owner:
+        addOwner();
+        return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private void addOwner() {
+    db.getBoat(currentUser.getBoats().get(0), task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (document.exists()) {
+          Boat b = document.toObject(Boat.class);
+          if (b.getCode() == null) {
+            b.setCode(Boat.generateAccessCode());
+            db.addBoat(b);
+          }
+          Intent sendIntent = new Intent();
+          sendIntent.setAction(Intent.ACTION_SEND);
+          sendIntent.putExtra(Intent.EXTRA_TEXT,
+              currentUser.getDisplayName() + " is inviting you to be the owner of the boat " + b
+                  .getName()
+                  + " on the app Boat Angels.\nYou can download the app here: https://play.google.com/store/apps/details?id="
+                  + this.getPackageName()
+                  + " and add yourself as the owner of the boat using the code: " + b.getCode());
+          sendIntent.setType("text/plain");
+          startActivity(sendIntent);
+        } else {
+          Log.e(TAG, "Unable to find boat.");
+        }
+      } else {
+        Log.e(TAG, "Unable to find boat");
+        Toast.makeText(this, "Unable to send message", Toast.LENGTH_LONG).show();
+      }
+      finish();
+    });
   }
 
   private void signout() {
@@ -124,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     mPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
-
 
     final String[] colors = getResources().getStringArray(R.array.default_preview);
 
@@ -168,23 +225,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
       viewPager.requestLayout();
     });
 
-    navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
-      @Override
-      public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
+    navigationTabBar
+        .setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
+          @Override
+          public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
 
-      }
+          }
 
-      @Override
-      public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-        model.hideBadge();
-      }
-    });
+          @Override
+          public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
+            model.hideBadge();
+          }
+        });
   }
 
   @Override
   public void onFragmentInteraction(Uri uri) {
 
   }
+
   @Override
   public void onBackPressed() {
     if (mPager.getCurrentItem() == 0) {
@@ -226,12 +285,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         .getDefaultSharedPreferences(getApplicationContext());
     prefs.registerOnSharedPreferenceChangeListener(this);
   }
+
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
     if (s.equals("locale_list")) {
       recreate();
     }
   }
+
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -275,20 +336,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
    * sequence.
    */
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+
     public ScreenSlidePagerAdapter(FragmentManager fm) {
       super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-      if (position==1)
+      if (position == 1) {
         return new BoatsForInspectionFragment();
-      else if (position == 0)
+      } else if (position == 0) {
         return new MyBoatFragment();
-      else if (position == 2)
+      } else if (position == 2) {
         return new MyActivityFragment();
-      else
+      } else {
         return new SettingsFragment();
+      }
     }
 
     @Override

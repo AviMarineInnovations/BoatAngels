@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,6 +22,7 @@ import in.avimarine.boatangels.dialogs.BoatCodeInputDialog;
 import in.avimarine.boatangels.dialogs.BoatCodeInputDialog.BoatCodeInputDialogListener;
 import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -32,8 +32,6 @@ public class SearchBoatActivity extends AppCompatActivity implements BoatCodeInp
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private List<Boat> boatList = new ArrayList<>();
   private Boat selectedBoat = null;
-  private DialogFragment df;
-
 
 
   @Override
@@ -57,6 +55,8 @@ public class SearchBoatActivity extends AppCompatActivity implements BoatCodeInp
               Boat boat = document.toObject(Boat.class);
               boatList.add(boat);
             }
+            Collections.sort(boatList,
+                (boat, t1) -> boat.getName().compareToIgnoreCase(t1.getName()));
             mListView.setAdapter(arrayAdapter);
             mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
               @Override
@@ -80,7 +80,12 @@ public class SearchBoatActivity extends AppCompatActivity implements BoatCodeInp
       Log.e(TAG, "Unable to get selected boat");
       return;
     }
-    df = BoatCodeInputDialog.newInstance(this);
+    if(b.getCode()==null){
+      Toast.makeText(this,"This boat has no access code. Contact the developers for help",Toast.LENGTH_LONG).show();
+      Log.e(TAG,"No access code for boat "+ selectedBoat.getName());
+      return;
+    }
+    DialogFragment df = BoatCodeInputDialog.newInstance(this);
     df.show(getFragmentManager(), "Enter_Access_Code");
 
 
@@ -94,11 +99,6 @@ public class SearchBoatActivity extends AppCompatActivity implements BoatCodeInp
       return;
     if (selectedBoat==null)
       return;
-    if(selectedBoat.getCode()==null){
-      Toast.makeText(this,"This boat has no access code. Contact the developers for help",Toast.LENGTH_LONG).show();
-      Log.e(TAG,"No access code for boat "+ selectedBoat.getName());
-      return;
-    }
     if (GeneralUtils.isValid(accessCodeText.getText().toString(),Long.class,0f,999999f)&&selectedBoat.getCode().equals(accessCodeText.getText().toString())) {
       Intent returnIntent = new Intent();
       returnIntent.putExtra("UUID",selectedBoat.getUuid());

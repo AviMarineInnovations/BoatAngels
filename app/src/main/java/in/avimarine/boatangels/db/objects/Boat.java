@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class Boat extends BaseDbObject {
 
+  public List<String> users = new ArrayList<>();
   private String name;
   private String model;
   private GeoPoint location;
@@ -24,6 +25,13 @@ public class Boat extends BaseDbObject {
   private String clubUuid;
   private Long lastInspectionDate;
   private String photoName;
+  private String code;
+
+  public static String generateAccessCode() {
+    Random rand = new Random();
+    int n = rand.nextInt(899999) + 100000;
+    return String.valueOf(n);
+  }
 
   public String getCode() {
     return code;
@@ -32,12 +40,6 @@ public class Boat extends BaseDbObject {
   public void setCode(String code) {
     this.code = code;
   }
-
-  private String code;
-
-
-  public List<String> users = new ArrayList<>();
-
 
   public String getName() {
     return name;
@@ -90,6 +92,7 @@ public class Boat extends BaseDbObject {
   public List<String> getUsers() {
     return users;
   }
+
   public void setUsers(List<String> users) {
     this.users = users;
   }
@@ -125,14 +128,6 @@ public class Boat extends BaseDbObject {
   public void setPhotoName(String photoName) {
     this.photoName = photoName;
   }
-
-
-  public static String generateAccessCode() {
-    Random rand = new Random();
-    int n = rand.nextInt(899999) + 100000;
-    return String.valueOf(n);
-  }
-
 
   @Override
   public String toString() {

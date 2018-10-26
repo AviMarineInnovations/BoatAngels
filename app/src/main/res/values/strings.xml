@@ -158,5 +158,6 @@
   <string name="message_hint">Message</string>
   <string name="loading_inspection">Loading latest inspection...</string>
   <string name="boat_code">Enter code</string>
+  <string name="add_owner">Add owner</string>
 
 </resources>

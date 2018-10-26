@@ -4,6 +4,9 @@
   <!--<item android:id="@+id/add_boat"-->
     <!--android:title="@string/add_boat_btn_text"-->
     <!--app:showAsAction="withText"/>-->
+  <item android:id="@+id/add_owner"
+    android:title="@string/add_owner"
+    app:showAsAction="withText"/>
   <item android:id="@+id/logout"
     android:title="@string/sign_out"
     app:showAsAction="withText"/>
