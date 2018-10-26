@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.activities.AddBoatActivity;
 import in.avimarine.boatangels.activities.AddUserActivity;
 import in.avimarine.boatangels.activities.AskInspectionActivity;
 import in.avimarine.boatangels.activities.InspectBoatActivity.Item;
@@ -86,27 +91,27 @@ public class MyBoatFragment extends Fragment {
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
       isUserRegistered(FirebaseAuth.getInstance().getUid());
-
     } else {
       Log.d(TAG, "Not logged in");
     }
-    Button ask = ((Activity)mContext).findViewById(R.id.ask_inspection);
-    ask.setOnClickListener(view -> {
+    Button askForInsptnBtn = ((Activity)mContext).findViewById(R.id.ask_inspection);
+    askForInsptnBtn.setOnClickListener(view -> {
       Intent intent = new Intent(mContext, AskInspectionActivity.class);
       startActivity(intent);
     });
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onResume() {
+    super.onResume();
+    if (currentUser!=null) {
+      isUserRegistered(currentUser.getUid());
+    }
   }
 
-
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
 
@@ -136,6 +141,7 @@ public class MyBoatFragment extends Fragment {
     mContext = null;
   }
   private void isUserRegistered(String uid) {
+    //TODO first try to get user from static class to avoid getting from online DB
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
@@ -149,17 +155,39 @@ public class MyBoatFragment extends Fragment {
           if (!currentUser.getBoats().isEmpty()) {
             ownBoatUuid = currentUser.getBoats().get(0);
             getOwnBoat(ownBoatUuid);
-          } else {
-
+          } else { //User has no boats registered
+            setNoBoatsView();
           }
         }
       }
     });
   }
+
+  private void setNoBoatsView() {
+    if (mContext!=null) {
+      GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
+      GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.no_boat_iv,R.id.no_boat_tv);
+      ImageView iv = ((Activity)mContext).findViewById(R.id.no_boat_iv);
+      iv.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          addBoatButton();
+        }
+      });
+    }
+
+  }
+
+  private void addBoatButton() {
+    Intent intent = new Intent(mContext, AddBoatActivity.class);
+    startActivity(intent);
+  }
+
   private void getOwnBoat(String uuid) {
     if (currentBoat == null || !currentBoat.getUuid().equals(uuid)) {
       db.getBoat(uuid, task -> {
         if (task.isSuccessful()) {
+          turnBoatViewOn();
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             currentBoat = document.toObject(Boat.class);
@@ -194,6 +222,13 @@ public class MyBoatFragment extends Fragment {
           }
         }
       });
+    }
+  }
+
+  private void turnBoatViewOn() {
+    if (mContext!=null) {
+      GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
+      GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.no_boat_iv,R.id.no_boat_tv);
     }
   }
 

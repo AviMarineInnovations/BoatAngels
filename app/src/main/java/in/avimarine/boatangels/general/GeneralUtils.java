@@ -136,6 +136,19 @@ public class GeneralUtils {
     return new Date();
   }
 
+  public static void setViewVisibility(Activity mContext, int visibility,
+      int... ids) {
+    if (mContext==null||(visibility!=View.GONE && visibility!=View.VISIBLE && visibility!=View.INVISIBLE)){
+      return;
+    }
+    for (int id: ids){
+      View v = mContext.findViewById(id);
+      if (v!=null){
+        v.setVisibility(visibility);
+      }
+    }
+  }
+
 
   enum CLAZZ {
     Integer, Double, Float

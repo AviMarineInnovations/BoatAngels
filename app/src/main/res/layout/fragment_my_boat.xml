@@ -7,11 +7,13 @@
 
 
   <include
+    android:visibility="gone"
     android:id="@+id/inspection_result"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     layout="@layout/fragment_inspection_result"/>
   <Button
+    android:visibility="gone"
     android:id="@+id/ask_inspection"
     android:layout_width="wrap_content"
     android:layout_height="55dp"
@@ -21,6 +23,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/inspection_result"/>
   <in.avimarine.boatangels.customViews.WeatherTableView
+    android:visibility="gone"
     android:id="@+id/tableLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -32,5 +35,28 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:speed_units="Knots"/>
+
+  <ImageView
+    android:id="@+id/no_boat_iv"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:visibility="visible"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_add_boat"/>
+  <TextView
+    android:id="@+id/no_boat_tv"
+    android:text="No boat?\nNo worries,\none day you'll have one!"
+    android:gravity="center"
+    android:textSize="20sp"
+
+    android:visibility="visible"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/no_boat_iv"/>
+
 
 </android.support.constraint.ConstraintLayout>
