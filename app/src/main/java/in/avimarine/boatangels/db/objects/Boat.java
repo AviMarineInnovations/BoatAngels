@@ -3,6 +3,7 @@ package in.avimarine.boatangels.db.objects;
 import com.google.firebase.firestore.GeoPoint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -23,6 +24,16 @@ public class Boat extends BaseDbObject {
   private String clubUuid;
   private Long lastInspectionDate;
   private String photoName;
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  private String code;
 
 
   public List<String> users = new ArrayList<>();
@@ -116,26 +127,15 @@ public class Boat extends BaseDbObject {
   }
 
 
-
-
+  public static String generateAccessCode() {
+    Random rand = new Random();
+    int n = rand.nextInt(899999) + 100000;
+    return String.valueOf(n);
+  }
 
 
   @Override
   public String toString() {
-    return
-        "uuid: " + getUuid() + "\n"+
-            "Name: " + name +  "\n" +
-
-            "lastUpdateTime: " + lastUpdateTime +"\n"+
-            "firstAddedTime: " + firstAddedTime +"\n"+
-            "Marina: " + marinaName+"\n"+
-            "model: " + model+"\n"+
-            "location: " + location +"\n"+
-            "ClubName: " + clubName+"\n"+
-            "OfferPoint: " + offerPoint+"\n"+
-            "lastInspectionDate: " + lastInspectionDate
-        ;
+    return name;
   }
-
-
 }

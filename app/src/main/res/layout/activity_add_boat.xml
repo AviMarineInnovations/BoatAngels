@@ -15,19 +15,47 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="in.avimarine.boatangels.activities.AddBoatActivity"
     tools:showIn="@layout/activity_add_boat">
-
+    <TextView
+      android:id="@+id/new_boat_header"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:text="Add new boat"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+      android:id="@+id/new_boat_header2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:text="Or select exiting boat"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.502"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/divider"/>
     <EditText
       android:id="@+id/boatname_et"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
       android:layout_marginLeft="16dp"
       android:ems="10"
-      android:inputType="textPersonName"
       android:hint="@string/boat_name_text"
+      android:inputType="textPersonName"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toBottomOf="@+id/new_boat_header"/>
     <EditText
       android:id="@+id/boat_model_et"
       android:layout_width="wrap_content"
@@ -65,59 +93,90 @@
       app:layout_constraintTop_toBottomOf="@+id/boat_club_et"/>
     <Spinner
       android:id="@+id/marina_spinner"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_width="250dp"
+      android:layout_height="35dp"
       android:layout_marginTop="8dp"
       android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/marin_tv"/>
+      app:layout_constraintTop_toBottomOf="@+id/marin_tv"
+      android:layout_marginLeft="16dp"/>
     <EditText
       android:id="@+id/latitude_et"
-      android:layout_width="wrap_content"
+      android:layout_width="100dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="6dp"
-      android:layout_marginStart="46dp"
-      android:layout_marginLeft="46dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
       android:ems="10"
       android:hint="@string/latitude_text"
       android:inputType="numberSigned|numberDecimal"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView"/>
+      app:layout_constraintStart_toEndOf="@+id/textView"
+      app:layout_constraintTop_toBottomOf="@+id/marina_spinner"/>
     <EditText
       android:id="@+id/longitude_et"
-      android:layout_width="wrap_content"
+      android:layout_width="100dp"
       android:layout_height="wrap_content"
-      android:layout_marginStart="46dp"
-      android:layout_marginLeft="46dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
       android:ems="10"
       android:hint="@string/longtitude_text"
       android:inputType="numberSigned|numberDecimal"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/textView"
       app:layout_constraintTop_toBottomOf="@+id/latitude_et"/>
     <Button
       android:id="@+id/add_boat_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="58dp"
-      android:layout_marginStart="148dp"
-      android:layout_marginEnd="148dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
       android:text="@string/add_btn_text"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"/>
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/longitude_et"/>
     <TextView
       android:id="@+id/textView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
       android:layout_marginStart="16dp"
       android:layout_marginLeft="16dp"
       android:text="@string/berth_text"
       android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="@+id/longitude_et"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/marina_spinner"/>
+      app:layout_constraintTop_toTopOf="@+id/latitude_et"/>
+    <Button
+      android:id="@+id/select_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:text="Select"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/new_boat_header2"/>
+    <View
+      android:id="@+id/divider"
+      android:layout_width="368dp"
+      android:layout_height="5dp"
+      android:layout_marginTop="12dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:background="?android:attr/listDivider"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/add_boat_btn"/>
+
   </android.support.constraint.ConstraintLayout>
 
 

@@ -157,5 +157,6 @@
   <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="message_hint">Message</string>
   <string name="loading_inspection">Loading latest inspection...</string>
+  <string name="boat_code">Enter code</string>
 
 </resources>

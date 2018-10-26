@@ -176,7 +176,6 @@ public class FireBase implements iDb {
 
   @Override
   public void updateWeather(String uuid, Weather w) {
-
     mFirestore.collection("marinas").document(uuid).update("weather", w);
   }
 

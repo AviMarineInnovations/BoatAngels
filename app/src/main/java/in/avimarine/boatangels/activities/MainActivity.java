@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
       isUserRegistered(FirebaseAuth.getInstance().getUid());
-//      signoutBtn.setEnabled(true);
     } else {
       Log.d(TAG, "Not logged in");
       startActivityForResult(
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-
     Log.d(TAG,"OnCreateOptionsMenu");
     getMenuInflater().inflate(R.menu.menu_main_activity, menu);
     return super.onCreateOptionsMenu(menu);
@@ -98,12 +96,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      // When the user clicks START ALARM, set the alarm.
-      case R.id.add_boat:
-        Intent intent = new Intent(this, AddBoatActivity.class);
-        startActivity(intent);
-        return true;
-      // When the user clicks CANCEL ALARM, cancel the alarm.
       case R.id.logout:
         signout();
         return true;
@@ -216,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   @Override
   protected void onResume() {
     super.onResume();
-
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
     } else {
@@ -254,10 +245,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (FirebaseAuth.getInstance() != null
             && FirebaseAuth.getInstance().getCurrentUser() != null) {
           isUserRegistered(FirebaseAuth.getInstance().getUid());
-
-
         }
-//        signoutBtn.setEnabled(true);
         return;
       } else {
         // Sign in failed

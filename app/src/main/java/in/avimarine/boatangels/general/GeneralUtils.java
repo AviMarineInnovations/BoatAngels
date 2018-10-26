@@ -109,6 +109,9 @@ public class GeneralUtils {
       case Integer:
         Integer i = tryParseInt(text);
         return i != null && isInBounds(i, min, max);
+      case Long:
+        Long l = tryParseLong(text);
+        return l!= null && isInBounds(l,min,max);
       default:
         return false;
     }
@@ -151,7 +154,7 @@ public class GeneralUtils {
 
 
   enum CLAZZ {
-    Integer, Double, Float
+    Integer, Double, Float, Long
 
   }
 
@@ -244,5 +247,7 @@ public class GeneralUtils {
   public static float millisToHours(long millis){
     return millis/3600000f;
   }
+
+
 
 }
