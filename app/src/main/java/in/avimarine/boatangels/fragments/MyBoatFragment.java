@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -80,8 +78,7 @@ public class MyBoatFragment extends Fragment {
    * @return A new instance of fragment MyBoatFragment.
    */
   public static MyBoatFragment newInstance() {
-    MyBoatFragment fragment = new MyBoatFragment();
-    return fragment;
+    return new MyBoatFragment();
   }
 
   @Override
@@ -168,12 +165,7 @@ public class MyBoatFragment extends Fragment {
       GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
       GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.no_boat_iv,R.id.no_boat_tv);
       ImageView iv = ((Activity)mContext).findViewById(R.id.no_boat_iv);
-      iv.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          addBoatButton();
-        }
-      });
+      iv.setOnClickListener(view -> addBoatButton());
     }
 
   }
@@ -246,8 +238,7 @@ public class MyBoatFragment extends Fragment {
       TextView message = ((Activity)mContext).findViewById(R.id.message_TextView);
       CircleImageView civ = ((Activity)mContext).findViewById(R.id.boat_image);
       title.setText(inspection.boatName);
-      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)) + "\nby "
-          + inspection.inspectorName);
+      subTitle.setText(getString(R.string.inspection_text, GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)), inspection.inspectorName));
       message.setText(inspection.message);
       setBoatPhoto(civ, currentBoat.getPhotoName());
       ItemsListAdapter myItemsListAdapter;
@@ -293,9 +284,7 @@ public class MyBoatFragment extends Fragment {
       return false;
     }
     if (getMaxWindDaysArray(weather.getWindForecast()).size() == 6) {
-      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120) {
-        return true;
-      }
+      return GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120;
     }
     return false;
   }
@@ -316,7 +305,10 @@ public class MyBoatFragment extends Fragment {
   }
 
   private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
+
     Map<Integer, Wind> ret = new TreeMap<>();
+    if (windForecast==null)
+      return ret;
     int day = -1;
     double speed = 0;
     double dir;

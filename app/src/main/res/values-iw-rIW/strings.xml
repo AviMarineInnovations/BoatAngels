@@ -70,5 +70,25 @@
   <string name="my_inspection_tv">הבדיקות שלי</string>
   <string name="new_inspection">בדיקה חדשה</string>
   <string name="view_inspection">צפה בבדיקה</string>
+  <string name="search_boat">חפש סירות</string>
+  <string name="version_not_supported_dialog_title">הגרסה אינה נתמכת</string>
+  <string name="version_not_supported_dialog_message">הגרסה אשר מותקנת אינה נתמכת יותר. לחץ אישור על מנת לפתוח את חנות היישומונים והורד את הגרסה החדשה ביותר.</string>
+  <string name="dlg_ok">אישור</string>
+  <string name="dlg_cancel">ביטול</string>
+  <string name="pref_title_social_recommendations">אפשר המלצות חברתיות</string>
+  <string name="pref_default_display_name">ישראל ישראלי</string>
+  <string name="pref_title_sync_frequency">דחיפות הסנכרון</string>
+  <string name="pref_title_system_sync_settings">הגדרות סינכרון מערכתיות</string>
+  <string name="boat_photo_content_description">תמונת סירה</string>
+  <string name="tab_text_4">הגדרות</string>
+  <string name="message_hint">הודעה</string>
+  <string name="loading_inspection">טוען את הבדיקה האחרונה</string>
+  <string name="boat_code">הכנס קוד</string>
+  <string name="add_owner">הוסף בעלים</string>
+  <string name="add_new_boat">הוסף סירה חדשה</string>
+  <string name="or_select_exiting_boat">או בחר סירה קיימת</string>
+  <string name="select">בחר</string>
+  <string name="no_boat_nno_worries_none_day_you_ll_have_one">אין סירה?\nלא נורא,\nמתישהוא תהיה לך גם אחת!</string>
+  <string name="inspection_text">נבדק בתאריך %1$s\nעל ידי %2$s</string>
 
 </resources>

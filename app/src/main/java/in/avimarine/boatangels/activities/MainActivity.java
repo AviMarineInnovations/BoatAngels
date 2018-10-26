@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
@@ -39,9 +38,7 @@ import in.avimarine.boatangels.general.Setting;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by GIGAMOLE on 28.03.2016.
- */
+
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,
     OnSharedPreferenceChangeListener {
 
@@ -50,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   private static final int RC_SIGN_IN = 123;
   private final iDb db = new FireBase();
   private ViewPager mPager;
-  private PagerAdapter mPagerAdapter;
   private User currentUser = null;
   private Menu menu;
 
@@ -164,28 +160,26 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   private void signout() {
     AuthUI.getInstance()
         .signOut(MainActivity.this)
-        .addOnCompleteListener(task -> {
-          startActivityForResult(
-              AuthUI.getInstance()
-                  .createSignInIntentBuilder()
-                  .setAvailableProviders(
-                      Arrays
-                          .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                              new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                  .build(),
-              RC_SIGN_IN);
-        });
+        .addOnCompleteListener(task -> startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(
+                    Arrays
+                        .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                .build(),
+            RC_SIGN_IN));
   }
 
   private void initUI() {
     // Instantiate a ViewPager and a PagerAdapter.
-    mPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
-    mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+    mPager = findViewById(R.id.vp_horizontal_ntb);
+    PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
 
     final String[] colors = getResources().getStringArray(R.array.default_preview);
 
-    final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
+    final NavigationTabBar navigationTabBar = findViewById(R.id.ntb_horizontal);
     final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
     models.add(
         new NavigationTabBar.Model.Builder(
@@ -219,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     navigationTabBar.setViewPager(mPager, 0);
 
     navigationTabBar.post(() -> {
-      final View viewPager = findViewById(R.id.vp_horizontal_ntb);
-      ((ViewGroup.MarginLayoutParams) viewPager.getLayoutParams()).topMargin =
+//      final View viewPager = findViewById(R.id.vp_horizontal_ntb);
+      ((ViewGroup.MarginLayoutParams) mPager.getLayoutParams()).topMargin =
           (int) -navigationTabBar.getBadgeMargin();
-      viewPager.requestLayout();
+      mPager.requestLayout();
     });
 
     navigationTabBar
@@ -337,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
    */
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
-    public ScreenSlidePagerAdapter(FragmentManager fm) {
+    ScreenSlidePagerAdapter(FragmentManager fm) {
       super(fm);
     }
 

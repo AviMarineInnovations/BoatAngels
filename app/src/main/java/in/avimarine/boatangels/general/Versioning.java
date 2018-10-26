@@ -16,7 +16,7 @@ import in.avimarine.boatangels.db.iDb;
 public class Versioning {
 
   private static final String TAG = "Versioning";
-  private Context c;
+  private final Context c;
   private iDb db;
 
   public Versioning(Context c) {
@@ -57,7 +57,7 @@ public class Versioning {
       PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
       return pInfo.versionCode;
     } catch (PackageManager.NameNotFoundException e) {
-      Log.d(TAG, "Error retreiving versioncode: ", e);
+      Log.d(TAG, "Error retrieving version code: ", e);
     }
     return -1;
   }

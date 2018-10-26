@@ -24,7 +24,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Query.Direction;
 import in.avimarine.boatangels.BoatHolder;
 import in.avimarine.boatangels.R;
-import in.avimarine.boatangels.activities.BoatForInspectionActivity;
 import in.avimarine.boatangels.activities.InspectBoatActivity;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
@@ -139,7 +138,7 @@ public class BoatsForInspectionFragment extends Fragment {
 
   }
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_boats_for_inspection, container, false);
     ButterKnife.bind(getActivity());

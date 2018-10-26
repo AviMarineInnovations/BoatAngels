@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -103,16 +102,9 @@ public class InspectBoatActivity extends AppCompatActivity {
     myItemsListAdapter = new ItemsListAdapter(this, items, true);
     listView.setAdapter(myItemsListAdapter);
 
-    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view,
-          int position, long id) {
-        Toast.makeText(InspectBoatActivity.this,
-            ((Item) (parent.getItemAtPosition(position))).ItemString,
-            Toast.LENGTH_LONG).show();
-      }
-    });
+    listView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(InspectBoatActivity.this,
+        ((Item) (parent.getItemAtPosition(position))).ItemString,
+        Toast.LENGTH_LONG).show());
 
     setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
     setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
@@ -121,19 +113,17 @@ public class InspectBoatActivity extends AppCompatActivity {
   }
 
     void setInspectionSeverityIcon(ImageButton button, StatusEnum status){
-      button.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
+      button.setOnClickListener(v -> {
         findViewById(R.id.good_inspection_btn).setSelected(false); //cancel another pressed button before pressing another
         findViewById(R.id.bad_inspection_btn).setSelected(false);
         findViewById(R.id.very_bad_inspection_btn).setSelected(false);
         v.setSelected(true);
         inspectionStatus = status;
-      }
-    });
+      });
     }
 
   private void initItems() {
-    items = new ArrayList<Item>();
+    items = new ArrayList<>();
 
 //    TypedArray arrayDrawable = getResources().obtainTypedArray(R.array.resicon);
 
@@ -264,12 +254,8 @@ public class InspectBoatActivity extends AppCompatActivity {
       viewHolder.text.setText(itemStr);
       viewHolder.checkBox.setTag(position);
       if (editable) {
-        viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            list.get(position).checked = ((CheckBoxTriState) view).getState();
-          }
-        });
+        viewHolder.checkBox.setOnClickListener(
+            view -> list.get(position).checked = ((CheckBoxTriState) view).getState());
         viewHolder.checkBox.setEnabled(true);
       }
       else{

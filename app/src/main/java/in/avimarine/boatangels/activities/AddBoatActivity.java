@@ -38,7 +38,7 @@ public class AddBoatActivity extends AppCompatActivity {
   private final List<Marina> marinas = new ArrayList<>();
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.marina_spinner)
-  Spinner marina_spinner;
+  Spinner marinaSpinner;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.boatname_et)
   EditText boatNameEt;
@@ -55,7 +55,6 @@ public class AddBoatActivity extends AppCompatActivity {
   @BindView(R.id.boat_club_et)
   EditText boatClubEt;
   private iDb db;
-  private MarinaSpinnerAdapter adapter;
 
 
   @Override
@@ -63,7 +62,7 @@ public class AddBoatActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_boat);
     ButterKnife.bind(this);
-    adapter = new MarinaSpinnerAdapter(this, marinas);
+    MarinaSpinnerAdapter adapter = new MarinaSpinnerAdapter(this, marinas);
     db = new FireBase();
     db.getMarinasInCountry("Israel", task -> {
       if (task.isSuccessful()) {
@@ -79,15 +78,15 @@ public class AddBoatActivity extends AppCompatActivity {
       }
     });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    marina_spinner.setAdapter(adapter);
+    marinaSpinner.setAdapter(adapter);
   }
 
   @OnClick(R.id.add_boat_btn)
   public void onAddBtnClick(View v) {
 
     Boat b = new Boat();
-    if (marina_spinner.getSelectedItem() == null) {
-      TextView tv = (TextView) marina_spinner.getSelectedView();
+    if (marinaSpinner.getSelectedItem() == null) {
+      TextView tv = (TextView) marinaSpinner.getSelectedView();
       if (tv != null) {
         tv.setError("No marina was selected");
       } else {
@@ -95,8 +94,8 @@ public class AddBoatActivity extends AppCompatActivity {
       }
       return;
     }
-    b.setMarinaUuid(((Marina) marina_spinner.getSelectedItem()).getUuid());
-    b.setMarinaName(((Marina) marina_spinner.getSelectedItem()).getName());
+    b.setMarinaUuid(((Marina) marinaSpinner.getSelectedItem()).getUuid());
+    b.setMarinaName(((Marina) marinaSpinner.getSelectedItem()).getName());
     b.setName(boatNameEt.getText().toString());
     b.setModel(boatModelEt.getText().toString());
     b.setClubName(boatClubEt.getText().toString());
@@ -178,7 +177,7 @@ public class AddBoatActivity extends AppCompatActivity {
     private final List<Marina> data;
     private final Context context;
 
-    public MarinaSpinnerAdapter(Context context,
+    MarinaSpinnerAdapter(Context context,
         List<Marina> values) {
       super(context, android.R.layout.simple_spinner_item, values);
       this.context = context;

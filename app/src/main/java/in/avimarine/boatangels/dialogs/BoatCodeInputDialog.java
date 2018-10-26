@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,9 +19,8 @@ import in.avimarine.boatangels.R;
  */
 public class BoatCodeInputDialog extends DialogFragment {
     private static final String TAG = "BoatCodeInputDialog";
-    public String accessCode;
     private Context c;
-    BoatCodeInputDialogListener mListener;
+    private BoatCodeInputDialogListener mListener;
 
     public static BoatCodeInputDialog newInstance(Context c) {
         BoatCodeInputDialog frag = new BoatCodeInputDialog();
@@ -57,16 +55,10 @@ public class BoatCodeInputDialog extends DialogFragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_boat_code_input, null);
         builder.setView(v)
                 .setTitle(title)
-                .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onBoatCodeDialogPositiveClick(BoatCodeInputDialog.this);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        BoatCodeInputDialog.this.getDialog().cancel();
-                    }
-                });
+                .setPositiveButton("Enter",
+                    (dialog, id) -> mListener.onBoatCodeDialogPositiveClick(BoatCodeInputDialog.this))
+                .setNegativeButton("Cancel",
+                    (dialog, id) -> BoatCodeInputDialog.this.getDialog().cancel());
 
         return builder.create();
     }

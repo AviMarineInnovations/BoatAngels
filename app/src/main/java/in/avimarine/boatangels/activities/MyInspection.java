@@ -2,26 +2,18 @@ package in.avimarine.boatangels.activities;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query.Direction;
-import com.google.firebase.firestore.QuerySnapshot;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Inspection;
 import java.text.DateFormat;
@@ -56,72 +48,61 @@ public class MyInspection extends AppCompatActivity {
 
     db.collection("inspections").orderBy("inspectionTime", Direction.DESCENDING)
         .get()
-        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-          @Override
-          public void onComplete(@NonNull Task<QuerySnapshot> task) {
-            if (task.isSuccessful()) {
-              for (DocumentSnapshot document : task.getResult()) {
-                Inspection inspec = document.toObject(Inspection.class);
-                if (inspec.inspectorUid.equals(uid)) {
-                  String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
-                  arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
-                      inspecDate + inspeData + "\n" +
-                      pointsEarned + inspec.pointsEarned);
-                  Log.d(TAG, document.getId() + " => " + document.getData());
+        .addOnCompleteListener(task -> {
+          if (task.isSuccessful()) {
+            for (DocumentSnapshot document : task.getResult()) {
+              Inspection inspec = document.toObject(Inspection.class);
+              if (inspec.inspectorUid.equals(uid)) {
+                String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
+                arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
+                    inspecDate + inspeData + "\n" +
+                    pointsEarned + inspec.pointsEarned);
+                Log.d(TAG, document.getId() + " => " + document.getData());
 
-                  hashMap.put(indexList, inspec.boatUuid);
-                  hashMapInspeUid.put(indexList, inspec.getUuid());
-                  indexList++;
-                }
+                hashMap.put(indexList, inspec.boatUuid);
+                hashMapInspeUid.put(indexList, inspec.getUuid());
+                indexList++;
               }
-              listView.setAdapter(arrayAdapter);
-            } else {
-              Log.d(TAG, "Cannot find inspection");
             }
-
+            listView.setAdapter(arrayAdapter);
+          } else {
+            Log.d(TAG, "Cannot find inspection");
           }
+
         });
-    listView.setOnItemClickListener(new OnItemClickListener() {
-      public void onItemClick(AdapterView<?> arg0, View v, int position,
-          long arg3) {
+    listView.setOnItemClickListener((arg0, v, position, arg3) -> {
 
-        inspecUid = hashMapInspeUid.get(position);
-        String uid = hashMap.get(position);
-        Log.d(TAG, "Name : " + uid + " " + position);
+      inspecUid = hashMapInspeUid.get(position);
+      String uid = hashMap.get(position);
+      Log.d(TAG, "Name : " + uid + " " + position);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
-        // set title
-        alertDialogBuilder.setTitle(getString(R.string.what_you_like_to_do));
+      // set title
+      alertDialogBuilder.setTitle(getString(R.string.what_you_like_to_do));
 
-        // set dialog message
-        alertDialogBuilder
-            .setCancelable(true)
-            .setPositiveButton(getString(R.string.new_inspection),
-                new DialogInterface.OnClickListener() {
+      // set dialog message
+      alertDialogBuilder
+          .setCancelable(true)
+          .setPositiveButton(getString(R.string.new_inspection),
+              (dialog, id) -> {
 
-                  public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(MyInspection.this, InspectBoatActivity.class);
+                intent.putExtra(getString(R.string.intent_extra_boat_uuid), uid);
+                startActivity(intent);
+              })
+          .setNegativeButton(getString(R.string.view_inspection),
+              (dialog, id) -> {
+                Intent intent1 = new Intent(MyInspection.this, InspectionResultActivity.class);
+                intent1.putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
+                startActivity(intent1);
+              });
 
-                    Intent intent = new Intent(MyInspection.this, InspectBoatActivity.class);
-                    intent.putExtra(getString(R.string.intent_extra_boat_uuid), uid);
-                    startActivity(intent);
-                  }
-                })
-            .setNegativeButton(getString(R.string.view_inspection),
-                new DialogInterface.OnClickListener() {
-                  public void onClick(DialogInterface dialog, int id) {
-                    Intent intent1 = new Intent(MyInspection.this, InspectionResultActivity.class);
-                    intent1.putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
-                    startActivity(intent1);
-                  }
-                });
+      // create alert dialog
+      AlertDialog alertDialog = alertDialogBuilder.create();
 
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-      }
+      // show it
+      alertDialog.show();
     });
   }
 

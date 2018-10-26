@@ -44,10 +44,11 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_add_boat_light"/>
+    app:srcCompat="@drawable/ic_add_boat_light"
+    android:contentDescription="@string/add_boat_btn_text"/>
   <TextView
     android:id="@+id/no_boat_tv"
-    android:text="No boat?\nNo worries,\none day you'll have one!"
+    android:text="@string/no_boat_nno_worries_none_day_you_ll_have_one"
     android:textColor="@color/list_item_text_color"
     android:gravity="center"
     android:textSize="20sp"

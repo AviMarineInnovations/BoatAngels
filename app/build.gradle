@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.26.1'
     }
 }
 apply plugin: 'com.android.application'
@@ -27,7 +27,7 @@ android {
         if (System.getenv("AMIT")) {
             release {
                 // Load keystore
-                def keystorePropertiesFile = rootProject.file("keystore.properties");
+                def keystorePropertiesFile = rootProject.file("keystore.properties")
                 def keystoreProperties = new Properties()
                 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
                 storeFile = file(keystoreProperties['storeFile'])

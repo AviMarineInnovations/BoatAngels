@@ -28,9 +28,9 @@ import java.util.List;
 
 public class SearchBoatActivity extends AppCompatActivity implements BoatCodeInputDialogListener {
 
-  public static final String TAG = "SearchBoatActivity";
+  private static final String TAG = "SearchBoatActivity";
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-  private List<Boat> boatList = new ArrayList<>();
+  private final List<Boat> boatList = new ArrayList<>();
   private Boat selectedBoat = null;
 
 
@@ -92,7 +92,7 @@ public class SearchBoatActivity extends AppCompatActivity implements BoatCodeInp
   }
   @Override
   public void onBoatCodeDialogPositiveClick(DialogFragment dialog) {
-    EditText accessCodeText = (EditText) dialog.getDialog().findViewById(R.id.access_code);
+    EditText accessCodeText = dialog.getDialog().findViewById(R.id.access_code);
     if (accessCodeText==null)
       return;
     if (accessCodeText.getText()==null)

@@ -102,16 +102,16 @@ public class GeneralUtils {
     switch (z) {
       case Float:
         Float f = tryParseFloat(text);
-        return f != null && isInBounds(f, min, max);
+        return isInBounds(f, min, max);
       case Double:
         Double d = tryParseDouble(text);
-        return d != null && isInBounds(d, min, max);
+        return isInBounds(d, min, max);
       case Integer:
         Integer i = tryParseInt(text);
-        return i != null && isInBounds(i, min, max);
+        return isInBounds(i, min, max);
       case Long:
         Long l = tryParseLong(text);
-        return l!= null && isInBounds(l,min,max);
+        return isInBounds(l, min, max);
       default:
         return false;
     }
