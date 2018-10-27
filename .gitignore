@@ -64,3 +64,9 @@ app/src/main/res/values/keys.xml
 .idea/caches/
 app/fabric.properties
 app/release/production/release/
+boatangels.admin/boatangels-stage-firebase-adminsdk-re4eb-599e513adf.json
+boatangels.admin/boatangels-prod-firebase-adminsdk-i5x24-54be28ac41.json
+boatangels.admin/boatangels-dev-firebase-adminsdk-56e58-24c5e84977.json
+boatangels.admin/.idea/
+boatangels.admin/db/
+boatangels.admin/gradle/wrapper/gradle-wrapper.jar
