@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -93,6 +94,10 @@ public class MyBoatFragment extends Fragment {
     }
     Button askForInsptnBtn = ((Activity)mContext).findViewById(R.id.ask_inspection);
     askForInsptnBtn.setOnClickListener(view -> {
+      if (currentBoat == null){
+        Toast.makeText(getActivity(),R.string.no_boat_for_inspection_msg,Toast.LENGTH_LONG).show();
+        return;
+      }
       Intent intent = new Intent(mContext, AskInspectionActivity.class);
       startActivity(intent);
     });
