@@ -1,15 +1,37 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+  <style name="AppTheme" parent="Theme.AppCompat.Light">
     <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <item name="colorPrimary">@color/titlebackgroundcolor</item>
+    <item name="android:textColorPrimary">@color/lightbackground</item>
+    <item name="colorPrimaryDark">@color/background</item>
     <item name="colorAccent">@color/colorAccent</item>
+    <item name="preferenceTheme">
+      @style/AppTheme.Preference
+    </item>
+    <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+  </style>
+  <style name="WindowTitleBackground">
+    <item name="android:background">@color/titlebackgroundcolor</item>
   </style>
 
+  <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowBackground">@drawable/background_splash</item>
+  </style>
+
+
+  <style name="AppTheme.Preference" parent="@style/PreferenceThemeOverlay.v14.Material">
+    <item name="android:textColorPrimary">@color/list_item_text_color</item>
+    <item name="android:textColor">@color/list_item_text_color</item>
+    <item name="android:textColorSecondary">@color/pref_text_summary</item>
+
+  </style>
+
+
   <style name="AppTheme.NoActionBar">
-    <item name="windowActionBar">false</item>
+    <!--<item name="windowActionBar">false</item>   -->
     <item name="windowNoTitle">true</item>
   </style>
 
@@ -18,35 +40,44 @@
     <item name="bowlines">#d92c2f</item>
     <item name="sternlines">#d92c2f</item>
   </style>
+
   <style name="VCheckedRopes" parent="UncheckedBoat">
     <item name="bowlines">#0abf00</item>
     <item name="sternlines">#0abf00</item>
   </style>
+
   <style name="XCheckedJibVCheckedMain" parent="UncheckedBoat">
     <item name="jib">#d92c2f</item>
     <item name="main">#0abf00</item>
   </style>
+
   <style name="VCheckedJibVCheckedMain" parent="UncheckedBoat">
     <item name="jib">#0abf00</item>
     <item name="main">#0abf00</item>
   </style>
+
   <style name="XCheckedJibXCheckedMain" parent="UncheckedBoat">
     <item name="jib">#d92c2f</item>
     <item name="main">#d92c2f</item>
   </style>
+
   <style name="VCheckedJibXCheckedMain" parent="UncheckedBoat">
     <item name="jib">#0abf00</item>
     <item name="main">#d92c2f</item>
   </style>
+
   <style name="UnCheckedJibVCheckedMain" parent="UncheckedBoat">
     <item name="main">#0abf00</item>
   </style>
+
   <style name="VCheckedJibUnCheckedMain" parent="UncheckedBoat">
     <item name="jib">#0abf00</item>
   </style>
+
   <style name="UnCheckedJibXCheckedMain" parent="UncheckedBoat">
     <item name="main">#d92c2f</item>
   </style>
+
   <style name="XCheckedJibUnCheckedMain" parent="UncheckedBoat">
     <item name="jib">#d92c2f</item>
   </style>
@@ -58,4 +89,10 @@
     <item name="jib">@color/colorPrimaryDark</item>
     <item name="main">@color/colorPrimaryDark</item>
   </style>
+
+  <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>-->
+
+  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
 </resources>

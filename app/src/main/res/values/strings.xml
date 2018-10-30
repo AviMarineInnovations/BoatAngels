@@ -5,6 +5,7 @@
   <string name="inspection_for_yacht_title">Inspection for Yacht:</string>
   <string name="inspect_boat_btn_text">Inspect Boat</string>
   <string name="add_boat_btn_text">Add Boat</string>
+  <string name="inspect_by_me_btn">My Inspection</string>
   <string name="boat_name_text">Name</string>
   <string name="boat_model_text">Model</string>
   <string name="marina_text">Marina</string>
@@ -36,8 +37,21 @@
   <string name="show_yactie_point">you have:</string>
   <string name="ask_for_inspection_title">Ask for inspection</string>
   <string name="inspect_me">Inspect Me</string>
+  <string name="inspect_boat">Boat: </string>
+  <string name="points_earned">Points Earned: </string>
+  <string name="inspect_date">Inspected On: </string>
+  <string name="my_inspection_tv">My Inspection</string>
+  <string name="what_you_like_to_do">what would you like to do ?</string>
+  <string name="new_inspection">New Inspection</string>
+  <string name="view_inspection">View Inspection</string>
   <string name="inspect_points_error_message">Insert Points!</string>
   <string name="max_point_error_message">You do not have enough points!</string>
+  <string name="search_boat">Search Boat…</string>
+  <string name="db_compatible_version" translatable="false">CompatibleVersion</string>
+  <string name="version_not_supported_dialog_title">Version not supported</string>
+  <string name="version_not_supported_dialog_message">The version installed is not supported any more. Press OK to open Play store and download a newer version.</string>
+  <string name="dlg_ok">OK</string>
+  <string name="dlg_cancel">Cancel</string>
   <plurals name="points_txt">
     <item quantity="one">One Point</item>
     <item quantity="other">%d Points</item>
@@ -68,7 +82,6 @@
     <item>iw</item>
     <item>en</item>
   </string-array>
-
 
 
   <!-- Example settings for Data & Sync -->
@@ -132,5 +145,21 @@
   <string name="pref_title_shabbath_observer">Shabbath Observer</string>
   <string name="pref_description_shabbath_observer">If you do not want to be disturbed or disturb others on Shabbath</string>
   <string name="boat_photo_content_description">Boat photo</string>
+  <string name="title_activity_main2" translatable="false">Boat Angels</string>
+  <string name="tab_text_1">My Boat</string>
+  <string name="tab_text_2">Inspect Boat</string>
+  <string name="tab_text_3">My Activity</string>
+  <string name="tab_text_4">Settings</string>
+  <string name="action_settings">Settings</string>
+  <string name="message_hint">Message</string>
+  <string name="loading_inspection">Loading latest inspection…</string>
+  <string name="boat_code">Enter code</string>
+  <string name="add_owner">Add owner</string>
+  <string name="add_new_boat">Add new boat</string>
+  <string name="or_select_exiting_boat">Or select exiting boat</string>
+  <string name="select">Select</string>
+  <string name="no_boat_nno_worries_none_day_you_ll_have_one">No boat?\nNo worries,\none day you\'ll have one!</string>
+  <string name="inspection_text">Was inspected on %1$s\nby %2$s</string>
+  <string name="no_boat_for_inspection_msg">Unfortunately you don\'t have a boat to inspect...</string>
 
 </resources>

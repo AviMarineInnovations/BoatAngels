@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
@@ -6,8 +7,16 @@
   android:layout_height="match_parent"
   tools:context="in.avimarine.boatangels.activities.BoatForInspectionActivity">
 
+
+  <SearchView
+    android:id="@+id/search_view_inspecton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:queryHint="Search Boat..."/>
+
   <android.support.v7.widget.RecyclerView
     android:id="@+id/boats_for_inspection_recyclerview"
+    android:layout_marginTop="60dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

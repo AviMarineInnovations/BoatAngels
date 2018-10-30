@@ -41,18 +41,21 @@
       android:textStyle="bold"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@color/list_item_text_color"
       tools:text="Name"/>
     <TextView
       android:id="@+id/club_name_tv"
       style="@style/TextAppearance.AppCompat.Small"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@color/list_item_text_color"
       tools:text="Club"/>
     <TextView
       android:id="@+id/sum_offer_points"
       style="@style/TextAppearance.AppCompat.Small"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@color/list_item_text_color"
       tools:text="Offer"/>
 
 

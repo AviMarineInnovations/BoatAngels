@@ -1,6 +1,9 @@
 package in.avimarine.boatangels.db;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
 //import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -9,12 +12,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import in.avimarine.boatangels.BuildConfig;
 import in.avimarine.boatangels.GlideApp;
 import in.avimarine.boatangels.db.objects.Boat;
+import in.avimarine.boatangels.db.objects.GlobalSettings;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Marina;
 import in.avimarine.boatangels.db.objects.User;
@@ -70,14 +75,30 @@ public class FireBase implements iDb {
     final long ONE_MEGABYTE = 1024 * 1024;
 
 
-    // Load the image using Glide
-    GlideApp.with(c)
-        .load(imageRef)
-        .error(errorImg)
-        .placeholder(loadingImg)
-        .into(iv);
+    if (isValidContextForGlide(c)) {
+      // Load the image using Glide
+      GlideApp.with(c)
+          .load(imageRef)
+          .error(errorImg)
+          .placeholder(loadingImg)
+          .into(iv);
+    }
   }
-
+  public static boolean isValidContextForGlide(final Context context) {
+    if (context == null) {
+      return false;
+    }
+    if (context instanceof Activity) {
+      final Activity activity = (Activity) context;
+      if(Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2){
+        return !activity.isDestroyed() && !activity.isFinishing();
+      }
+      else {
+        return !activity.isChangingConfigurations() && !activity.isFinishing();
+      }
+    }
+    return true;
+  }
   @Override
   public void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
     mFirestore.collection("boats").document(uuid).get().addOnCompleteListener(listener);
@@ -104,6 +125,12 @@ public class FireBase implements iDb {
   @Override
   public void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
     mFirestore.collection("inspections").document(uuid).get().addOnCompleteListener(listener);
+  }
+
+  @Override
+  public void getLatestInspection(String boatUuid, OnCompleteListener<QuerySnapshot> listener) {
+    mFirestore.collection("inspections").whereEqualTo("boatUuid", boatUuid).orderBy("inspectionTime",
+        Direction.DESCENDING).limit(1).get().addOnCompleteListener(listener);
   }
 
   @Override
@@ -144,7 +171,16 @@ public class FireBase implements iDb {
 
   @Override
   public void updateWeather(String uuid, Weather w) {
-
     mFirestore.collection("marinas").document(uuid).update("weather", w);
+  }
+
+  @Override
+  public void getSupportedVersion(OnCompleteListener<DocumentSnapshot> listener) {
+    mFirestore.collection("globalSettings").document("versions").get().addOnCompleteListener(listener);
+  }
+
+  @Override
+  public void setSupportedVersion(long version) {
+    mFirestore.collection("globalSettings").document("versions").set(new GlobalSettings(version));
   }
 }

@@ -34,6 +34,8 @@ public interface iDb {
 
   void getInspection(String uuid, OnCompleteListener<DocumentSnapshot> listener);
 
+  void getLatestInspection(String boatUuid, OnCompleteListener<QuerySnapshot> listener);
+
   void addInspection(Inspection inspection);
 
   void setUser(User user);
@@ -49,4 +51,8 @@ public interface iDb {
   User getCurrentUser();
 
   void updateWeather(String uuid, Weather w);
+
+  void getSupportedVersion(OnCompleteListener<DocumentSnapshot> listener);
+
+  void setSupportedVersion(long version);
 }
