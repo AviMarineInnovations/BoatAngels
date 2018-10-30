@@ -3,10 +3,9 @@ package in.avimarine.boatangels;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.widget.ImageView; //pazit
+import android.widget.ImageView;
 import android.widget.TextView;
 import in.avimarine.boatangels.db.objects.Inspection;
-import in.avimarine.boatangels.db.objects.Inspection.StatusEnum;
 import java.util.Date;
 /**
  * This file is part of an

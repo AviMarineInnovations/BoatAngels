@@ -16,24 +16,24 @@ import in.avimarine.boatangels.db.iDb;
 public class Versioning {
 
   private static final String TAG = "Versioning";
-  private Context c;
-  private iDb commManager;
+  private final Context c;
+  private iDb db;
 
   public Versioning(Context c) {
     this.c = c;
-    commManager = new FireBase();
+    db = new FireBase();
   }
 
   public void getSupportedVersion(OnGetSupportedVersionListener<Long> listener) {
     try {
-      commManager.getSupportedVersion(task -> {
+      db.getSupportedVersion(task -> {
         if (task.isSuccessful()) {
           DocumentSnapshot document = task.getResult();
           long supportedVersion;
           if (!document.exists()) {
             Log.d(TAG,"No supported version value found in DB");
             supportedVersion = getInstalledVersionCode();
-            commManager.setSupportedVersion(supportedVersion);
+            db.setSupportedVersion(supportedVersion);
             Log.d(TAG,"Setting the minimal supported version to current version: " + supportedVersion);
           } else {
             supportedVersion = document.getLong("compatibleVersion");
@@ -42,6 +42,9 @@ public class Versioning {
             }
           }
           listener.onComplete(supportedVersion);
+        }
+        else {
+          Log.e(TAG,"Unable to get version ",task.getException());
         }
       });
     } catch (Exception e) {
@@ -54,7 +57,7 @@ public class Versioning {
       PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
       return pInfo.versionCode;
     } catch (PackageManager.NameNotFoundException e) {
-      Log.d(TAG, "Error retreiving versioncode: ", e);
+      Log.d(TAG, "Error retrieving version code: ", e);
     }
     return -1;
   }

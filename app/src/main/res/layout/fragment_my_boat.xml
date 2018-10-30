@@ -7,11 +7,13 @@
 
 
   <include
+    android:visibility="visible"
     android:id="@+id/inspection_result"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     layout="@layout/fragment_inspection_result"/>
   <Button
+    android:visibility="visible"
     android:id="@+id/ask_inspection"
     android:layout_width="wrap_content"
     android:layout_height="55dp"
@@ -21,6 +23,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/inspection_result"/>
   <in.avimarine.boatangels.customViews.WeatherTableView
+    android:visibility="visible"
     android:id="@+id/tableLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -32,5 +35,29 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:speed_units="Knots"/>
+
+  <ImageView
+    android:id="@+id/no_boat_iv"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_add_boat_light"
+    android:contentDescription="@string/add_boat_btn_text"/>
+  <TextView
+    android:id="@+id/no_boat_tv"
+    android:text="@string/no_boat_nno_worries_none_day_you_ll_have_one"
+    android:textColor="@color/list_item_text_color"
+    android:gravity="center"
+    android:textSize="20sp"
+    android:visibility="gone"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/no_boat_iv"/>
+
 
 </android.support.constraint.ConstraintLayout>

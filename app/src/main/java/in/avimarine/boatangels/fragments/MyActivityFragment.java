@@ -1,50 +1,30 @@
 package in.avimarine.boatangels.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import butterknife.ButterKnife;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Query.Direction;
-import com.google.firebase.firestore.QuerySnapshot;
-import in.avimarine.boatangels.BoatHolder;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.activities.InspectBoatActivity;
 import in.avimarine.boatangels.activities.InspectionResultActivity;
-import in.avimarine.boatangels.activities.MyInspection;
 import in.avimarine.boatangels.db.FireBase;
-import in.avimarine.boatangels.db.iDb;
-import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
-import in.avimarine.boatangels.general.GeneralUtils;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +84,7 @@ public class MyActivityFragment extends Fragment {
 
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
     ButterKnife.bind(getActivity());
@@ -132,68 +112,62 @@ public class MyActivityFragment extends Fragment {
 
     db.collection("inspections").orderBy("inspectionTime", Direction.DESCENDING)
         .get()
-        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-          @Override
-          public void onComplete(@NonNull Task<QuerySnapshot> task) {
-            if (task.isSuccessful()) {
-              for (DocumentSnapshot document : task.getResult()) {
-                Inspection inspec = document.toObject(Inspection.class);
-                if (inspec.inspectorUid.equals(uid) || inspec.boatUuid.equals(myBoatUuid)) {
-                  String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
-                  arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
-                      inspecDate + inspeData + "\n" +
-                      pointsEarned + inspec.pointsEarned);
-                  Log.d(TAG, document.getId() + " => " + document.getData());
+        .addOnCompleteListener(task -> {
+          if (task.isSuccessful()) {
+            for (DocumentSnapshot document : task.getResult()) {
+              Inspection inspec = document.toObject(Inspection.class);
+              if (inspec.inspectorUid.equals(uid) || inspec.boatUuid.equals(myBoatUuid)) {
+                String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
+                arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
+                    inspecDate + inspeData + "\n" +
+                    pointsEarned + inspec.pointsEarned);
+                Log.d(TAG, document.getId() + " => " + document.getData());
 
-                  hashMap.put(indexList, inspec.boatUuid);
-                  hashMapInspeUid.put(indexList, inspec.getUuid());
-                  indexList++;
-                }
+                hashMap.put(indexList, inspec.boatUuid);
+                hashMapInspeUid.put(indexList, inspec.getUuid());
+                indexList++;
               }
-              listView.setAdapter(arrayAdapter);
-            } else {
-              Log.d(TAG, "Cannot find inspection");
             }
-
+            listView.setAdapter(arrayAdapter);
+          } else {
+            Log.d(TAG, "Cannot find inspection");
           }
+
         });
-    listView.setOnItemClickListener(new OnItemClickListener() {
-      public void onItemClick(AdapterView<?> arg0, View v, int position,
-          long arg3) {
+    listView.setOnItemClickListener((arg0, v, position, arg3) -> {
 
-        inspecUid = hashMapInspeUid.get(position);
-        String uid = hashMap.get(position);
-        Log.d(TAG, "Name : " + uid + " " + position);
+      inspecUid = hashMapInspeUid.get(position);
+      String uid = hashMap.get(position);
+      Log.d(TAG, "Name : " + uid + " " + position);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
-        // set title
-        alertDialogBuilder.setTitle(getString(R.string.what_you_like_to_do));
+      // set title
+      alertDialogBuilder.setTitle(getString(R.string.what_you_like_to_do));
 
-        // set dialog message
-        alertDialogBuilder
-            .setCancelable(true)
-            .setPositiveButton(getString(R.string.new_inspection),
-                (dialog, id) -> {
+      // set dialog message
+      alertDialogBuilder
+          .setCancelable(true)
+          .setPositiveButton(getString(R.string.new_inspection),
+              (dialog, id) -> {
 
-                  Intent intent = new Intent(getActivity(), InspectBoatActivity.class);
-                  intent.putExtra(getString(R.string.intent_extra_boat_uuid), uid);
-                  startActivity(intent);
-                })
-            .setNegativeButton(getString(R.string.view_inspection),
-                (dialog, id) -> {
-                  Intent intent1 = new Intent(getActivity(), InspectionResultActivity.class);
-                  intent1
-                      .putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
-                  startActivity(intent1);
-                });
+                Intent intent = new Intent(getActivity(), InspectBoatActivity.class);
+                intent.putExtra(getString(R.string.intent_extra_boat_uuid), uid);
+                startActivity(intent);
+              })
+          .setNegativeButton(getString(R.string.view_inspection),
+              (dialog, id) -> {
+                Intent intent1 = new Intent(getActivity(), InspectionResultActivity.class);
+                intent1
+                    .putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
+                startActivity(intent1);
+              });
 
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
+      // create alert dialog
+      AlertDialog alertDialog = alertDialogBuilder.create();
 
-        // show it
-        alertDialog.show();
-      }
+      // show it
+      alertDialog.show();
     });
   }
 

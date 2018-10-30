@@ -102,13 +102,16 @@ public class GeneralUtils {
     switch (z) {
       case Float:
         Float f = tryParseFloat(text);
-        return f != null && isInBounds(f, min, max);
+        return isInBounds(f, min, max);
       case Double:
         Double d = tryParseDouble(text);
-        return d != null && isInBounds(d, min, max);
+        return isInBounds(d, min, max);
       case Integer:
         Integer i = tryParseInt(text);
-        return i != null && isInBounds(i, min, max);
+        return isInBounds(i, min, max);
+      case Long:
+        Long l = tryParseLong(text);
+        return isInBounds(l, min, max);
       default:
         return false;
     }
@@ -136,9 +139,22 @@ public class GeneralUtils {
     return new Date();
   }
 
+  public static void setViewVisibility(Activity mContext, int visibility,
+      int... ids) {
+    if (mContext==null||(visibility!=View.GONE && visibility!=View.VISIBLE && visibility!=View.INVISIBLE)){
+      return;
+    }
+    for (int id: ids){
+      View v = mContext.findViewById(id);
+      if (v!=null){
+        v.setVisibility(visibility);
+      }
+    }
+  }
+
 
   enum CLAZZ {
-    Integer, Double, Float
+    Integer, Double, Float, Long
 
   }
 
@@ -231,5 +247,7 @@ public class GeneralUtils {
   public static float millisToHours(long millis){
     return millis/3600000f;
   }
+
+
 
 }

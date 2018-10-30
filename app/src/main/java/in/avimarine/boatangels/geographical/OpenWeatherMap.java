@@ -2,7 +2,6 @@ package in.avimarine.boatangels.geographical;
 
 import android.util.Log;
 import com.google.firebase.firestore.GeoPoint;
-import in.avimarine.boatangels.general.GeneralUtils;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;

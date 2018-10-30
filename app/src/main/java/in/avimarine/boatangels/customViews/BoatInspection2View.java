@@ -2,18 +2,13 @@ package in.avimarine.boatangels.customViews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.avimarine.boatangels.CheckBoxTriState;
-import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
 
 /**

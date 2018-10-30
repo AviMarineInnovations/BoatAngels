@@ -43,6 +43,7 @@ captures/
 .idea/libraries
 .idea/sonarlint
 .idea/misc.xml
+.idea/assetWizardSettings.xml
 
 # Keystore files
 *.jks
@@ -61,6 +62,8 @@ freeline_project_description.json
 app/release/output.json
 app/src/main/res/values/keys.xml
 .idea/caches/
+app/fabric.properties
+app/release/production/release/
 boatangels.admin/boatangels-stage-firebase-adminsdk-re4eb-599e513adf.json
 boatangels.admin/boatangels-prod-firebase-adminsdk-i5x24-54be28ac41.json
 boatangels.admin/boatangels-dev-firebase-adminsdk-56e58-24c5e84977.json

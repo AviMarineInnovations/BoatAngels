@@ -18,7 +18,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import in.avimarine.boatangels.BuildConfig;
 import in.avimarine.boatangels.GlideApp;
-import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.GlobalSettings;
 import in.avimarine.boatangels.db.objects.Inspection;
@@ -92,14 +91,10 @@ public class FireBase implements iDb {
     if (context instanceof Activity) {
       final Activity activity = (Activity) context;
       if(Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2){
-        if (activity.isDestroyed() || activity.isFinishing()) {
-          return false;
-        }
+        return !activity.isDestroyed() && !activity.isFinishing();
       }
       else {
-        if (activity.isChangingConfigurations() || activity.isFinishing()) {
-          return false;
-        }
+        return !activity.isChangingConfigurations() && !activity.isFinishing();
       }
     }
     return true;
@@ -176,7 +171,6 @@ public class FireBase implements iDb {
 
   @Override
   public void updateWeather(String uuid, Weather w) {
-
     mFirestore.collection("marinas").document(uuid).update("weather", w);
   }
 

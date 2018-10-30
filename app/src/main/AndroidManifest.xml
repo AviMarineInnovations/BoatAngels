@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   package="in.avimarine.boatangels">
-
+  <uses-permission android:name="android.permission.INTERNET" />
   <application
     android:allowBackup="true"
     android:fullBackupContent="@xml/backup_descriptor"
@@ -32,9 +32,7 @@
       android:name=".activities.SettingsActivity"/>
 
     <activity android:name=".activities.MyInspection"/>
-    <activity android:name=".activities.MyInspection$activity_search_boat"/>
     <activity android:name=".activities.SearchBoatActivity"/>
-    <activity android:name=".activities.SendFeedbackActivity"/>
     <activity android:name=".activities.MainActivity"/>
 
     <activity
@@ -46,6 +44,10 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-  </application>
+      <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ecf8af8586fdec97046346763eaceff00443b591" />
+    </application>
+
 
 </manifest>

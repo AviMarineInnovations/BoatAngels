@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.activities.AddBoatActivity;
 import in.avimarine.boatangels.activities.AddUserActivity;
 import in.avimarine.boatangels.activities.AskInspectionActivity;
 import in.avimarine.boatangels.activities.InspectBoatActivity.Item;
@@ -75,8 +78,7 @@ public class MyBoatFragment extends Fragment {
    * @return A new instance of fragment MyBoatFragment.
    */
   public static MyBoatFragment newInstance() {
-    MyBoatFragment fragment = new MyBoatFragment();
-    return fragment;
+    return new MyBoatFragment();
   }
 
   @Override
@@ -86,27 +88,27 @@ public class MyBoatFragment extends Fragment {
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
       isUserRegistered(FirebaseAuth.getInstance().getUid());
-
     } else {
       Log.d(TAG, "Not logged in");
     }
-    Button ask = ((Activity)mContext).findViewById(R.id.ask_inspection);
-    ask.setOnClickListener(view -> {
+    Button askForInsptnBtn = ((Activity)mContext).findViewById(R.id.ask_inspection);
+    askForInsptnBtn.setOnClickListener(view -> {
       Intent intent = new Intent(mContext, AskInspectionActivity.class);
       startActivity(intent);
     });
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onResume() {
+    super.onResume();
+    if (currentUser!=null) {
+      isUserRegistered(currentUser.getUid());
+    }
   }
 
-
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
 
@@ -136,6 +138,7 @@ public class MyBoatFragment extends Fragment {
     mContext = null;
   }
   private void isUserRegistered(String uid) {
+    //TODO first try to get user from static class to avoid getting from online DB
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
@@ -149,17 +152,34 @@ public class MyBoatFragment extends Fragment {
           if (!currentUser.getBoats().isEmpty()) {
             ownBoatUuid = currentUser.getBoats().get(0);
             getOwnBoat(ownBoatUuid);
-          } else {
-
+          } else { //User has no boats registered
+            setNoBoatsView();
           }
         }
       }
     });
   }
+
+  private void setNoBoatsView() {
+    if (mContext!=null) {
+      GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
+      GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.no_boat_iv,R.id.no_boat_tv);
+      ImageView iv = ((Activity)mContext).findViewById(R.id.no_boat_iv);
+      iv.setOnClickListener(view -> addBoatButton());
+    }
+
+  }
+
+  private void addBoatButton() {
+    Intent intent = new Intent(mContext, AddBoatActivity.class);
+    startActivity(intent);
+  }
+
   private void getOwnBoat(String uuid) {
     if (currentBoat == null || !currentBoat.getUuid().equals(uuid)) {
       db.getBoat(uuid, task -> {
         if (task.isSuccessful()) {
+          turnBoatViewOn();
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             currentBoat = document.toObject(Boat.class);
@@ -197,6 +217,13 @@ public class MyBoatFragment extends Fragment {
     }
   }
 
+  private void turnBoatViewOn() {
+    if (mContext!=null) {
+      GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
+      GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.no_boat_iv,R.id.no_boat_tv);
+    }
+  }
+
   private void updateInspectionView(Inspection inspection) {
     if (inspection==null) {
       Log.d(TAG, "Inspection is null");
@@ -211,8 +238,7 @@ public class MyBoatFragment extends Fragment {
       TextView message = ((Activity)mContext).findViewById(R.id.message_TextView);
       CircleImageView civ = ((Activity)mContext).findViewById(R.id.boat_image);
       title.setText(inspection.boatName);
-      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)) + "\nby "
-          + inspection.inspectorName);
+      subTitle.setText(getString(R.string.inspection_text, GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)), inspection.inspectorName));
       message.setText(inspection.message);
       setBoatPhoto(civ, currentBoat.getPhotoName());
       ItemsListAdapter myItemsListAdapter;
@@ -258,9 +284,7 @@ public class MyBoatFragment extends Fragment {
       return false;
     }
     if (getMaxWindDaysArray(weather.getWindForecast()).size() == 6) {
-      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120) {
-        return true;
-      }
+      return GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120;
     }
     return false;
   }
@@ -281,7 +305,10 @@ public class MyBoatFragment extends Fragment {
   }
 
   private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
+
     Map<Integer, Wind> ret = new TreeMap<>();
+    if (windForecast==null)
+      return ret;
     int day = -1;
     double speed = 0;
     double dir;
