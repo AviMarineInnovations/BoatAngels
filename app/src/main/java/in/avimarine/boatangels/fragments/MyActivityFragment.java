@@ -47,7 +47,6 @@ public class MyActivityFragment extends Fragment {
   private String mParam1;
 
   private static final String TAG = "MyActivityFragment";
-  //  private FirestoreRecyclerAdapter adapter;
   private String uid = FirebaseAuth.getInstance().getUid();
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
   private List<String> arrayInspe = new ArrayList<>();
@@ -135,39 +134,12 @@ public class MyActivityFragment extends Fragment {
 
         });
     listView.setOnItemClickListener((arg0, v, position, arg3) -> {
-
       inspecUid = hashMapInspeUid.get(position);
-      String uid = hashMap.get(position);
-      Log.d(TAG, "Name : " + uid + " " + position);
-
-      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-
-      // set title
-      alertDialogBuilder.setTitle(getString(R.string.what_you_like_to_do));
-
-      // set dialog message
-      alertDialogBuilder
-          .setCancelable(true)
-          .setPositiveButton(getString(R.string.new_inspection),
-              (dialog, id) -> {
-
-                Intent intent = new Intent(getActivity(), InspectBoatActivity.class);
-                intent.putExtra(getString(R.string.intent_extra_boat_uuid), uid);
-                startActivity(intent);
-              })
-          .setNegativeButton(getString(R.string.view_inspection),
-              (dialog, id) -> {
-                Intent intent1 = new Intent(getActivity(), InspectionResultActivity.class);
-                intent1
-                    .putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
-                startActivity(intent1);
-              });
-
-      // create alert dialog
-      AlertDialog alertDialog = alertDialogBuilder.create();
-
-      // show it
-      alertDialog.show();
+      if (inspecUid!=null) {
+        Intent i = new Intent(getActivity(), InspectionResultActivity.class);
+        i.putExtra(getString(R.string.intent_extra_inspection_uuid), inspecUid);
+        startActivity(i);
+      }
     });
   }
 
@@ -186,18 +158,6 @@ public class MyActivityFragment extends Fragment {
   public void onDetach() {
     super.onDetach();
     mListener = null;
-  }
-
-  @Override
-  public void onStart() {
-    super.onStart();
-//    adapter.startListening();
-  }
-
-  @Override
-  public void onStop() {
-    super.onStop();
-//    adapter.stopListening();
   }
 
 }
