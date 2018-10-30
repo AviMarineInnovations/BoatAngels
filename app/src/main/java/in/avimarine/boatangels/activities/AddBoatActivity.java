@@ -101,16 +101,8 @@ public class AddBoatActivity extends AppCompatActivity {
     b.setClubName(boatClubEt.getText().toString());
     Double lat = GeneralUtils.tryParseDouble(boatLatEt.getText().toString());
     Double lon = GeneralUtils.tryParseDouble(boatLonEt.getText().toString());
-    if (!isValidLat(lat)) {
-      boatLatEt.setError("Out of range");
-      boatLatEt.requestFocus();
-      return;
-    }
-    if (!isValidLon(lon)) {
-      boatLonEt.setError("Out of range");
-      boatLonEt.requestFocus();
-      return;
-    }
+    cordinateValidity(isValidLat(lat), boatLatEt);
+    cordinateValidity(isValidLon(lon), boatLonEt);
     b.setLocation(new GeoPoint(lat, lon));
     b.setLastUpdate(new Date());
     b.setFirstAddedTime(new Date());
@@ -121,6 +113,13 @@ public class AddBoatActivity extends AppCompatActivity {
     db.setUser(u);
     db.addBoat(b);
     finish();
+  }
+
+  public void cordinateValidity(boolean vaild, EditText boatCordEt){
+    if (!vaild){
+      boatCordEt.setError("Out of range");
+      boatCordEt.requestFocus();
+    }
   }
 
   @OnClick(R.id.select_btn)

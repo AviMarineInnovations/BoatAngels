@@ -142,7 +142,6 @@ public class BoatsForInspectionFragment extends Fragment {
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_boats_for_inspection, container, false);
     ButterKnife.bind(getActivity());
-
     return view;
   }
 

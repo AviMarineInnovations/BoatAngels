@@ -124,9 +124,6 @@ public class InspectBoatActivity extends AppCompatActivity {
 
   private void initItems() {
     items = new ArrayList<>();
-
-//    TypedArray arrayDrawable = getResources().obtainTypedArray(R.array.resicon);
-
     ArrayList<String> arrayText = new ArrayList<>();
     arrayText.add("BOWLINES");
     arrayText.add("JIB");
@@ -134,7 +131,6 @@ public class InspectBoatActivity extends AppCompatActivity {
     arrayText.add("MAIN");
 
     for (int i = 0; i < arrayText.size(); i++) {
-//      Drawable d = arrayDrawable.getDrawable(i);
       String s = arrayText.get(i);
       State f = State.UNCHECKED;
       Item item = new Item(s, f);
@@ -181,11 +177,9 @@ public class InspectBoatActivity extends AppCompatActivity {
   public static class Item {
 
     State checked;
-    //    Drawable ItemDrawable;
     String ItemString;
 
     public Item(String t, State b) {
-//      ItemDrawable = drawable;
       ItemString = t;
       checked = b;
     }

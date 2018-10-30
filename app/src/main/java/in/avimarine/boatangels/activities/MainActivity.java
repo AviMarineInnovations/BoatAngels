@@ -105,12 +105,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
     if ((currentUser != null) && (currentUser.getBoats() != null) && (!currentUser.getBoats()
         .isEmpty())) {
-      menu.getItem(0).setEnabled(true);
-      menu.getItem(0).setVisible(true);
+      changeAddOwnerMenuItem(menu, true);
     } else {
-      menu.getItem(0).setEnabled(false);
-      menu.getItem(0).setVisible(false);
+      changeAddOwnerMenuItem(menu, false);
     }
+  }
+
+  private void changeAddOwnerMenuItem(Menu menu, boolean b) {
+    menu.getItem(0).setEnabled(b);
+    menu.getItem(0).setVisible(b);
   }
 
   @Override
@@ -213,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     navigationTabBar.setViewPager(mPager, 0);
 
     navigationTabBar.post(() -> {
-//      final View viewPager = findViewById(R.id.vp_horizontal_ntb);
       ((ViewGroup.MarginLayoutParams) mPager.getLayoutParams()).topMargin =
           (int) -navigationTabBar.getBadgeMargin();
       mPager.requestLayout();
@@ -337,14 +339,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public Fragment getItem(int position) {
-      if (position == 1) {
-        return new BoatsForInspectionFragment();
-      } else if (position == 0) {
-        return new MyBoatFragment();
-      } else if (position == 2) {
-        return new MyActivityFragment();
-      } else {
-        return new SettingsFragment();
+      switch (position) {
+        case 1:
+          return new BoatsForInspectionFragment();
+        case 0:
+          return new MyBoatFragment();
+        case 2:
+          return new MyActivityFragment();
+        default:
+          return new SettingsFragment();
       }
     }
 
