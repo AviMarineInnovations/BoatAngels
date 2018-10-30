@@ -12,7 +12,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import in.avimarine.boatangels.R;
-import in.avimarine.boatangels.activities.InspectionResultActivity;
+import in.avimarine.boatangels.activities.MainActivity;
 import java.util.Random;
 
 /**
@@ -27,11 +27,8 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
 
-
     Log.d(TAG, "From: " + remoteMessage.getFrom());
-    Log.d(TAG, "From2: " + FirebaseInstanceId.getInstance().getToken());
-
-
+    Log.d(TAG, "Token: " + FirebaseInstanceId.getInstance().getToken());
 
     // Check if message contains a data payload.
     if (remoteMessage.getData().size() > 0) {
@@ -40,7 +37,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
       String title = remoteMessage.getData().get("title");
       String InspectUuid = remoteMessage.getData().get("InspectionUid");
       Log.d(TAG,"InspecUidTest: "+ InspectUuid);
-      sendNotification(msg, title, InspectUuid);
+      sendNotification(msg, title);
     }
 
     // Check if message contains a notification payload.
@@ -53,12 +50,11 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     // message, here is where that should be initiated. See sendNotification method below.
   }
 
-  private void sendNotification(String messageBody, String title, String inspetionUuid) {
+  private void sendNotification(String messageBody, String title) {
     Random rand = new Random();
     int n = rand.nextInt(10000);
 
-    Intent intent = new Intent(this, InspectionResultActivity.class);
-    intent.putExtra(getString(R.string.intent_extra_inspection_uuid),inspetionUuid);
+    Intent intent = new Intent(this, MainActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     PendingIntent pendingIntent = PendingIntent.getActivity(this, ID_SMALL_NOTIFICATION+n, intent,
         PendingIntent.FLAG_UPDATE_CURRENT);
@@ -77,7 +73,9 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     NotificationManager notificationManager =
         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-    notificationManager.notify(ID_SMALL_NOTIFICATION+n, notificationBuilder.build());
+    if (notificationManager != null) {
+      notificationManager.notify(ID_SMALL_NOTIFICATION+n, notificationBuilder.build());
+    }
 
   }
 

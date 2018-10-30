@@ -180,28 +180,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
 
           DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
-          tokensRef.set(currentUser, SetOptions.merge());
-//                    .update("tokens", currentUser.tokens)
-//                    .addOnSuccessListener(aVoid -> Log
-//                        .d(TAG, "DocumentSnapshot successfully remove token!" + currentUser.tokens))
-//                    .addOnFailureListener(e -> Log.w(TAG, "Error removing token", e));
+           tokensRef.set(currentUser, SetOptions.merge());
         }
 
       }
       while (task.isSuccessful()) {
         AuthUI.getInstance()
             .signOut(MainActivity.this)
-            .addOnCompleteListener(taskSignOut -> {
-              startActivityForResult(
-                  AuthUI.getInstance()
-                      .createSignInIntentBuilder()
-                      .setAvailableProviders(
-                          Arrays
-                              .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                  new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                      .build(),
-                  RC_SIGN_IN);
-            });
+            .addOnCompleteListener(taskSignOut -> startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(
+                        Arrays
+                            .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                    .build(),
+                RC_SIGN_IN));
 
         break;
       }

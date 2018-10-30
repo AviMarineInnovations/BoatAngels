@@ -202,38 +202,35 @@ public class InspectBoatActivity extends AppCompatActivity {
     ) {
       FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
       DocumentReference docRef = rootRef.collection("users").document(userUid);
-      docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-        @Override
-        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-          if (task.isSuccessful()) {
-            DocumentSnapshot document = task.getResult();
-            if (document.exists()) {
-              Log.d(TAG, "fegrgrrg");
-              User u = document.toObject(User.class);
-              Log.d(TAG, "usermoo " + u );
-              users.add(u);
+      docRef.get().addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult();
+          if (document.exists()) {
 
-              Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+            User u = document.toObject(User.class);
 
-              if(index == b.getUsers().size()){
+            users.add(u);
 
-                String title = "New inspection from: " +  currentUser.getDisplayName();
-                String msg = "User: " + currentUser.getDisplayName() + " Checked you now";
+            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
-                Notification notifi = new Notification(users, title, msg);
-                notifi.sendNotification(notifi, getApplicationContext());
+            if(index == b.getUsers().size()){
 
-                finish();
-              }
+              String title = "New inspection from: " +  currentUser.getDisplayName();
+              String msg = "User: " + currentUser.getDisplayName() + " Checked you now";
 
-            } else {
-              Log.d(TAG, "No such document");
+              Notification notifi = new Notification(users, title, msg);
+              notifi.sendNotification(notifi, getApplicationContext());
+
+              finish();
             }
-          } else {
-            Log.d(TAG, "get failed with ", task.getException());
-          }
 
+          } else {
+            Log.d(TAG, "No such document");
+          }
+        } else {
+          Log.d(TAG, "get failed with ", task.getException());
         }
+
       });
 
       index++;
