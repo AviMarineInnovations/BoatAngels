@@ -190,10 +190,13 @@ public class MyBoatFragment extends Fragment {
             currentBoat = document.toObject(Boat.class);
               db.getLatestInspection(currentBoat.getUuid(),
                   task12 -> {
-                    if (task.isSuccessful()) {
-                      for (DocumentSnapshot d : task12.getResult()) {
-                        updateInspectionView(d.toObject(Inspection.class));
-                        break;
+                    if (task.isSuccessful()&&(!GeneralUtils.isNull(task12.getResult(),task12.getResult().getDocuments()))) {
+                      if (task12.getResult().getDocuments().isEmpty()){
+                        updateInspectionView(null);
+                      }
+                      else if (task12.getResult().getDocuments().get(0)!=null) {
+                        updateInspectionView(
+                            task12.getResult().getDocuments().get(0).toObject(Inspection.class));
                       }
                     } else {
                       Log.e(TAG, "Error getting documents: ", task.getException());
@@ -232,6 +235,8 @@ public class MyBoatFragment extends Fragment {
   private void updateInspectionView(Inspection inspection) {
     if (inspection==null) {
       Log.d(TAG, "Inspection is null");
+      TextView title = ((Activity)mContext).findViewById(R.id.inspect_boat_title);
+      title.setText(R.string.no_inspection_message);
       return;
     }
     if (getActivity()!=null)

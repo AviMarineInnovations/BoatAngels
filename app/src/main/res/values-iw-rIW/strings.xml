@@ -91,5 +91,6 @@
   <string name="no_boat_nno_worries_none_day_you_ll_have_one">אין סירה?\nלא נורא,\nמתישהוא תהיה לך גם אחת!</string>
   <string name="inspection_text">נבדק בתאריך %1$s\nעל ידי %2$s</string>
   <string name="no_boat_for_inspection_msg">לצערנו אין לך סירה בשביל שיבדקו אותה…</string>
+  <string name="no_inspection_message">הסירה מעולם לא נבדקה</string>
 
 </resources>
