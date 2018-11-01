@@ -206,7 +206,7 @@ public class MyBoatFragment extends Fragment {
                     DocumentSnapshot document1 = task1.getResult();
                     if (document1.exists()) {
                       currentMarina = document1.toObject(Marina.class);
-                      updateWeather(currentMarina);
+                      //TODO: return later: updateWeather(currentMarina);
                     } else {
                       Log.e(TAG, "Unable to get own marina");
                     }
