@@ -233,6 +233,10 @@ public class MyBoatFragment extends Fragment {
   }
 
   private void updateInspectionView(Inspection inspection) {
+    if(mContext==null){
+      Log.d(TAG, "Context is null");
+      return;
+    }
     if (inspection==null) {
       Log.d(TAG, "Inspection is null");
       TextView title = ((Activity)mContext).findViewById(R.id.inspect_boat_title);

@@ -55,21 +55,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main3);
     initUI();
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    if (auth.getCurrentUser() != null) {
-      Log.d(TAG, "Logged in");
-      isUserRegistered(FirebaseAuth.getInstance().getUid());
-    } else {
-      Log.d(TAG, "Not logged in");
-      startActivityForResult(
-          AuthUI.getInstance()
-              .createSignInIntentBuilder()
-              .setAvailableProviders(
-                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-              .build(),
-          RC_SIGN_IN);
-    }
+//    FirebaseAuth auth = FirebaseAuth.getInstance();
+//    if (auth.getCurrentUser() != null) {
+//      Log.d(TAG, "Logged in");
+//      isUserRegistered(FirebaseAuth.getInstance().getUid());
+//    } else {
+//      Log.d(TAG, "Not logged in");
+//      startActivityForResult(
+//          AuthUI.getInstance()
+//              .createSignInIntentBuilder()
+//              .setAvailableProviders(
+//                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+//                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+//              .build(),
+//          RC_SIGN_IN);
+//    }
   }
 
   private void isUserRegistered(String uid) {
@@ -265,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     super.onResume();
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
+      isUserRegistered(FirebaseAuth.getInstance().getUid());
     } else {
       Log.d(TAG, "Not logged in");
       startActivityForResult(
