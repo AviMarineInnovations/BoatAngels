@@ -37,7 +37,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-     addPreferencesFromResource(R.xml.app_preferences);
+    //Style is set by "@style/preferenceTheme"
+    addPreferencesFromResource(R.xml.app_preferences);
   }
 
   @Override
@@ -109,7 +110,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
    * A preference value change listener that updates the preference's summary
    * to reflect its new value.
    */
-  private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+  private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
     String stringValue = value.toString();
 
     if (preference instanceof ListPreference) {

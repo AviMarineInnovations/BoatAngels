@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,13 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.activities.AddBoatActivity;
 import in.avimarine.boatangels.activities.AddUserActivity;
 import in.avimarine.boatangels.activities.AskInspectionActivity;
 import in.avimarine.boatangels.activities.InspectBoatActivity.Item;
@@ -61,16 +65,6 @@ public class MyBoatFragment extends Fragment {
   private Boat currentBoat = null;
   private Marina currentMarina = null;
   private static final String TAG = "MyBoatFragment";
-
-  // TODO: Rename parameter arguments, choose names that match
-  // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-  private static final String ARG_PARAM1 = "param1";
-  private static final String ARG_PARAM2 = "param2";
-
-  // TODO: Rename and change types of parameters
-  private String mParam1;
-  private String mParam2;
-
   private OnFragmentInteractionListener mListener;
   private Context mContext;
 
@@ -80,20 +74,12 @@ public class MyBoatFragment extends Fragment {
 
   /**
    * Use this factory method to create a new instance of
-   * this fragment using the provided parameters.
-   *
-   * @param param1 Parameter 1.
-   * @param param2 Parameter 2.
+   * this fragment.
+
    * @return A new instance of fragment MyBoatFragment.
    */
-  // TODO: Rename and change types and number of parameters
-  public static MyBoatFragment newInstance(String param1, String param2) {
-    MyBoatFragment fragment = new MyBoatFragment();
-    Bundle args = new Bundle();
-    args.putString(ARG_PARAM1, param1);
-    args.putString(ARG_PARAM2, param2);
-    fragment.setArguments(args);
-    return fragment;
+  public static MyBoatFragment newInstance() {
+    return new MyBoatFragment();
   }
 
   @Override
@@ -103,33 +89,31 @@ public class MyBoatFragment extends Fragment {
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
       isUserRegistered(FirebaseAuth.getInstance().getUid());
-
     } else {
       Log.d(TAG, "Not logged in");
     }
-    Button ask = ((Activity)mContext).findViewById(R.id.ask_inspection);
-    ask.setOnClickListener(view -> {
-      Intent intent = new Intent(((Activity)mContext), AskInspectionActivity.class);
+    Button askForInsptnBtn = ((Activity)mContext).findViewById(R.id.ask_inspection);
+    askForInsptnBtn.setOnClickListener(view -> {
+      if (currentBoat == null){
+        Toast.makeText(getActivity(),R.string.no_boat_for_inspection_msg,Toast.LENGTH_LONG).show();
+        return;
+      }
+      Intent intent = new Intent(mContext, AskInspectionActivity.class);
       startActivity(intent);
     });
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-      mParam1 = getArguments().getString(ARG_PARAM1);
-      mParam2 = getArguments().getString(ARG_PARAM2);
+  public void onResume() {
+    super.onResume();
+    if (currentUser!=null) {
+      isUserRegistered(currentUser.getUid());
     }
-
-
   }
 
-
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
 
@@ -159,6 +143,7 @@ public class MyBoatFragment extends Fragment {
     mContext = null;
   }
   private void isUserRegistered(String uid) {
+    //TODO first try to get user from static class to avoid getting from online DB
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
@@ -172,17 +157,34 @@ public class MyBoatFragment extends Fragment {
           if (!currentUser.getBoats().isEmpty()) {
             ownBoatUuid = currentUser.getBoats().get(0);
             getOwnBoat(ownBoatUuid);
-          } else {
-
+          } else { //User has no boats registered
+            setNoBoatsView();
           }
         }
       }
     });
   }
+
+  private void setNoBoatsView() {
+    if (mContext!=null) {
+      GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
+      GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.no_boat_iv,R.id.no_boat_tv);
+      ImageView iv = ((Activity)mContext).findViewById(R.id.no_boat_iv);
+      iv.setOnClickListener(view -> addBoatButton());
+    }
+
+  }
+
+  private void addBoatButton() {
+    Intent intent = new Intent(mContext, AddBoatActivity.class);
+    startActivity(intent);
+  }
+
   private void getOwnBoat(String uuid) {
     if (currentBoat == null || !currentBoat.getUuid().equals(uuid)) {
       db.getBoat(uuid, task -> {
         if (task.isSuccessful()) {
+          turnBoatViewOn();
           DocumentSnapshot document = task.getResult();
           if (document.exists()) {
             currentBoat = document.toObject(Boat.class);
@@ -220,6 +222,13 @@ public class MyBoatFragment extends Fragment {
     }
   }
 
+  private void turnBoatViewOn() {
+    if (mContext!=null) {
+      GeneralUtils.setViewVisibility((Activity)mContext,View.VISIBLE,R.id.inspection_result,R.id.ask_inspection,R.id.tableLayout);
+      GeneralUtils.setViewVisibility((Activity)mContext,View.GONE,R.id.no_boat_iv,R.id.no_boat_tv);
+    }
+  }
+
   private void updateInspectionView(Inspection inspection) {
     if (inspection==null) {
       Log.d(TAG, "Inspection is null");
@@ -234,19 +243,18 @@ public class MyBoatFragment extends Fragment {
       TextView message = ((Activity)mContext).findViewById(R.id.message_TextView);
       CircleImageView civ = ((Activity)mContext).findViewById(R.id.boat_image);
       title.setText(inspection.boatName);
-      subTitle.setText("Was inspected on " + GeneralUtils.toFormatedDateString(((Activity)mContext),new Date(inspection.inspectionTime)) + "\nby "
-          + inspection.inspectorName);
+      subTitle.setText(getString(R.string.inspection_text, GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)), inspection.inspectorName));
       message.setText(inspection.message);
       setBoatPhoto(civ, currentBoat.getPhotoName());
       ItemsListAdapter myItemsListAdapter;
-      myItemsListAdapter = new ItemsListAdapter(((Activity)mContext), items);
+      myItemsListAdapter = new ItemsListAdapter(mContext, items, false);
       listView.setAdapter(myItemsListAdapter);
     }
 
   }
 
   private void setBoatPhoto(CircleImageView civ, String photoName) {
-    new FireBase().loadImgToImageView(((Activity)mContext),civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
+    new FireBase().loadImgToImageView(mContext,civ,"boats/"+photoName,R.drawable.ic_no_picture_boat_icon,R.drawable.ic_no_picture_boat_icon);
   }
   private List<Item> initItems(Inspection i) {
     List<Item> ret = new ArrayList<>();
@@ -265,7 +273,7 @@ public class MyBoatFragment extends Fragment {
     if (checkWeather(m.getWeather())) {
       updateWeatherWidget(m.getWeather());
     } else {
-      new WeatherHttpClient(((Activity)mContext), output -> {
+      new WeatherHttpClient(mContext, output -> {
         Weather w = owp.parseData(output);
         if (w != null) {
           updateWeatherWidget(w);
@@ -281,9 +289,7 @@ public class MyBoatFragment extends Fragment {
       return false;
     }
     if (getMaxWindDaysArray(weather.getWindForecast()).size() == 6) {
-      if (GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120) {
-        return true;
-      }
+      return GeneralUtils.getMinutesDifference(weather.getLastUpdate(), GeneralUtils.now()) < 120;
     }
     return false;
   }
@@ -304,7 +310,10 @@ public class MyBoatFragment extends Fragment {
   }
 
   private Map<Integer, Wind> getMaxWindDaysArray(Map<Date, Wind> windForecast) {
+
     Map<Integer, Wind> ret = new TreeMap<>();
+    if (windForecast==null)
+      return ret;
     int day = -1;
     double speed = 0;
     double dir;
@@ -344,7 +353,6 @@ public class MyBoatFragment extends Fragment {
    * >Communicating with Other Fragments</a> for more information.
    */
   public interface OnFragmentInteractionListener {
-
     // TODO: Update argument type and name
     void onFragmentInteraction(Uri uri);
   }
