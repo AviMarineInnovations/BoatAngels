@@ -26,7 +26,7 @@ import org.json.JSONObject;
 public class Notification extends Application {
 
 
-private static final String TAG = "LOG";
+private static final String TAG = "Notification_Service";
 private List<User> usersToSend;
 private String title;
 private String msg;
@@ -50,16 +50,27 @@ private static final String FCM_PUSH_URL = "https://fcm.googleapis.com/fcm/send"
    * @param contx Context
    */
   public void sendNotification(Notification notifi, Context contx) {
+
+    //Create List of users and store users to send push notification.
     List<User> users = notifi.usersToSend;
+
+    //get the FCM key from String resource.
     String SERVER_KEY = contx.getResources().getString(R.string.FCMSERVERKEY);
 
+    //Send notification to all users in notification object.
     for (User u: users
     ) {
+      //Send Notification to All user Devices.
       for (String token:u.getTokens()
           ) {
         Log.d(TAG, "User token: " + token);
+        Log.d(TAG, "User token: " + token);
         Log.d(TAG, "FCMSERVERKEY " + SERVER_KEY);
+
+        //Set the title of notification.
         String title = notifi.title;
+
+        //Set the message body of Notification.
         String msg = notifi.msg;
 
         JSONObject obj = null;
@@ -73,6 +84,7 @@ private static final String FCM_PUSH_URL = "https://fcm.googleapis.com/fcm/send"
           obj = new JSONObject();
           objData = new JSONObject();
 
+          //Put the Data into Json Request.
           objData.put("body", msg);
           objData.put("sound", "default");
           objData.put("icon", "icon_name"); //   icon_name
@@ -82,7 +94,6 @@ private static final String FCM_PUSH_URL = "https://fcm.googleapis.com/fcm/send"
           dataobjData.put("title", title);
           dataobjData.put("msg", msg);
           dataobjData.put("click_action","OPEN_ACTIVITY_1");
-          Log.d(TAG, "inspe Uid " + token);
           obj.put("to", token);
 
           obj.put("notification", objData);
