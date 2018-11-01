@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,8 +21,13 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
@@ -30,6 +36,7 @@ import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Inspection.StatusEnum;
+import in.avimarine.boatangels.db.objects.Notification;
 import in.avimarine.boatangels.db.objects.User;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +69,7 @@ public class InspectBoatActivity extends AppCompatActivity {
   private Boat b;
   private User u = null;
   private StatusEnum inspectionStatus;
+
 
   List<Item> items;
   ItemsListAdapter myItemsListAdapter;
@@ -146,22 +154,63 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
-    inspection.pointsEarned = b.getOfferPoint();
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.getName();
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
     inspection.inspectorUid = u.getUid();
     inspection.setStatus(inspectionStatus); //pazit
-    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+    if (currentUser != null) {
       inspection.inspectorName = u.getDisplayName();
     }
     inspection.finding = getCheckBoxes();
     b.setLastInspectionDate(inspection.inspectionTime);
     db.addInspection(inspection);
     db.addBoat(b);
-    finish();
+
+    List <User> users = new ArrayList<>();
+
+    for (String userUid : b.getUsers()
+    ) {
+      FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+      DocumentReference docRef = rootRef.collection("users").document(userUid);
+      docRef.get().addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult();
+          if (document.exists()) {
+
+            User u = document.toObject(User.class);
+
+            users.add(u);
+
+            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+            if(index == b.getUsers().size()){
+
+              String title = "New inspection from: " +  currentUser.getDisplayName();
+              String msg = "User: " + currentUser.getDisplayName() + " Checked you now";
+
+              Notification notifi = new Notification(users, title, msg);
+              notifi.sendNotification(notifi, getApplicationContext());
+
+              finish();
+            }
+
+          } else {
+            Log.d(TAG, "No such document");
+          }
+        } else {
+          Log.d(TAG, "get failed with ", task.getException());
+        }
+
+      });
+
+      index++;
+      }
+
+
   }
+
 
 
   private Map<String, String> getCheckBoxes() {

@@ -26,10 +26,12 @@ public class User extends BaseDbObject {
   private String uid;
   private TimeZone timeZone;
   private List<String> boats = new ArrayList<>();
+  public   ArrayList<String> tokens = new ArrayList<>();
 
 
 
   private boolean shabbathObserver;
+
 
   @Override
   public String toString() {
@@ -41,7 +43,8 @@ public class User extends BaseDbObject {
         "yachtiePoint=" + yachtiePoint +'\n' +
         "firstAddedTime=" + firstJoinTime +'\n' +
         "boats=" + boats +'\n'+
-        "lastUpdateTime=" + lastUpdateTime
+        "lastUpdateTime=" + lastUpdateTime +'\n'+
+            "tokens=" + tokens
         ;
   }
 
@@ -123,5 +126,13 @@ public class User extends BaseDbObject {
 
   public boolean isShabbathObserver() {
     return shabbathObserver;
+  }
+
+  public List<String> getTokens() {
+    return tokens;
+  }
+
+  public void setTokens(ArrayList<String> tokens) {
+    this.tokens = tokens;
   }
 }
