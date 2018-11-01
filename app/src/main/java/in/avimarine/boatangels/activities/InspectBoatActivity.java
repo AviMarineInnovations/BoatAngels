@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -69,8 +68,7 @@ public class InspectBoatActivity extends AppCompatActivity {
   ListView listView;
   private Boat b;
   private User u = null;
-  private StatusEnum inspectionStatus; //pazit
-  private int index = 0;
+  private StatusEnum inspectionStatus;
 
 
   List<Item> items;
@@ -109,47 +107,31 @@ public class InspectBoatActivity extends AppCompatActivity {
     }
 
     initItems();
-    myItemsListAdapter = new ItemsListAdapter(this, items);
+    myItemsListAdapter = new ItemsListAdapter(this, items, true);
     listView.setAdapter(myItemsListAdapter);
 
-    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    listView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(InspectBoatActivity.this,
+        ((Item) (parent.getItemAtPosition(position))).ItemString,
+        Toast.LENGTH_LONG).show());
 
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view,
-          int position, long id) {
-        Toast.makeText(InspectBoatActivity.this,
-            ((Item) (parent.getItemAtPosition(position))).ItemString,
-            Toast.LENGTH_LONG).show();
-      }
-    });
-
-    // TODO : fix code duplications
-    ImageButton goodBtn  = findViewById(R.id.good_inspection_btn);
-    goodBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        sumInspectionAsGood();
-      }
-    });
-    ImageButton badBtn  = findViewById(R.id.bad_inspection_btn);
-    badBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        sumInspectionAsBad();
-      }
-    });
-    ImageButton veryBadBtn  = findViewById(R.id.very_bad_inspection_btn);
-    veryBadBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        sumInspectionAsVeryBad();
-      }
-    });
+    setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
+    setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
+    setInspectionSeverityIcon(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
 
   }
 
+    void setInspectionSeverityIcon(ImageButton button, StatusEnum status){
+      button.setOnClickListener(v -> {
+        findViewById(R.id.good_inspection_btn).setSelected(false); //cancel another pressed button before pressing another
+        findViewById(R.id.bad_inspection_btn).setSelected(false);
+        findViewById(R.id.very_bad_inspection_btn).setSelected(false);
+        v.setSelected(true);
+        inspectionStatus = status;
+      });
+    }
+
   private void initItems() {
-    items = new ArrayList<Item>();
-
-//    TypedArray arrayDrawable = getResources().obtainTypedArray(R.array.resicon);
-
+    items = new ArrayList<>();
     ArrayList<String> arrayText = new ArrayList<>();
     arrayText.add("BOWLINES");
     arrayText.add("JIB");
@@ -157,7 +139,6 @@ public class InspectBoatActivity extends AppCompatActivity {
     arrayText.add("MAIN");
 
     for (int i = 0; i < arrayText.size(); i++) {
-//      Drawable d = arrayDrawable.getDrawable(i);
       String s = arrayText.get(i);
       State f = State.UNCHECKED;
       Item item = new Item(s, f);
@@ -166,13 +147,6 @@ public class InspectBoatActivity extends AppCompatActivity {
 
   }
 
-  private void sumInspectionAsGood() { inspectionStatus = StatusEnum.GOOD; }
-  private void sumInspectionAsBad()
-  {
-    inspectionStatus = StatusEnum.BAD;
-  }
-  private void sumInspectionAsVeryBad() { inspectionStatus = StatusEnum.VERY_BAD; }
-
   @OnClick(R.id.send_inspection_btn)
   public void onClick(View v) {
     Inspection inspection = new Inspection();
@@ -180,8 +154,6 @@ public class InspectBoatActivity extends AppCompatActivity {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
-    FirebaseUser currentUser =  FirebaseAuth.getInstance().getCurrentUser();
-    inspection.pointsEarned = b.getOfferPoint();  //TODO: fix direct access to Inspection field by using setters instead
     inspection.boatUuid = b.getUuid();
     inspection.boatName = b.getName();
     inspection.message = inspection_text.getText().toString();
@@ -254,11 +226,9 @@ public class InspectBoatActivity extends AppCompatActivity {
   public static class Item {
 
     State checked;
-    //    Drawable ItemDrawable;
     String ItemString;
 
     public Item(String t, State b) {
-//      ItemDrawable = drawable;
       ItemString = t;
       checked = b;
     }
@@ -271,18 +241,19 @@ public class InspectBoatActivity extends AppCompatActivity {
   static class ViewHolder {
 
     CheckBoxTriState checkBox;
-    //    ImageView icon;
     TextView text;
   }
 
   public static class ItemsListAdapter extends BaseAdapter {
 
+    private final boolean editable;
     private Context context;
     private List<Item> list;
 
-    public ItemsListAdapter(Context c, List<Item> l) {
+    public ItemsListAdapter(Context c, List<Item> l,boolean editable) {
       context = c;
       list = l;
+      this.editable = editable;
     }
 
     @Override
@@ -314,26 +285,25 @@ public class InspectBoatActivity extends AppCompatActivity {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         rowView = inflater.inflate(R.layout.item_inspection_finding, null);
 
-        viewHolder.checkBox = (CheckBoxTriState) rowView.findViewById(R.id.rowCheckBox);
-//        viewHolder.icon = (ImageView) rowView.findViewById(R.id.rowImageView);
-        viewHolder.text = (TextView) rowView.findViewById(R.id.rowTextView);
+        viewHolder.checkBox = rowView.findViewById(R.id.rowCheckBox);
+        viewHolder.text = rowView.findViewById(R.id.rowTextView);
         rowView.setTag(viewHolder);
       } else {
         viewHolder = (ViewHolder) rowView.getTag();
       }
 
-//      viewHolder.icon.setImageDrawable(list.get(position).ItemDrawable);
       viewHolder.checkBox.setState(list.get(position).checked);
-
       final String itemStr = list.get(position).ItemString;
       viewHolder.text.setText(itemStr);
       viewHolder.checkBox.setTag(position);
-      viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          list.get(position).checked = ((CheckBoxTriState) view).getState();
-        }
-      });
+      if (editable) {
+        viewHolder.checkBox.setOnClickListener(
+            view -> list.get(position).checked = ((CheckBoxTriState) view).getState());
+        viewHolder.checkBox.setEnabled(true);
+      }
+      else{
+        viewHolder.checkBox.setEnabled(false);
+      }
 
       viewHolder.checkBox.setState(getFindingStat(position));
 

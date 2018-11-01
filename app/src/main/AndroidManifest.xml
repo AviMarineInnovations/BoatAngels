@@ -2,15 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   package="in.avimarine.boatangels">
-
-
+  <uses-permission android:name="android.permission.INTERNET" />
   <application
     android:allowBackup="true"
     android:fullBackupContent="@xml/backup_descriptor"
-    android:icon="@mipmap/ic_launcher"
+    android:icon="@mipmap/app_icon"
     android:label="@string/app_name"
     android:name=".App"
-    android:roundIcon="@mipmap/ic_launcher_round"
+    android:roundIcon="@mipmap/app_icon"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
@@ -20,30 +19,42 @@
       android:screenOrientation="portrait"/>
     <activity
       android:name=".activities.AddBoatActivity"
-      android:theme="@style/AppTheme.NoActionBar"/>
-    <activity android:name=".activities.InspectionsListActivity"/>
+      android:theme="@style/AppTheme.NoActionBar"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".activities.InspectionsListActivity"
+      android:screenOrientation="portrait"/>
     <activity
       android:name=".activities.InspectionResultActivity"
       android:screenOrientation="portrait"/>
-    <activity android:name=".activities.AddUserActivity"/>
-    <activity android:name=".activities.BoatForInspectionActivity"/>
-    <activity android:name=".activities.AskInspectionActivity"/>
+    <activity android:name=".activities.AddUserActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".activities.BoatForInspectionActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".activities.AskInspectionActivity"
+      android:screenOrientation="portrait"/>
     <activity
       android:configChanges="layoutDirection|locale"
       android:label="@string/title_activity_settings"
-      android:name=".activities.SettingsActivity"/>
+      android:name=".activities.SettingsActivity"
+      android:screenOrientation="portrait"/>
 
-    <activity android:name=".activities.MyInspection"/>
-    <activity android:name=".activities.MyInspection$activity_search_boat"/>
-    <activity android:name=".activities.SearchBoatActivity"/>
-    <activity android:name=".activities.SendFeedbackActivity"/>
-    <activity android:name=".activities.MainActivity">
-    <intent-filter>
-      <action android:name="android.intent.action.MAIN"/>
-      <category android:name="android.intent.category.LAUNCHER"/>
-    </intent-filter>
+    <activity android:name=".activities.MyInspection"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".activities.SearchBoatActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".activities.MainActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:name=".activities.SplashActivity"
+      android:label="@string/app_name"
+      android:theme="@style/SplashTheme"
+      android:screenOrientation="portrait">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
     </activity>
-
     <service android:name=".general.MyFirebaseMessagingService">
       <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT"/>
@@ -69,5 +80,11 @@
 
   </application>
   <uses-permission android:name="android.permission.INTERNET"/>
+      <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ecf8af8586fdec97046346763eaceff00443b591" />
+    </application>
+
+
 
 </manifest>

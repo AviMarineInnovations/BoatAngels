@@ -213,6 +213,6 @@
     app:layout_constraintStart_toEndOf="@+id/checkBox_mainsail"
     app:layout_constraintTop_toBottomOf="@+id/moored_boat_bowlines"
     app:layout_constraintVertical_bias="1.0"
-    app:srcCompat="@drawable/ic_good_inspection_status_24px"/>
+    app:srcCompat="@drawable/ic_unpressed_good_inspection_icon"/>
 
 </android.support.constraint.ConstraintLayout>

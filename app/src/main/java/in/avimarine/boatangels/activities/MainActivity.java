@@ -17,8 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -33,6 +33,7 @@ import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
+import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
 import in.avimarine.boatangels.fragments.MyActivityFragment;
@@ -44,21 +45,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-/**
- * Created by GIGAMOLE on 28.03.2016.
- */
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,
+    OnSharedPreferenceChangeListener {
 
   private static final String TAG = "MainActivity";
-  private ViewPager mPager;
-  private PagerAdapter mPagerAdapter;
-  private final iDb db = new FireBase();
-  private User currentUser = null;
-//  private Boat currentBoat = null;
-//  private Marina currentMarina = null;
-
   private static final int NUM_PAGES = 4;
   private static final int RC_SIGN_IN = 123;
+  private final iDb db = new FireBase();
+  private ViewPager mPager;
+  private User currentUser = null;
+  private Menu menu;
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -70,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
       Log.d(TAG, "Logged in");
 
       isUserRegistered(FirebaseAuth.getInstance().getUid());
-//      signoutBtn.setEnabled(true);
     } else {
       Log.d(TAG, "Not logged in");
       startActivityForResult(
@@ -112,18 +107,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
           }
 
-//          settingsBtn.setEnabled(true);
-//          if (!currentUser.getBoats().isEmpty()) {
-//            addBoatBtn.setEnabled(false);
-//            showInspectionBtn.setEnabled(true);
-//            askInspectionBtn.setEnabled(true);
-//            ownBoatUuid = currentUser.getBoats().get(0);
-//            getOwnBoat(ownBoatUuid);
-//          } else {
-//            addBoatBtn.setEnabled(true);
-//            showInspectionBtn.setEnabled(false);
-//            askInspectionBtn.setEnabled(false);
-//          }
+
+          db.setCurrentUser(currentUser);
+          Setting.setUser(this, currentUser);
+          setMenuItems(menu);
 
         }
       }
@@ -142,30 +129,56 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-
-    Log.d(TAG, "OnCreateOptionsMenu");
     getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+    setMenuItems(menu);
     return super.onCreateOptionsMenu(menu);
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      // When the user clicks START ALARM, set the alarm.
-      case R.id.add_boat:
-        Intent intent = new Intent(this, AddBoatActivity.class);
-        startActivity(intent);
-        return true;
-      // When the user clicks CANCEL ALARM, cancel the alarm.
       case R.id.logout:
         signout();
+        return true;
+      case R.id.add_owner:
+        addOwner();
         return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
-  private void signout() {
+  private void addOwner() {
+    db.getBoat(currentUser.getBoats().get(0), task -> {
+      if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (document.exists()) {
+          Boat b = document.toObject(Boat.class);
+          if (b.getCode() == null) {
+            b.setCode(Boat.generateAccessCode());
+            db.addBoat(b);
+          }
+          Intent sendIntent = new Intent();
+          sendIntent.setAction(Intent.ACTION_SEND);
+          sendIntent.putExtra(Intent.EXTRA_TEXT,
+              currentUser.getDisplayName() + " is inviting you to be the owner of the boat " + b
+                  .getName()
+                  + " on the app Boat Angels.\nYou can download the app here: https://play.google.com/store/apps/details?id="
+                  + this.getPackageName()
+                  + " and add yourself as the owner of the boat using the code: " + b.getCode());
+          sendIntent.setType("text/plain");
+          startActivity(sendIntent);
+        } else {
+          Log.e(TAG, "Unable to find boat.");
+        }
+      } else {
+        Log.e(TAG, "Unable to find boat");
+        Toast.makeText(this, "Unable to send message", Toast.LENGTH_LONG).show();
+      }
+      finish();
+    });
+  }
 
+  private void signout() {
     db.getUser(currentUser.getUid(), (Task<DocumentSnapshot> task) -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
@@ -202,13 +215,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     });
 
+    AuthUI.getInstance()
+        .signOut(MainActivity.this)
+        .addOnCompleteListener(task -> startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(
+                    Arrays
+                        .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                .build(),
+            RC_SIGN_IN));
 
   }
 
   private void initUI() {
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = findViewById(R.id.vp_horizontal_ntb);
-    mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+    PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+    
     mPager.setAdapter(mPagerAdapter);
 
     final String[] colors = getResources().getStringArray(R.array.default_preview);
@@ -247,10 +272,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     navigationTabBar.setViewPager(mPager, 0);
 
     navigationTabBar.post(() -> {
-      final View viewPager = findViewById(R.id.vp_horizontal_ntb);
-      ((ViewGroup.MarginLayoutParams) viewPager.getLayoutParams()).topMargin =
+      ((ViewGroup.MarginLayoutParams) mPager.getLayoutParams()).topMargin =
           (int) -navigationTabBar.getBadgeMargin();
-      viewPager.requestLayout();
+      mPager.requestLayout();
     });
 
     navigationTabBar
@@ -295,12 +319,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   @Override
   protected void onResume() {
     super.onResume();
-
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-//      hiddenElements(false);
       Log.d(TAG, "Logged in");
     } else {
-//      hiddenElements(true);
       Log.d(TAG, "Not logged in");
       startActivityForResult(
           AuthUI.getInstance()
@@ -337,10 +358,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (FirebaseAuth.getInstance() != null
             && FirebaseAuth.getInstance().getCurrentUser() != null) {
           isUserRegistered(FirebaseAuth.getInstance().getUid());
-
-
         }
-//        signoutBtn.setEnabled(true);
         return;
       } else {
         // Sign in failed
@@ -371,20 +389,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
    */
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
-    public ScreenSlidePagerAdapter(FragmentManager fm) {
+    ScreenSlidePagerAdapter(FragmentManager fm) {
+
       super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-      if (position == 1)
-        return new BoatsForInspectionFragment();
-      else if (position == 0)
-        return new MyBoatFragment();
-      else if (position == 2)
-        return new MyActivityFragment();
-      else
-        return new SettingsFragment();
+
     }
 
     @Override

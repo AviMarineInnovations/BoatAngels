@@ -111,7 +111,8 @@
     app:layout_constraintTop_toTopOf="@+id/send_inspection_btn"
     app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
     android:tint="#ffffff"
-    tools:visibility="visible"
+    android:visibility="gone"
+    android:clickable="false"
     android:contentDescription="@string/addphotosbuton_content_description"/>
   <de.hdodenhof.circleimageview.CircleImageView
     xmlns:app="http://schemas.android.com/apk/res-auto"
