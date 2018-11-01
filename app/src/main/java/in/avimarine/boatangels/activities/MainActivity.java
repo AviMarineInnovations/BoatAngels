@@ -1,6 +1,5 @@
 package in.avimarine.boatangels.activities;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -22,13 +21,8 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.iid.FirebaseInstanceId;
 import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -64,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     FirebaseAuth auth = FirebaseAuth.getInstance();
     if (auth.getCurrentUser() != null) {
       Log.d(TAG, "Logged in");
-
       isUserRegistered(FirebaseAuth.getInstance().getUid());
     } else {
       Log.d(TAG, "Not logged in");
@@ -88,50 +81,39 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           startActivity(intent);
         } else {
           currentUser = document.toObject(User.class);
-
-          String token = FirebaseInstanceId.getInstance().getToken();
-
-          if (!currentUser.tokens.contains(token)) {
-            currentUser.tokens.add(token);
-            Log.d(TAG, "Add new token user " + token);
-            FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
-
-            DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
-            tokensRef.set(currentUser, SetOptions.merge());
-
-          }
-          if (task.isSuccessful()) {
-
-            db.setCurrentUser(currentUser);
-            Setting.setUser(this, currentUser);
-
-          }
-
-
           db.setCurrentUser(currentUser);
           Setting.setUser(this, currentUser);
           setMenuItems(menu);
-
         }
       }
     });
-
-
   }
-
-  /*
-    A method that handles tokens (tokens usage for notify user)
-    and a list of devices by user,
-    If a device does not exist,
-    the method will set it to db.
-   */
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
+    Log.d(TAG, "OnCreateOptionsMenu");
+    this.menu = menu;
     getMenuInflater().inflate(R.menu.menu_main_activity, menu);
     setMenuItems(menu);
     return super.onCreateOptionsMenu(menu);
+  }
+
+  private void setMenuItems(Menu menu) {
+    if (menu == null) {
+      Log.e(TAG, "menu is null");
+      return;
+    }
+    if ((currentUser != null) && (currentUser.getBoats() != null) && (!currentUser.getBoats()
+        .isEmpty())) {
+      changeAddOwnerMenuItem(menu, true);
+    } else {
+      changeAddOwnerMenuItem(menu, false);
+    }
+  }
+
+  private void changeAddOwnerMenuItem(Menu menu, boolean b) {
+    menu.getItem(0).setEnabled(b);
+    menu.getItem(0).setVisible(b);
   }
 
   @Override
@@ -179,42 +161,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   }
 
   private void signout() {
-    db.getUser(currentUser.getUid(), (Task<DocumentSnapshot> task) -> {
-      if (task.isSuccessful()) {
-        DocumentSnapshot document = task.getResult();
-
-        currentUser = document.toObject(User.class);
-
-        String token = FirebaseInstanceId.getInstance().getToken();
-
-        if (currentUser.tokens.contains(token)) {
-          currentUser.tokens.remove(token);
-          Log.d(TAG, "remove  token from user " + token);
-          FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
-
-          DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
-           tokensRef.set(currentUser, SetOptions.merge());
-        }
-
-      }
-      while (task.isSuccessful()) {
-        AuthUI.getInstance()
-            .signOut(MainActivity.this)
-            .addOnCompleteListener(taskSignOut -> startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(
-                        Arrays
-                            .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                    .build(),
-                RC_SIGN_IN));
-
-        break;
-      }
-
-    });
-
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(task -> startActivityForResult(
@@ -226,14 +172,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                             new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                 .build(),
             RC_SIGN_IN));
-
   }
 
   private void initUI() {
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = findViewById(R.id.vp_horizontal_ntb);
     PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-    
     mPager.setAdapter(mPagerAdapter);
 
     final String[] colors = getResources().getStringArray(R.array.default_preview);
@@ -390,21 +334,26 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
     ScreenSlidePagerAdapter(FragmentManager fm) {
-
       super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-
+      switch (position) {
+        case 1:
+          return new BoatsForInspectionFragment();
+        case 0:
+          return new MyBoatFragment();
+        case 2:
+          return new MyActivityFragment();
+        default:
+          return new SettingsFragment();
+      }
     }
 
     @Override
     public int getCount() {
       return NUM_PAGES;
     }
-
   }
-
 }
-

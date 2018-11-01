@@ -50,7 +50,6 @@ public interface iDb {
 
   User getCurrentUser();
 
-
   void updateWeather(String uuid, Weather w);
 
   void getSupportedVersion(OnCompleteListener<DocumentSnapshot> listener);
