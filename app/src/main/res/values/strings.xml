@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name" translatable="false">BoatAngels</string>
+  <string name="app_name" translatable="false">Boat Angels</string>
   <string name="sign_out">Sign Out</string>
   <string name="welcome_message">Welcome %1$s</string>
   <string name="inspection_for_yacht_title">Inspection for Yacht:</string>
