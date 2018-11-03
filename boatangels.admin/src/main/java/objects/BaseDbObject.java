@@ -1,3 +1,5 @@
+package objects;
+
 import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
 

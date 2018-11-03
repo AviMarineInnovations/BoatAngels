@@ -1,3 +1,5 @@
+package objects;
+
 import com.google.cloud.firestore.GeoPoint;
 import java.util.ArrayList;
 import java.util.List;

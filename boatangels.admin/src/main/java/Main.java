@@ -3,14 +3,18 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import objects.Boat;
+import objects.Inspection;
+import objects.User;
+
 import java.io.*;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        FirebaseApp devApp = init("dev", "boatangels-dev-firebase-adminsdk-56e58-24c5e84977.json", "https://boatangels-dev.firebaseio.com/","boatangels-dev.appspot.com");
-        FirebaseApp stageApp = init("stage", "boatangels-stage-firebase-adminsdk-re4eb-599e513adf.json", "https://boatangels-stage.firebaseio.com/","boats");
-        FirebaseApp prodApp = init("prod", "boatangels-prod-firebase-adminsdk-i5x24-54be28ac41.json", "https://boatangels-prod.firebaseio.com/","boats");
+        FirebaseApp devApp = init("dev", "boatangels-dev-firebase-adminsdk-tdt9j-935d43fdd2.json", "https://boatangels-dev.firebaseio.com/","boatangels-dev.appspot.com");
+        FirebaseApp stageApp = init("stage", "boatangels-stage-firebase-adminsdk-esnk9-21ea2359a8.json", "https://boatangels-stage.firebaseio.com/","boats");
+        FirebaseApp prodApp = init("prod", "boatangels-prod-firebase-adminsdk-bfsp1-f8bb0ba700.json", "https://boatangels-prod.firebaseio.com/","boats");
 
         if (isNull(devApp, stageApp, prodApp)) {
             System.err.println("Error initializing");
@@ -23,11 +27,25 @@ public class Main {
 //        saveDbs(devApp,"db\\dev");
 //        saveDbs(stageApp,"db\\stage");
 //        saveDbs(prodApp,"db\\prod");
-
-        List<Boat> boats = Firestore.getAllBoats(devApp,"boats");
-        Firestore.putBoats(devApp, boats);
+//        Firestore.putBoats(devApp, boats);
 //        Storage.getBoatPhotos(devApp,"","boats");
 
+        List<Boat> boats = Firestore.getAllBoats(devApp,"boats");
+        List<Inspection> inspections = Firestore.getAllInspections(devApp,"inspections");
+        List<User> users = Firestore.getAllUsers(devApp,"users");
+
+//        removeOrphandBoats(devApp, boats, inspections, users);
+
+
+    }
+
+    private static void removeOrphandBoats(FirebaseApp app, List<Boat> boats, List<Inspection> inspections, List<User> users) {
+        System.out.println("Orphand Inspections:");
+        List<Inspection> orphands = Analyzer.findOrphandInspections(inspections,boats,users);
+        for(Inspection i: orphands){
+            System.out.println(i.toString());
+        }
+        Maintenance.removeOrphandInspections(app,orphands);
     }
 
     private static void saveDbs(FirebaseApp devApp,String dir) {
