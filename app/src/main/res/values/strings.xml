@@ -118,25 +118,18 @@
   </string-array>
 
   <string-array name="multi_select_list_preference_default_value"/>
-
   <string name="pref_title_system_sync_settings">System sync settings</string>
-
   <string name="pref_header_notifications">Notifications</string>
-
   <string name="pref_title_new_message_notifications">New message notifications</string>
 
   <string name="pref_title_ringtone">Ringtone</string>
   <string name="pref_ringtone_silent">Silent</string>
-
   <string name="pref_title_vibrate">Vibrate</string>
   <string name="pref_title_new_inspection_notif">New Inspection</string>
   <string name="pref_title_new_reply_notif">New Reply</string>
   <string name="pref_title_new_response_notif">New Response</string>
   <string name="pref_title_new_ask_for_inspection_notif">New Inspection Requested</string>
-
-
   <string name="pref_header_account">Account Settings</string>
-
   <string name="settings_btn">Settings</string>
   <string name="pref_title_phone_number">Phone number</string>
   <string name="pref_title_email">e-mail</string>
@@ -162,5 +155,7 @@
   <string name="inspection_text">Was inspected on %1$s\nby %2$s</string>
   <string name="no_boat_for_inspection_msg">Unfortunately you don\'t have a boat to inspect...</string>
   <string name="no_inspection_message">No inspection yet. Sorry</string>
+  <string name="privacy_policy_url" translatable="false">http://boatangels.avimarine.in/privacypolicy.html</string>
+  <string name="tos_url" translatable="false">http://boatangels.avimarine.in/tos.html</string>
 
 </resources>

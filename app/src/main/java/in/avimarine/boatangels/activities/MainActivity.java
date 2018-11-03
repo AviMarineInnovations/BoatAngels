@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder;
+import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -230,11 +232,11 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.EmailBuilder().build()))
+                new GoogleBuilder().build(),
+                new EmailBuilder().build()))
             .setLogo(R.mipmap.banner)
-            .setTosAndPrivacyPolicyUrls("http://boatangels.avimarine.in/tos.html",
-                "http://boatangels.avimarine.in/privacypolicy.html")
+            .setTosAndPrivacyPolicyUrls(getString(R.string.tos_url),
+                getString(R.string.privacy_policy_url))
             .build(),
         RC_SIGN_IN);
   }

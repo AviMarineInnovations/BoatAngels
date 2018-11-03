@@ -110,7 +110,7 @@ public class AddUserActivity extends AppCompatActivity {
           widget.cancelPendingInputEvents();
         }
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-            Uri.parse("http://boatangels.avimarine.in/tos.html"));
+            Uri.parse(getString(R.string.tos_url)));
         startActivity(browserIntent);
       }
 
