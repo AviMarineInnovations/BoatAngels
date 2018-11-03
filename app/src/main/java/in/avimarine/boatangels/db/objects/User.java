@@ -26,10 +26,8 @@ public class User extends BaseDbObject {
   private String uid;
   private TimeZone timeZone;
   private List<String> boats = new ArrayList<>();
-
-
-
   private boolean shabbathObserver;
+  private Date agreedTos;
 
   @Override
   public String toString() {
@@ -123,5 +121,13 @@ public class User extends BaseDbObject {
 
   public boolean isShabbathObserver() {
     return shabbathObserver;
+  }
+
+  public void setAgreedTos(Date agreedTos) {
+    this.agreedTos = agreedTos;
+  }
+
+  public Date getAgreedTos() {
+    return agreedTos;
   }
 }

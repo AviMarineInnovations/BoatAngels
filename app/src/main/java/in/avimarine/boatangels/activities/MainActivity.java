@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -32,15 +31,13 @@ import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
 import in.avimarine.boatangels.fragments.MyActivityFragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment;
-import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
 import in.avimarine.boatangels.fragments.SettingsFragment;
 import in.avimarine.boatangels.general.Setting;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,
-    OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
   private static final String TAG = "MainActivity";
   private static final int NUM_PAGES = 4;
@@ -198,24 +195,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           (int) -navigationTabBar.getBadgeMargin();
       mPager.requestLayout();
     });
-
-    navigationTabBar
-        .setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
-          @Override
-          public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
-
-          }
-
-          @Override
-          public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-            model.hideBadge();
-          }
-        });
-  }
-
-  @Override
-  public void onFragmentInteraction(Uri uri) {
-
   }
 
   @Override
@@ -227,14 +206,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     } else {
       // Otherwise, select the previous step.
       mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-    }
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    if (FirebaseAuth.getInstance().getUid() != null) {
-      isUserRegistered(FirebaseAuth.getInstance().getUid());
     }
   }
 
@@ -262,8 +233,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.EmailBuilder().build()))
             .setLogo(R.mipmap.banner)
-            .setPrivacyPolicyUrl("http://aayaffe.github.io/SailingRaceCourseManager/Privacy%20Policy.html")
-            .setTosUrl("https://superapp.example.com/terms-of-service.html")
+            .setTosAndPrivacyPolicyUrls("http://boatangels.avimarine.in/tos.html",
+                "http://boatangels.avimarine.in/privacypolicy.html")
             .build(),
         RC_SIGN_IN);
   }
@@ -280,37 +251,37 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     super.onActivityResult(requestCode, resultCode, data);
     //Sign in result
     if (requestCode == RC_SIGN_IN) {
-      IdpResponse response = IdpResponse.fromResultIntent(data);
-
-      // Successfully signed in
-      if (resultCode == RESULT_OK) {
-        Log.d(TAG, "Logged in!!");
-        if (FirebaseAuth.getInstance() != null
-            && FirebaseAuth.getInstance().getCurrentUser() != null) {
-          isUserRegistered(FirebaseAuth.getInstance().getUid());
-        }
-        return;
-      } else {
-        // Sign in failed
-        if (response == null) {
-          // User pressed back button
-          Log.d(TAG, "Log in failure: User pressed back button");
-          return;
-        }
-
-        if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-          Log.d(TAG, "Log in failure: No network");
-          return;
-        }
-
-        if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-          Log.d(TAG, "Log in failure: Unknown error");
-          return;
-        }
-      }
-
-      Log.d(TAG, "Log in failure: Unknown login response");
+      onLoginActivityResult(resultCode, data);
     }
+  }
+
+  private void onLoginActivityResult(int resultCode, Intent data) {
+    IdpResponse response = IdpResponse.fromResultIntent(data);
+    // Successfully signed in
+    if (resultCode == RESULT_OK) {
+      Log.d(TAG, "Logged in!!");
+      if (FirebaseAuth.getInstance() != null
+          && FirebaseAuth.getInstance().getCurrentUser() != null) {
+        isUserRegistered(FirebaseAuth.getInstance().getUid());
+      }
+      return;
+    } else {
+      // Sign in failed
+      if (response == null) {
+        // User pressed back button
+        Log.d(TAG, "Log in failure: User pressed back button");
+        return;
+      }
+      if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+        Log.d(TAG, "Log in failure: No network");
+        return;
+      }
+      if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+        Log.d(TAG, "Log in failure: Unknown error");
+        return;
+      }
+    }
+    Log.d(TAG, "Log in failure: Unknown login response");
   }
 
   /**
