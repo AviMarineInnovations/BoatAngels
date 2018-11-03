@@ -1,7 +1,6 @@
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Strings;
 import com.google.firebase.FirebaseApp;
@@ -9,6 +8,9 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import objects.Boat;
+import objects.Inspection;
+import objects.User;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -101,4 +103,60 @@ public class Firestore {
 
     }
 
+    public static List<Inspection> getAllInspections(FirebaseApp app, String collection) {
+        List<Inspection> ret = new ArrayList<>();
+        if ((app == null) || (Strings.isNullOrEmpty(collection))) {
+            return ret;
+        }
+        com.google.cloud.firestore.Firestore firestore = FirestoreClient.getFirestore(app);
+        ApiFuture<QuerySnapshot> future = firestore.collection(collection).get();
+        List<QueryDocumentSnapshot> documents = null;
+        try {
+            documents = future.get().getDocuments();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        if ((documents != null) && (documents.size() > 0)) {
+            for (QueryDocumentSnapshot document : documents) {
+                ret.add(document.toObject(Inspection.class));
+            }
+        }
+        return ret;
+    }
+    public static List<User> getAllUsers(FirebaseApp app, String collection) {
+        List<User> ret = new ArrayList<>();
+        if ((app == null) || (Strings.isNullOrEmpty(collection))) {
+            return ret;
+        }
+        com.google.cloud.firestore.Firestore firestore = FirestoreClient.getFirestore(app);
+        ApiFuture<QuerySnapshot> future = firestore.collection(collection).get();
+        List<QueryDocumentSnapshot> documents = null;
+        try {
+            documents = future.get().getDocuments();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        if ((documents != null) && (documents.size() > 0)) {
+            for (QueryDocumentSnapshot document : documents) {
+                ret.add(document.toObject(User.class));
+            }
+        }
+        return ret;
+    }
+
+    public static void deleteInspections(FirebaseApp app, List<String> Uuids){
+        com.google.cloud.firestore.Firestore db = FirestoreClient.getFirestore(app);
+        ApiFuture<WriteResult> writeResult = null;
+        for (String uuid: Uuids) {
+            writeResult = db.collection("inspections").document(uuid).delete();
+        }
+
+        try {
+            System.out.println(writeResult.get().getUpdateTime());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 }

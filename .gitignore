@@ -44,6 +44,9 @@ captures/
 .idea/sonarlint
 .idea/misc.xml
 .idea/assetWizardSettings.xml
+.idea/sonarIssues.xml
+.idea/caches/
+.idea/drawable_viewer_plugin.xml
 
 # Keystore files
 *.jks
@@ -58,10 +61,9 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
-.idea/sonarIssues.xml
+
 app/release/output.json
 app/src/main/res/values/keys.xml
-.idea/caches/
 app/fabric.properties
 app/release/production/release/
 boatangels.admin/boatangels-stage-firebase-adminsdk-re4eb-599e513adf.json

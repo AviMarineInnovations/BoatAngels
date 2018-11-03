@@ -36,13 +36,13 @@ public class CheckBoxTriState extends android.support.v7.widget.AppCompatCheckBo
     setOnCheckedChangeListener((buttonView, isChecked) -> {
       switch (state) {
         case UNCHECKED:
-          state = State.XCHECKED;
-          break;
-        case XCHECKED:
           state = State.VCHECKED;
           break;
-        case VCHECKED:
+        case XCHECKED:
           state = State.UNCHECKED;
+          break;
+        case VCHECKED:
+          state = State.XCHECKED;
           break;
       }
       updateBtn();
