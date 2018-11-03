@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     );
     models.add(
         new NavigationTabBar.Model.Builder(
-            getResources().getDrawable(R.drawable.ic_directions_run_black_24dp),
+            getResources().getDrawable(R.drawable.ic_compass_rose),
             Color.parseColor(colors[2]))
             .title(getResources().getString(R.string.tab_text_3))
             .build()

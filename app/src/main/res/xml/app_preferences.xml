@@ -62,46 +62,46 @@
       android:singleLine="true"
       android:title="@string/pref_title_timezone"/>
 
-    <android.support.v7.preference.SwitchPreferenceCompat
-      android:defaultValue="false"
-      android:key="shabbath_observer"
-      android:summary="@string/pref_description_shabbath_observer"
-      android:title="@string/pref_title_shabbath_observer"/>
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+      <!--android:defaultValue="false"-->
+      <!--android:key="shabbath_observer"-->
+      <!--android:summary="@string/pref_description_shabbath_observer"-->
+      <!--android:title="@string/pref_title_shabbath_observer"/>-->
 
   </android.support.v7.preference.PreferenceCategory>
-  <android.support.v7.preference.PreferenceCategory
-    android:title="@string/pref_header_notifications">
+  <!--<android.support.v7.preference.PreferenceCategory-->
+    <!--android:title="@string/pref_header_notifications">-->
 
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-             when checked/unchecked. -->
-    <android.support.v7.preference.SwitchPreferenceCompat
-      android:defaultValue="true"
-      android:key="notifications_new_message"
-      android:title="@string/pref_title_new_message_notifications"/>
+    <!--&lt;!&ndash; A 'parent' preference, which enables/disables child preferences (below)-->
+             <!--when checked/unchecked. &ndash;&gt;-->
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+      <!--android:defaultValue="true"-->
+      <!--android:key="notifications_new_message"-->
+      <!--android:title="@string/pref_title_new_message_notifications"/>-->
 
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <android.support.v7.preference.SwitchPreferenceCompat
-      android:defaultValue="true"
-      android:dependency="notifications_new_message"
-      android:key="notifications_new_inspection"
-      android:title="@string/pref_title_new_inspection_notif"/>
+    <!--&lt;!&ndash; NOTE: This preference will be enabled only when the checkbox above is checked. &ndash;&gt;-->
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+      <!--android:defaultValue="true"-->
+      <!--android:dependency="notifications_new_message"-->
+      <!--android:key="notifications_new_inspection"-->
+      <!--android:title="@string/pref_title_new_inspection_notif"/>-->
 
-    <android.support.v7.preference.SwitchPreferenceCompat
-      android:defaultValue="true"
-      android:dependency="notifications_new_message"
-      android:key="notifications_new_reply"
-      android:title="@string/pref_title_new_reply_notif"/>
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+      <!--android:defaultValue="true"-->
+      <!--android:dependency="notifications_new_message"-->
+      <!--android:key="notifications_new_reply"-->
+      <!--android:title="@string/pref_title_new_reply_notif"/>-->
 
-    <android.support.v7.preference.SwitchPreferenceCompat
-      android:defaultValue="true"
-      android:dependency="notifications_new_message"
-      android:key="notifications_new_response"
-      android:title="@string/pref_title_new_response_notif"/>
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+      <!--android:defaultValue="true"-->
+      <!--android:dependency="notifications_new_message"-->
+      <!--android:key="notifications_new_response"-->
+      <!--android:title="@string/pref_title_new_response_notif"/>-->
 
-    <android.support.v7.preference.SwitchPreferenceCompat
-      android:defaultValue="true"
-      android:dependency="notifications_new_message"
-      android:key="notifications_new_ask_for_inspection"
-      android:title="@string/pref_title_new_ask_for_inspection_notif"/>
-  </android.support.v7.preference.PreferenceCategory>
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+      <!--android:defaultValue="true"-->
+      <!--android:dependency="notifications_new_message"-->
+      <!--android:key="notifications_new_ask_for_inspection"-->
+      <!--android:title="@string/pref_title_new_ask_for_inspection_notif"/>-->
+  <!--</android.support.v7.preference.PreferenceCategory>-->
 </android.support.v7.preference.PreferenceScreen>

@@ -31,11 +31,6 @@
       android:screenOrientation="portrait"/>
     <activity android:name=".activities.AskInspectionActivity"
       android:screenOrientation="portrait"/>
-    <activity
-      android:configChanges="layoutDirection|locale"
-      android:label="@string/title_activity_settings"
-      android:name=".activities.SettingsActivity"
-      android:screenOrientation="portrait"/>
 
     <activity android:name=".activities.MyInspection"
       android:screenOrientation="portrait"/>
