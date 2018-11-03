@@ -71,3 +71,4 @@ boatangels.admin/.idea/
 boatangels.admin/db/
 boatangels.admin/gradle/wrapper/gradle-wrapper.jar
 boatangels.admin/boatangels*adminsdk*.json
+.idea/drawable_viewer_plugin.xml

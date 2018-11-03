@@ -60,7 +60,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:textColor="#ffffff"
-    app:layout_constraintBottom_toTopOf="@id/message_linedEditText"
+    app:layout_constraintBottom_toTopOf="@id/linearLayout2"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/boat_image"/>
@@ -141,21 +141,28 @@
     app:layout_constraintTop_toBottomOf="@id/listview">
   <ImageButton
     android:id="@+id/good_inspection_btn"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="80dp"
     android:layout_weight="1"
+    android:background="@null"
+    android:scaleType="fitCenter"
+
     app:srcCompat="@drawable/good_inspection_button_states"/>
   <ImageButton
     android:id="@+id/bad_inspection_btn"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="80dp"
     android:layout_weight="1"
+    android:background="@null"
+    android:scaleType="fitCenter"
     app:srcCompat="@drawable/bad_inspection_button_states"/>
   <ImageButton
     android:id="@+id/very_bad_inspection_btn"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="80dp"
     android:layout_weight="1"
+    android:background="@null"
+    android:scaleType="fitCenter"
     app:srcCompat="@drawable/very_bad_inspection_button_status"/>
   </LinearLayout>
 

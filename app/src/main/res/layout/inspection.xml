@@ -44,6 +44,6 @@
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    app:srcCompat="@drawable/ic_unpressed_good_inspection_icon"/>
+    app:srcCompat="@drawable/ic_status_good_unselected"/>
 
 </RelativeLayout>

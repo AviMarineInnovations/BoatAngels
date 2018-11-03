@@ -61,7 +61,7 @@ public class InspectBoatActivity extends AppCompatActivity {
   ListView listView;
   private Boat b;
   private User u = null;
-  private StatusEnum inspectionStatus;
+  private StatusEnum inspectionStatus = StatusEnum.GOOD;
 
   List<Item> items;
   ItemsListAdapter myItemsListAdapter;
@@ -109,6 +109,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
     setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
     setInspectionSeverityIcon(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
+    findViewById(R.id.good_inspection_btn).setSelected(true);
 
   }
 

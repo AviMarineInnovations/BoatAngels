@@ -41,13 +41,13 @@ public class Inspection extends BaseDbObject {
   public void setInspectionIcon(ImageView icon){
     switch (status) {
       case GOOD:
-        icon.setImageResource(R.drawable.ic_unpressed_good_inspection_icon);
+        icon.setImageResource(R.drawable.ic_status_good_unselected);
         break;
       case BAD:
-        icon.setImageResource(R.drawable.ic_unpressed_bad_inspection_icon);
+        icon.setImageResource(R.drawable.ic_status_average_unselected);
         break;
       case VERY_BAD:
-        icon.setImageResource(R.drawable.ic_unpressed_very_bad_inspection_icon);
+        icon.setImageResource(R.drawable.ic_status_bad_unselected);
         break;
     }
   }
