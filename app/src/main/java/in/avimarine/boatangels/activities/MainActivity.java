@@ -186,14 +186,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
     models.add(
         new NavigationTabBar.Model.Builder(
-            getResources().getDrawable(R.drawable.ic_traffic_red_24px),
+            getResources().getDrawable(R.drawable.ic_my_boat),
             Color.parseColor(colors[0]))
             .title(getResources().getString(R.string.tab_text_1))
             .build()
     );
     models.add(
         new NavigationTabBar.Model.Builder(
-            getResources().getDrawable(R.drawable.ic_traffic_green_24px),
+            getResources().getDrawable(R.drawable.ic_inspection_icon),
             Color.parseColor(colors[1]))
             .title(getResources().getString(R.string.tab_text_2))
             .build()
