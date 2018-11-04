@@ -22,7 +22,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 import devlight.io.library.ntb.NavigationTabBar;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
@@ -37,6 +41,7 @@ import in.avimarine.boatangels.fragments.SettingsFragment;
 import in.avimarine.boatangels.general.Setting;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,
@@ -81,9 +86,23 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           startActivity(intent);
         } else {
           currentUser = document.toObject(User.class);
-          db.setCurrentUser(currentUser);
-          Setting.setUser(this, currentUser);
-          setMenuItems(menu);
+          String token = FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken();
+          if (!currentUser.getTokens().contains(token)) {
+
+            currentUser.addToken(token);
+            Log.d(TAG, "Add new token user " + token);
+            FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
+            DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
+            tokensRef.set(currentUser, SetOptions.merge());
+
+          }
+
+          if (task.isSuccessful()) {
+
+            db.setCurrentUser(currentUser);
+            Setting.setUser(this, currentUser);
+            setMenuItems(menu);
+          }
         }
       }
     });
@@ -161,6 +180,24 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   }
 
   private void signout() {
+
+    try{
+
+      String token = FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken();
+
+      if (currentUser.getTokens().contains(token)) {
+        currentUser.removeToken(token);
+        Log.d(TAG, "remove  token from user " + token);
+        FirebaseFirestore dbRef = FirebaseFirestore.getInstance();
+        DocumentReference tokensRef = dbRef.collection("users").document(currentUser.getUid());
+        tokensRef.set(currentUser, SetOptions.merge());
+      }
+    }
+    catch (Exception ex){
+
+      Log.e(TAG, "Faild to remove Token from DB: " + ex.getMessage());
+    }
+
     AuthUI.getInstance()
         .signOut(MainActivity.this)
         .addOnCompleteListener(task -> startActivityForResult(
