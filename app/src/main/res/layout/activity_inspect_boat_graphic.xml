@@ -87,7 +87,7 @@
     app:layout_constraintTop_toBottomOf="@+id/moored_boat_sternlines"
     tools:visibility="visible"
     android:inputType="text"/>
-  <in.avimarine.boatangels.CheckBoxTriState
+  <in.avimarine.boatangels.customViews.CheckBoxTriState
     android:id="@+id/checkBox_stern"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
     app:layout_constraintStart_toStartOf="@+id/moored_boat_sternlines"
     app:layout_constraintTop_toTopOf="@+id/moored_boat_sternlines"
     tools:visibility="visible"/>
-  <in.avimarine.boatangels.CheckBoxTriState
+  <in.avimarine.boatangels.customViews.CheckBoxTriState
     android:id="@+id/checkBox_bow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
     android:layout_marginRight="5dp"
     android:layout_marginLeft="8dp"
     tools:visibility="visible"/>
-  <in.avimarine.boatangels.CheckBoxTriState
+  <in.avimarine.boatangels.customViews.CheckBoxTriState
     android:id="@+id/checkBox_jib"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
     tools:visibility="visible"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="80dp"/>
-  <in.avimarine.boatangels.CheckBoxTriState
+  <in.avimarine.boatangels.customViews.CheckBoxTriState
     android:id="@+id/checkBox_mainsail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

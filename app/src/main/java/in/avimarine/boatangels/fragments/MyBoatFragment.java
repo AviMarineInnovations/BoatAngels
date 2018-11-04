@@ -19,10 +19,10 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
-import in.avimarine.boatangels.CheckBoxTriState;
+import in.avimarine.boatangels.customViews.CheckBoxTriState;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.activities.AddBoatActivity;
-import in.avimarine.boatangels.activities.AskInspectionActivity;
+import in.avimarine.boatangels.activities.AskForInspectionActivity;
 import in.avimarine.boatangels.activities.InspectBoatActivity.Item;
 import in.avimarine.boatangels.activities.InspectBoatActivity.ItemsListAdapter;
 import in.avimarine.boatangels.customViews.WeatherTableView;
@@ -73,7 +73,7 @@ public class MyBoatFragment extends Fragment {
         Toast.makeText(getActivity(),R.string.no_boat_for_inspection_msg,Toast.LENGTH_LONG).show();
         return;
       }
-      Intent intent = new Intent(mContext, AskInspectionActivity.class);
+      Intent intent = new Intent(mContext, AskForInspectionActivity.class);
       startActivity(intent);
     });
   }

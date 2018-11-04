@@ -12,8 +12,7 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.avimarine.boatangels.CheckBoxTriState;
-import in.avimarine.boatangels.CheckBoxTriState.State;
+import in.avimarine.boatangels.customViews.CheckBoxTriState.State;
 import in.avimarine.boatangels.R;
 
 /**

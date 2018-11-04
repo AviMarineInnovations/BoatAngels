@@ -1,7 +1,8 @@
-package in.avimarine.boatangels;
+package in.avimarine.boatangels.customViews;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import in.avimarine.boatangels.R;
 
 /**
  * This file is part of an

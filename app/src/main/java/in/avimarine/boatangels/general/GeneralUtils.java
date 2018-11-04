@@ -152,6 +152,10 @@ public class GeneralUtils {
     }
   }
 
+  public static boolean isNullOrEmpty(List list) {
+    return ((list==null)||(list.isEmpty()));
+  }
+
 
   enum CLAZZ {
     Integer, Double, Float, Long

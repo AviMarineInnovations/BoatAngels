@@ -29,7 +29,7 @@
       android:screenOrientation="portrait"/>
     <activity android:name=".activities.BoatForInspectionActivity"
       android:screenOrientation="portrait"/>
-    <activity android:name=".activities.AskInspectionActivity"
+    <activity android:name=".activities.AskForInspectionActivity"
       android:screenOrientation="portrait"/>
 
     <activity android:name=".activities.MyInspection"
