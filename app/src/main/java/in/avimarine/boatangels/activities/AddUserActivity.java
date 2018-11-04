@@ -46,7 +46,7 @@ public class AddUserActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_user);
     ButterKnife.bind(this);
-    setTitle("Add user");
+    setTitle(R.string.add_user);
     EditText editTextMail = findViewById(R.id.mail);
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       String authEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -57,49 +57,55 @@ public class AddUserActivity extends AppCompatActivity {
     Button button = findViewById(R.id.btn_sign_in);
     CheckBox checkBox = findViewById(R.id.tos_checkbox);
     setClickableTOSText(checkBox);
-
-    button.setOnClickListener(v -> {
-      EditText editTextName = findViewById(R.id.name);
-      EditText editTextPhone = findViewById(R.id.phone);
-      name = editTextName.getText().toString();
-      mail = editTextMail.getText().toString();
-      phone = editTextPhone.getText().toString();
-      country = countryCodePicker.getSelectedCountryName();
-      boolean error = false;
-      boolean tos = checkBox.isChecked();
-      if (isNotValidInput(name)) {
-        editTextName.setError(getString(R.string.name_error_message));
-        error = true;
-      }
-      if (isNotValidInput(mail) || GeneralUtils.isNotValidEmail(mail)) {
-        editTextMail.setError(getString(R.string.email_error_message));
-        error = true;
-      }
-      if (isNotValidMobile(phone)) {
-        editTextPhone.setError(getString(R.string.phone_number_error_message));
-        error = true;
-      }
-      if (!tos) {
-        checkBox.setError("You must accept the terms of service");
-        error = true;
-      }
-      if (!error) {
-        uid = FirebaseAuth.getInstance().getUid();
-        User user = new User();
-        user.setDisplayName(name);
-        user.setMail(mail);
-        user.setPhone(phone);
-        user.setCountry(country);
-        user.setFirstJoinTime(new Date());
-        user.setLastUpdate(new Date());
-        user.setAgreedTos(new Date());
-        user.setUid(uid);
-        db.setUser(user);
-        finish();
-      }
-    });
+    button.setOnClickListener(v -> addBtnClick(editTextMail, checkBox));
   }
 
+  private void addBtnClick(EditText editTextMail, CheckBox checkBox) {
+    EditText editTextName = findViewById(R.id.name);
+    EditText editTextPhone = findViewById(R.id.phone);
+    name = editTextName.getText().toString();
+    mail = editTextMail.getText().toString();
+    phone = editTextPhone.getText().toString();
+    country = countryCodePicker.getSelectedCountryName();
+    boolean error = false;
+    boolean tos = checkBox.isChecked();
+    if (isNotValidInput(name)) {
+      editTextName.setError(getString(R.string.name_error_message));
+      error = true;
+    }
+    if (isNotValidInput(mail) || GeneralUtils.isNotValidEmail(mail)) {
+      editTextMail.setError(getString(R.string.email_error_message));
+      error = true;
+    }
+    if (isNotValidMobile(phone)) {
+      editTextPhone.setError(getString(R.string.phone_number_error_message));
+      error = true;
+    }
+    if (!tos) {
+      checkBox.setError("You must accept the terms of service");
+      error = true;
+    }
+    if (!error) {
+      uid = FirebaseAuth.getInstance().getUid();
+      User user = new User();
+      user.setDisplayName(name);
+      user.setMail(mail);
+      user.setPhone(phone);
+      user.setCountry(country);
+      user.setFirstJoinTime(new Date());
+      user.setLastUpdate(new Date());
+      user.setAgreedTos(new Date());
+      user.setUid(uid);
+      db.setUser(user);
+      finish();
+    }
+  }
+
+  /**
+   * Sets a clickable label on the Terms of service checkbox that links to a copy of the
+   * TOS
+   * @param cb
+   */
   private void setClickableTOSText(CheckBox cb) {
 
     ClickableSpan clickableSpan = new ClickableSpan() {

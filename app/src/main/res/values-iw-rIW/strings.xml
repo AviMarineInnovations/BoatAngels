@@ -92,5 +92,6 @@
   <string name="inspection_text">נבדק בתאריך %1$s\nעל ידי %2$s</string>
   <string name="no_boat_for_inspection_msg">לצערנו אין לך סירה בשביל שיבדקו אותה…</string>
   <string name="no_inspection_message">הסירה מעולם לא נבדקה</string>
+  <string name="add_user">הוסף משתמש</string>
 
 </resources>

@@ -20,19 +20,16 @@ public class Main {
             System.err.println("Error initializing");
             return;
         }
-        // Use the shorthand notation to retrieve the default app's services
-        FirebaseAuth defaultAuth = FirebaseAuth.getInstance(devApp);
-        FirebaseDatabase defaultDatabase = FirebaseDatabase.getInstance(devApp);
 
-//        saveDbs(devApp,"db\\dev");
-//        saveDbs(stageApp,"db\\stage");
-//        saveDbs(prodApp,"db\\prod");
+        saveDbs(devApp,"db\\dev");
+        saveDbs(stageApp,"db\\stage");
+        saveDbs(prodApp,"db\\prod");
 //        Firestore.putBoats(devApp, boats);
-//        Storage.getBoatPhotos(devApp,"","boats");
+        Storage.getBoatPhotos(devApp,"","boats");
 
-        List<Boat> boats = Firestore.getAllBoats(devApp,"boats");
-        List<Inspection> inspections = Firestore.getAllInspections(devApp,"inspections");
-        List<User> users = Firestore.getAllUsers(devApp,"users");
+//        List<Boat> boats = Firestore.getAllBoats(devApp,"boats");
+//        List<Inspection> inspections = Firestore.getAllInspections(devApp,"inspections");
+//        List<User> users = Firestore.getAllUsers(devApp,"users");
 
 //        removeOrphandBoats(devApp, boats, inspections, users);
 
