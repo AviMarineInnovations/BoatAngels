@@ -3,7 +3,6 @@ package in.avimarine.boatangels.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,14 +16,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.avimarine.boatangels.CheckBoxTriState;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.activities.AddBoatActivity;
-import in.avimarine.boatangels.activities.AddUserActivity;
 import in.avimarine.boatangels.activities.AskInspectionActivity;
 import in.avimarine.boatangels.activities.InspectBoatActivity.Item;
 import in.avimarine.boatangels.activities.InspectBoatActivity.ItemsListAdapter;
@@ -50,15 +47,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MyBoatFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MyBoatFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyBoatFragment extends Fragment {
   private final iDb db = new FireBase();
   private String ownBoatUuid;
@@ -66,22 +54,8 @@ public class MyBoatFragment extends Fragment {
   private Boat currentBoat = null;
   private Marina currentMarina = null;
   private static final String TAG = "MyBoatFragment";
-  private OnFragmentInteractionListener mListener;
   private Context mContext;
 
-  public MyBoatFragment() {
-    // Required empty public constructor
-  }
-
-  /**
-   * Use this factory method to create a new instance of
-   * this fragment.
-
-   * @return A new instance of fragment MyBoatFragment.
-   */
-  public static MyBoatFragment newInstance() {
-    return new MyBoatFragment();
-  }
 
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -118,29 +92,15 @@ public class MyBoatFragment extends Fragment {
     return inflater.inflate(R.layout.fragment_my_boat, container, false);
   }
 
-  // TODO: Rename method, update argument and hook method into UI event
-  public void onButtonPressed(Uri uri) {
-    if (mListener != null) {
-      mListener.onFragmentInteraction(uri);
-    }
-  }
-
   @Override
   public void onAttach(Context context) {
     super.onAttach(context);
     mContext = context;
-    if (context instanceof OnFragmentInteractionListener) {
-      mListener = (OnFragmentInteractionListener) context;
-    } else {
-      throw new RuntimeException(context.toString()
-          + " must implement OnFragmentInteractionListener");
-    }
   }
 
   @Override
   public void onDetach() {
     super.onDetach();
-    mListener = null;
     mContext = null;
   }
   private void isUserRegistered(String uid) {
@@ -148,10 +108,7 @@ public class MyBoatFragment extends Fragment {
     db.getUser(uid, task -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
-        if (!document.exists()) {
-          Intent intent = new Intent(mContext, AddUserActivity.class);
-          startActivity(intent);
-        } else {
+        if (document.exists()) {
           currentUser = document.toObject(User.class);
           db.setCurrentUser(currentUser);
           Setting.setUser(mContext,currentUser);
@@ -351,19 +308,5 @@ public class MyBoatFragment extends Fragment {
       }
     }
     return ret;
-  }
-  /**
-   * This interface must be implemented by activities that contain this
-   * fragment to allow an interaction in this fragment to be communicated
-   * to the activity and potentially other fragments contained in that
-   * activity.
-   * <p>
-   * See the Android Training lesson <a href=
-   * "http://developer.android.com/training/basics/fragments/communicating.html"
-   * >Communicating with Other Fragments</a> for more information.
-   */
-  public interface OnFragmentInteractionListener {
-    // TODO: Update argument type and name
-    void onFragmentInteraction(Uri uri);
   }
 }

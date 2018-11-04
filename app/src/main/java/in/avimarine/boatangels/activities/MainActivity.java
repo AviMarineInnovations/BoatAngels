@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder;
+import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,15 +33,13 @@ import in.avimarine.boatangels.db.objects.User;
 import in.avimarine.boatangels.fragments.BoatsForInspectionFragment;
 import in.avimarine.boatangels.fragments.MyActivityFragment;
 import in.avimarine.boatangels.fragments.MyBoatFragment;
-import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
 import in.avimarine.boatangels.fragments.SettingsFragment;
 import in.avimarine.boatangels.general.Setting;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,
-    OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
   private static final String TAG = "MainActivity";
   private static final int NUM_PAGES = 4;
@@ -55,21 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main3);
     initUI();
-//    FirebaseAuth auth = FirebaseAuth.getInstance();
-//    if (auth.getCurrentUser() != null) {
-//      Log.d(TAG, "Logged in");
-//      isUserRegistered(FirebaseAuth.getInstance().getUid());
-//    } else {
-//      Log.d(TAG, "Not logged in");
-//      startActivityForResult(
-//          AuthUI.getInstance()
-//              .createSignInIntentBuilder()
-//              .setAvailableProviders(
-//                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-//                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-//              .build(),
-//          RC_SIGN_IN);
-//    }
   }
 
   private void isUserRegistered(String uid) {
@@ -125,8 +109,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
       case R.id.add_owner:
         addOwner();
         return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
-    return super.onOptionsItemSelected(item);
   }
 
   private void addOwner() {
@@ -163,15 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   private void signout() {
     AuthUI.getInstance()
         .signOut(MainActivity.this)
-        .addOnCompleteListener(task -> startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(
-                    Arrays
-                        .asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                .build(),
-            RC_SIGN_IN));
+        .addOnCompleteListener(task -> startLoginActivity());
   }
 
   private void initUI() {
@@ -220,24 +197,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
           (int) -navigationTabBar.getBadgeMargin();
       mPager.requestLayout();
     });
-
-    navigationTabBar
-        .setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
-          @Override
-          public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
-
-          }
-
-          @Override
-          public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-            model.hideBadge();
-          }
-        });
-  }
-
-  @Override
-  public void onFragmentInteraction(Uri uri) {
-
   }
 
   @Override
@@ -253,14 +212,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    if (FirebaseAuth.getInstance().getUid() != null) {
-      isUserRegistered(FirebaseAuth.getInstance().getUid());
-    }
-  }
-
-  @Override
   protected void onResume() {
     super.onResume();
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -268,19 +219,26 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
       isUserRegistered(FirebaseAuth.getInstance().getUid());
     } else {
       Log.d(TAG, "Not logged in");
-      startActivityForResult(
-          AuthUI.getInstance()
-              .createSignInIntentBuilder()
-              .setAvailableProviders(
-                  Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                      new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-              .build(),
-          RC_SIGN_IN);
+      startLoginActivity();
 
     }
     SharedPreferences prefs = PreferenceManager
         .getDefaultSharedPreferences(getApplicationContext());
     prefs.registerOnSharedPreferenceChangeListener(this);
+  }
+
+  private void startLoginActivity() {
+    startActivityForResult(
+        AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(Arrays.asList(
+                new GoogleBuilder().build(),
+                new EmailBuilder().build()))
+            .setLogo(R.mipmap.banner)
+            .setTosAndPrivacyPolicyUrls(getString(R.string.tos_url),
+                getString(R.string.privacy_policy_url))
+            .build(),
+        RC_SIGN_IN);
   }
 
   @Override
@@ -293,39 +251,39 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    // RC_SIGN_IN is the request code you passed into startActivityForResult(...) when starting the sign in flow.
+    //Sign in result
     if (requestCode == RC_SIGN_IN) {
-      IdpResponse response = IdpResponse.fromResultIntent(data);
-
-      // Successfully signed in
-      if (resultCode == RESULT_OK) {
-        Log.d(TAG, "Logged in!!");
-        if (FirebaseAuth.getInstance() != null
-            && FirebaseAuth.getInstance().getCurrentUser() != null) {
-          isUserRegistered(FirebaseAuth.getInstance().getUid());
-        }
-        return;
-      } else {
-        // Sign in failed
-        if (response == null) {
-          // User pressed back button
-          Log.d(TAG, "Log in failure: User pressed back button");
-          return;
-        }
-
-        if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
-          Log.d(TAG, "Log in failure: No network");
-          return;
-        }
-
-        if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-          Log.d(TAG, "Log in failure: Unknown error");
-          return;
-        }
-      }
-
-      Log.d(TAG, "Log in failure: Unknown login response");
+      onLoginActivityResult(resultCode, data);
     }
+  }
+
+  private void onLoginActivityResult(int resultCode, Intent data) {
+    IdpResponse response = IdpResponse.fromResultIntent(data);
+    // Successfully signed in
+    if (resultCode == RESULT_OK) {
+      Log.d(TAG, "Logged in!!");
+      if (FirebaseAuth.getInstance() != null
+          && FirebaseAuth.getInstance().getCurrentUser() != null) {
+        isUserRegistered(FirebaseAuth.getInstance().getUid());
+      }
+      return;
+    } else {
+      // Sign in failed
+      if (response == null) {
+        // User pressed back button
+        Log.d(TAG, "Log in failure: User pressed back button");
+        return;
+      }
+      if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+        Log.d(TAG, "Log in failure: No network");
+        return;
+      }
+      if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+        Log.d(TAG, "Log in failure: Unknown error");
+        return;
+      }
+    }
+    Log.d(TAG, "Log in failure: Unknown login response");
   }
 
   /**
