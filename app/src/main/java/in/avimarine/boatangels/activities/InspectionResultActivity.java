@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -59,6 +60,15 @@ public class InspectionResultActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.inspection_status_icon_for_result)
   ImageView inspectionResultIcon;
+//  _________________________________________
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.like_button)
+  ImageButton likeButton;
+
+  private boolean likeBtPressed =false;
+
+//---------------------------------------------
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +95,6 @@ public class InspectionResultActivity extends AppCompatActivity {
         Log.d(TAG, "get failed with ", task.getException());
       }
     });
-
   }
 
   @OnClick(R.id.checkBox_bow)
@@ -104,8 +113,20 @@ public class InspectionResultActivity extends AppCompatActivity {
     message.setText(i.message);
     setCheckBoxes(i);
     colorBoat();
-    i.setInspectionIcon(inspectionResultIcon);
+    i.setInspectionSavirityIcon(inspectionResultIcon);
+    onLikeButtonClick(likeButton, i);
   }
+
+  void onLikeButtonClick(ImageButton button, Inspection i){
+    button.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        likeBtPressed = !likeBtPressed;
+        v.setSelected(likeBtPressed); //if he liked = false, then v(view object-thanksButton) shuold be pressed (true) and vise versa
+        i.setLikeStatus(likeBtPressed);
+      }
+    });
+  }
+
 
   private void colorBoat() {
     if (checkbox_bow.getState()==State.VCHECKED){
@@ -207,5 +228,4 @@ public class InspectionResultActivity extends AppCompatActivity {
       }
     }
   }
-
 }

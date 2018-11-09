@@ -117,9 +117,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
     setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
     setInspectionSeverityIcon(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
-
   }
-
     void setInspectionSeverityIcon(ImageButton button, StatusEnum status){
       button.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
@@ -166,7 +164,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     inspection.message = inspection_text.getText().toString();
     inspection.inspectionTime = new Date().getTime();
     inspection.inspectorUid = u.getUid();
-    inspection.setStatus(inspectionStatus); //pazit
+    inspection.setStatus(inspectionStatus);
     if (FirebaseAuth.getInstance().getCurrentUser() != null) {
       inspection.inspectorName = u.getDisplayName();
     }

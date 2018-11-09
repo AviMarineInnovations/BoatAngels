@@ -1,50 +1,37 @@
 package in.avimarine.boatangels.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.firestore.QuerySnapshot;
-import in.avimarine.boatangels.BoatHolder;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.activities.InspectBoatActivity;
 import in.avimarine.boatangels.activities.InspectionResultActivity;
-import in.avimarine.boatangels.activities.MyInspection;
 import in.avimarine.boatangels.db.FireBase;
-import in.avimarine.boatangels.db.iDb;
-import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.fragments.MyBoatFragment.OnFragmentInteractionListener;
-import in.avimarine.boatangels.general.GeneralUtils;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +64,16 @@ public class MyActivityFragment extends Fragment {
   private String inspecUid;
   private OnFragmentInteractionListener mListener;
 
+
+
+//  private void displayLikeIcon(View view, ImageView likeIcon, boolean like)
+//  {
+//    if(like)
+//      likeIcon.setVisibility(view.VISIBLE);
+//    else
+//      likeIcon.setVisibility(view.INVISIBLE);
+//  }
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -107,8 +104,8 @@ public class MyActivityFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
+    //ImageView likeIcon2 = (ImageView)(getView().findViewById(R.id.like_icon));
     ButterKnife.bind(getActivity());
-
     return view;
   }
 
@@ -139,6 +136,10 @@ public class MyActivityFragment extends Fragment {
               for (DocumentSnapshot document : task.getResult()) {
                 Inspection inspec = document.toObject(Inspection.class);
                 if (inspec.inspectorUid.equals(uid) || inspec.boatUuid.equals(myBoatUuid)) {
+
+                  //ImageView likeImage =  getView().findViewById(R.id.like_icon);
+                  //displayLikeIcon(getView(),likeImage, inspec.getLiked());  //pazit
+
                   String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
                   arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
                       inspecDate + inspeData + "\n" +
@@ -225,5 +226,4 @@ public class MyActivityFragment extends Fragment {
     super.onStop();
 //    adapter.stopListening();
   }
-
 }

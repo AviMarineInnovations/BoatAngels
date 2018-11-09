@@ -4,6 +4,7 @@ import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.GOOD;
 import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.BAD;
 import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.VERY_BAD;
 
+import android.view.View;
 import android.widget.ImageView;
 import in.avimarine.boatangels.R;
 import java.util.List;
@@ -34,11 +35,13 @@ public class Inspection extends BaseDbObject {
   public List<Message> discussion;
   public int pointsEarned;
   private StatusEnum status = GOOD;
+  private boolean liked = false;
+
 
 
   public void setStatus(StatusEnum status) {this.status = status;}
   public StatusEnum getStatus() { return  status;}
-  public void setInspectionIcon(ImageView icon){
+  public void setInspectionSavirityIcon(ImageView icon){
     switch (status) {
       case GOOD:
         icon.setImageResource(R.drawable.ic_unpressed_good_inspection_icon);
@@ -51,6 +54,23 @@ public class Inspection extends BaseDbObject {
         break;
     }
   }
+
+  //-------------------------
+  public boolean getLiked(){ return this.liked; }
+  public void setLikeStatus(boolean liked){
+    this.liked = liked;
+  }
+
+//  public void displayLikeIcon(View view, ImageView likeIcon)
+//  {
+//    if(this.liked)
+//      likeIcon.setVisibility(view.VISIBLE);
+//    else
+//      likeIcon.setVisibility(view.INVISIBLE);
+//  }
+
+  //-------------------------
+
   @Override
   public String toString() {
     return "Inspection{" +
