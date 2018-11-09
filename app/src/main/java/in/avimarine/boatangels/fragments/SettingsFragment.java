@@ -44,14 +44,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
     switch (s) {
-      case "locale_list":
-        String loc = sharedPreferences.getString(s, "default");
-        if (loc.equals("default")) {
-          LocaleUtils.restoreDefaultLocale();
-        } else
-          LocaleUtils.setLocale(new Locale(loc));
-        getActivity().recreate();
-        break;
       case "display_name": {
         String s1 = sharedPreferences.getString(s, "");
         FireBase fb = new FireBase();
