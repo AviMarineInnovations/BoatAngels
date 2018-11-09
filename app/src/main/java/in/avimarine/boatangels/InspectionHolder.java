@@ -27,9 +27,9 @@ public class InspectionHolder extends RecyclerView.ViewHolder {
   }
 
   public void bind(Inspection i) {
-    Date date = new Date(i.inspectionTime);
+    Date date = new Date(i.getInspectionTime());
     setDate(DateFormat.format("dd.MM.yyyy HH:mm", date).toString());
-    setText(i.message);
+    setText(i.getMessage());
     i.setInspectionIcon(statusIcon);
   }
 

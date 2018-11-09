@@ -20,16 +20,19 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.firebase.auth.FirebaseAuth;
+import com.crashlytics.android.answers.Answers;
 import com.google.firebase.firestore.DocumentSnapshot;
+import in.avimarine.boatangels.Points;
+import in.avimarine.boatangels.R;
+import in.avimarine.boatangels.analytics.InspectionEvent;
 import in.avimarine.boatangels.customViews.CheckBoxTriState;
 import in.avimarine.boatangels.customViews.CheckBoxTriState.State;
-import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.db.FireBase;
 import in.avimarine.boatangels.db.iDb;
 import in.avimarine.boatangels.db.objects.Boat;
 import in.avimarine.boatangels.db.objects.Inspection;
 import in.avimarine.boatangels.db.objects.Inspection.StatusEnum;
+import in.avimarine.boatangels.db.objects.TransactionStatus;
 import in.avimarine.boatangels.db.objects.User;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +49,6 @@ import java.util.Map;
 public class InspectBoatActivity extends AppCompatActivity {
 
   private static final String TAG = "InspectBoatActivity";
-  private iDb db;
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.message_linedEditText)
   EditText inspection_text;
@@ -59,12 +61,15 @@ public class InspectBoatActivity extends AppCompatActivity {
   @SuppressWarnings("WeakerAccess")
   @BindView(R.id.listview)
   ListView listView;
+  @SuppressWarnings("WeakerAccess")
+  @BindView(R.id.send_inspection_btn)
+  ImageButton sendInspectionBtn;
+  List<Item> items;
+  ItemsListAdapter myItemsListAdapter;
+  private iDb db;
   private Boat b;
   private User u = null;
   private StatusEnum inspectionStatus = StatusEnum.GOOD;
-
-  List<Item> items;
-  ItemsListAdapter myItemsListAdapter;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +86,12 @@ public class InspectBoatActivity extends AppCompatActivity {
     db.getBoat(uuid, task -> {
       if (task.isSuccessful()) {
         DocumentSnapshot document = task.getResult();
-        if (document.exists()) {
+        if (document != null && document.exists()) {
           b = document.toObject(Boat.class);
+          if (b == null) {
+            Log.e(TAG, "boat is null!");
+            finish();
+          }
           title.setText(getString(R.string.inspection_title, b.getName()));
           ((FireBase) db).loadImgToImageView(this, boatImage, "boats/" + b.getPhotoName(),
               R.drawable.ic_no_picture_boat_icon, R.drawable.ic_no_picture_boat_icon);
@@ -102,9 +111,10 @@ public class InspectBoatActivity extends AppCompatActivity {
     myItemsListAdapter = new ItemsListAdapter(this, items, true);
     listView.setAdapter(myItemsListAdapter);
 
-    listView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(InspectBoatActivity.this,
-        ((Item) (parent.getItemAtPosition(position))).ItemString,
-        Toast.LENGTH_LONG).show());
+    listView.setOnItemClickListener(
+        (parent, view, position, id) -> Toast.makeText(InspectBoatActivity.this,
+            ((Item) (parent.getItemAtPosition(position))).ItemString,
+            Toast.LENGTH_LONG).show());
 
     setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
     setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
@@ -113,15 +123,16 @@ public class InspectBoatActivity extends AppCompatActivity {
 
   }
 
-    void setInspectionSeverityIcon(ImageButton button, StatusEnum status){
-      button.setOnClickListener(v -> {
-        findViewById(R.id.good_inspection_btn).setSelected(false); //cancel another pressed button before pressing another
-        findViewById(R.id.bad_inspection_btn).setSelected(false);
-        findViewById(R.id.very_bad_inspection_btn).setSelected(false);
-        v.setSelected(true);
-        inspectionStatus = status;
-      });
-    }
+  void setInspectionSeverityIcon(ImageButton button, StatusEnum status) {
+    button.setOnClickListener(v -> {
+      findViewById(R.id.good_inspection_btn)
+          .setSelected(false); //cancel another pressed button before pressing another
+      findViewById(R.id.bad_inspection_btn).setSelected(false);
+      findViewById(R.id.very_bad_inspection_btn).setSelected(false);
+      v.setSelected(true);
+      inspectionStatus = status;
+    });
+  }
 
   private void initItems() {
     items = new ArrayList<>();
@@ -142,26 +153,56 @@ public class InspectBoatActivity extends AppCompatActivity {
 
   @OnClick(R.id.send_inspection_btn)
   public void onClick(View v) {
-    Inspection inspection = new Inspection();
+
     if (b == null) {
       Toast.makeText(this, "No boat was selected", Toast.LENGTH_SHORT).show();
       return;
     }
-    inspection.pointsEarned = b.getOfferPoint();
-    inspection.boatUuid = b.getUuid();
-    inspection.boatName = b.getName();
-    inspection.message = inspection_text.getText().toString();
-    inspection.inspectionTime = new Date().getTime();
-    inspection.inspectorUid = u.getUid();
-    inspection.setStatus(inspectionStatus); //pazit
-    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-      inspection.inspectorName = u.getDisplayName();
+    sendInspectionBtn.setEnabled(false);
+    Inspection inspection = new Inspection(u.getUid(), u.getDisplayName(), b.getUuid(), b.getName(),
+        inspection_text.getText().toString(), getCheckBoxes(), new Date().getTime(), null,
+        b.getOfferPoint(), inspectionStatus);
+    //Check that these points were not offered by me.
+    if (b.getOfferPoint() > 0 && ((b.getOfferingUserUid() == null) || !b.getOfferingUserUid()
+        .equals(u.getUid()))) {
+      Points.getOfferedPointsForInspection(u.getUid(), b.getUuid(),
+          transactionStatus -> {
+            onTransactionReturn(inspection, transactionStatus,inspection.getPointsEarned());
+          },
+          e -> addInspectionError("failed locally"));
+      //Give points if inspecting a boat which is not mine
+    } else if ((b.getOfferingUserUid() == null) || !b.getOfferingUserUid().equals(u.getUid())) {
+      Points.givePointsForInspection(u.getUid(), 10,
+          transactionStatus -> {
+            onTransactionReturn(inspection, transactionStatus, 10);
+          },
+          e -> addInspectionError("failed locally"));
+    } else {
+      performTransaction(inspection,0);
     }
-    inspection.finding = getCheckBoxes();
-    b.setLastInspectionDate(inspection.inspectionTime);
+  }
+
+  private void onTransactionReturn(Inspection inspection, TransactionStatus transactionStatus, int points) {
+    if (transactionStatus == TransactionStatus.SUCCESS) {
+      performTransaction(inspection, points);
+    } else {
+      addInspectionError("failed on server");
+    }
+  }
+
+  private void performTransaction(Inspection inspection, int points) {
+    inspection.setPointsEarned(points);
     db.addInspection(inspection);
-    db.addBoat(b);
+    FireBase.setBoatLastInspectionDate(b.getUuid(), inspection.getInspectionTime());
+    Answers.getInstance().logCustom(new InspectionEvent());
     finish();
+  }
+
+  private void addInspectionError(String s2) {
+    Toast.makeText(InspectBoatActivity.this,
+        getString(R.string.error_adding_inspection), Toast.LENGTH_LONG).show();
+    Log.e(TAG, s2);
+    sendInspectionBtn.setEnabled(true);
   }
 
 
@@ -202,7 +243,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     private Context context;
     private List<Item> list;
 
-    public ItemsListAdapter(Context c, List<Item> l,boolean editable) {
+    public ItemsListAdapter(Context c, List<Item> l, boolean editable) {
       context = c;
       list = l;
       this.editable = editable;
@@ -252,8 +293,7 @@ public class InspectBoatActivity extends AppCompatActivity {
         viewHolder.checkBox.setOnClickListener(
             view -> list.get(position).checked = ((CheckBoxTriState) view).getState());
         viewHolder.checkBox.setEnabled(true);
-      }
-      else{
+      } else {
         viewHolder.checkBox.setEnabled(false);
       }
 

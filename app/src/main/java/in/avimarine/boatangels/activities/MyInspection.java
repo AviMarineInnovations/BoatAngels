@@ -52,14 +52,14 @@ public class MyInspection extends AppCompatActivity {
           if (task.isSuccessful()) {
             for (DocumentSnapshot document : task.getResult()) {
               Inspection inspec = document.toObject(Inspection.class);
-              if (inspec.inspectorUid.equals(uid)) {
-                String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
-                arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
+              if (inspec.getInspectorUid().equals(uid)) {
+                String inspeData = DateFormat.getDateInstance().format(inspec.getInspectionTime());
+                arrayInspe.add(inspecBoat + inspec.getBoatName() + "\n" +
                     inspecDate + inspeData + "\n" +
-                    pointsEarned + inspec.pointsEarned);
+                    pointsEarned + inspec.getPointsEarned());
                 Log.d(TAG, document.getId() + " => " + document.getData());
 
-                hashMap.put(indexList, inspec.boatUuid);
+                hashMap.put(indexList, inspec.getBoatUuid());
                 hashMapInspeUid.put(indexList, inspec.getUuid());
                 indexList++;
               }

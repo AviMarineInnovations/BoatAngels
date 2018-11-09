@@ -156,5 +156,6 @@
   <string name="tos_url" translatable="false">http://boatangels.avimarine.in/tos.html</string>
   <string name="add_user">Add user</string>
   <string name="ask_for_inspetion_explanation">You can ask for inspection from other users. The points you offer will be immediately deducted from your points and given to the first user to inspect your boat.</string>
+  <string name="error_adding_inspection">Error adding inspection. Try again later</string>
 
 </resources>

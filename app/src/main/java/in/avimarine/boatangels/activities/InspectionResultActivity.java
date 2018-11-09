@@ -99,9 +99,9 @@ public class InspectionResultActivity extends AppCompatActivity {
   private void updateUI(Inspection i){
     GeneralUtils.enableAndShowViews(title,subtitle,message,boatBody,boatBowLines,boatSternLines);
     GeneralUtils.showViews(checkbox_bow,checkbox_jib,checkbox_main,checkbox_stern);
-    title.setText(getString(R.string.inspection_title,i.boatName));
-    subtitle.setText(getString(R.string.inspection_subtitle, i.inspectorName, GeneralUtils.toFormatedDateString(this,new Date(i.inspectionTime))));
-    message.setText(i.message);
+    title.setText(getString(R.string.inspection_title,i.getBoatName()));
+    subtitle.setText(getString(R.string.inspection_subtitle, i.getInspectorName(), GeneralUtils.toFormatedDateString(this,new Date(i.getInspectionTime()))));
+    message.setText(i.getMessage());
     setCheckBoxes(i);
     colorBoat();
     i.setInspectionIcon(inspectionResultIcon);
@@ -184,14 +184,14 @@ public class InspectionResultActivity extends AppCompatActivity {
   }
 
   private void setCheckBoxes(Inspection i) {
-    if (i.finding==null){
+    if (i.getFinding()==null){
       GeneralUtils.disableAndHideViews(checkbox_bow,checkbox_jib,checkbox_main,checkbox_stern,boatBody,boatBowLines,boatSternLines);
       return;
     }
-    setCheckBox(i.finding,"BOWLINES", checkbox_bow);
-    setCheckBox(i.finding,"JIB", checkbox_jib);
-    setCheckBox(i.finding,"MAIN", checkbox_main);
-    setCheckBox(i.finding,"STERNLINES", checkbox_stern);
+    setCheckBox(i.getFinding(),"BOWLINES", checkbox_bow);
+    setCheckBox(i.getFinding(),"JIB", checkbox_jib);
+    setCheckBox(i.getFinding(),"MAIN", checkbox_main);
+    setCheckBox(i.getFinding(),"STERNLINES", checkbox_stern);
   }
 
   private void setCheckBox(Map<String,String> m, String key, CheckBoxTriState cb) {

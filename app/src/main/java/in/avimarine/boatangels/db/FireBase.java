@@ -48,6 +48,10 @@ public class FireBase implements iDb {
     }
   }
 
+  public static void setBoatLastInspectionDate(String boatUuid, Long inspectionTime) {
+    FirebaseFirestore.getInstance().collection("boats").document(boatUuid).update("lastInspectionDate", inspectionTime);
+  }
+
   @Override
   public void addBoat(Boat b) {
     CollectionReference cr = mFirestore.collection("boats");

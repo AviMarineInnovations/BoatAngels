@@ -209,9 +209,9 @@ public class MyBoatFragment extends Fragment {
       List<Item> items = initItems(inspection);
       TextView message = ((Activity)mContext).findViewById(R.id.message_TextView);
       CircleImageView civ = ((Activity)mContext).findViewById(R.id.boat_image);
-      title.setText(inspection.boatName);
-      subTitle.setText(getString(R.string.inspection_text, GeneralUtils.toFormatedDateString(mContext,new Date(inspection.inspectionTime)), inspection.inspectorName));
-      message.setText(inspection.message);
+      title.setText(inspection.getBoatName());
+      subTitle.setText(getString(R.string.inspection_text, GeneralUtils.toFormatedDateString(mContext,new Date(inspection.getInspectionTime())), inspection.getInspectorName()));
+      message.setText(inspection.getMessage());
       setBoatPhoto(civ, currentBoat.getPhotoName());
       ItemsListAdapter myItemsListAdapter;
       myItemsListAdapter = new ItemsListAdapter(mContext, items, false);
@@ -225,7 +225,7 @@ public class MyBoatFragment extends Fragment {
   }
   private List<Item> initItems(Inspection i) {
     List<Item> ret = new ArrayList<>();
-    for (Map.Entry<String,String> me: i.finding.entrySet()) {
+    for (Map.Entry<String,String> me: i.getFinding().entrySet()) {
       Item item = new Item(me.getKey(), CheckBoxTriState.State.valueOf(me.getValue()));
       ret.add(item);
     }

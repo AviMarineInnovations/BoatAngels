@@ -1,5 +1,7 @@
 package in.avimarine.boatangels.db.objects;
 
+import java.util.Date;
+
 /**
  * This file is part of an
  * Avi Marine Innovations project: BoatAngels
@@ -7,30 +9,52 @@ package in.avimarine.boatangels.db.objects;
  */
 public class Transaction extends BaseDbObject {
 
-  private String srcUid;
-  private String destUid;
+  private String srcId;
+  private String destId;
+
+  public Transaction(String srcId, String destId,
+      TransactionType type, int amount, TransactionStatus status) {
+    this.srcId = srcId;
+    this.destId = destId;
+    this.type = type;
+    this.amount = amount;
+    this.status = status;
+    this.firstAddedTime = new Date().getTime();
+    this.lastUpdateTime = new Date().getTime();
+  }
+
+  private TransactionType type;
   private int amount;
   private TransactionStatus status;
+
 
   @Override
   public String toString() {
     return "";
   }
 
-  public String getSrcUid() {
-    return srcUid;
+  public String getSrcId() {
+    return srcId;
   }
 
-  public void setSrcUid(String srcUid) {
-    this.srcUid = srcUid;
+  public void setSrcId(String srcId) {
+    this.srcId = srcId;
   }
 
-  public String getDestUid() {
-    return destUid;
+  public String getDestId() {
+    return destId;
   }
 
-  public void setDestUid(String destUid) {
-    this.destUid = destUid;
+  public void setDestId(String destId) {
+    this.destId = destId;
+  }
+
+  public TransactionType getType() {
+    return type;
+  }
+
+  public void setType(TransactionType type) {
+    this.type = type;
   }
 
   public int getAmount() {
