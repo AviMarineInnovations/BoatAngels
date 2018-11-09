@@ -264,7 +264,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
       Log.d(TAG, "Logged in!!");
       if (FirebaseAuth.getInstance() != null
           && FirebaseAuth.getInstance().getCurrentUser() != null) {
-        isUserRegistered(FirebaseAuth.getInstance().getUid());
+        isUserRegistered(
+            FirebaseAuth.getInstance().getUid()); //TODO: fix add user screen shows twice.
       }
       return;
     } else {

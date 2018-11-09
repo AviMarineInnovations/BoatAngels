@@ -80,7 +80,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:ems="10"
-    android:text="You can ask for inspection from other users. The points you offer will be immediatly deducted from your points and given to the first user to inspect your boat. "
+    android:text="@string/ask_for_inspetion_explanation"
     android:textColor="#ffffff"
     android:textSize="18sp"
     app:layout_constraintEnd_toEndOf="parent"

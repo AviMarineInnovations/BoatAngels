@@ -156,6 +156,14 @@ public class GeneralUtils {
     return ((list==null)||(list.isEmpty()));
   }
 
+  public static boolean isNullOrEmpty(String... strings) {
+    for (String s : strings){
+      if (s==null || s.isEmpty())
+        return true;
+    }
+    return false;
+  }
+
 
   enum CLAZZ {
     Integer, Double, Float, Long
