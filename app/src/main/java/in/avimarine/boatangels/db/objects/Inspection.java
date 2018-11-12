@@ -1,8 +1,6 @@
 package in.avimarine.boatangels.db.objects;
 
 import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.GOOD;
-import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.BAD;
-import static in.avimarine.boatangels.db.objects.Inspection.StatusEnum.VERY_BAD;
 
 import android.widget.ImageView;
 import in.avimarine.boatangels.R;
@@ -19,21 +17,110 @@ import java.util.Map;
 
 public class Inspection extends BaseDbObject {
 
-  public enum StatusEnum
-  {
-    GOOD, BAD, VERY_BAD
+
+  private String inspectorUid;
+  private String inspectorName;
+  private String boatUuid;
+  private String boatName;
+  private String message;
+  private Map<String, String> finding;
+  private Long inspectionTime;
+  private List<Message> discussion;
+  private int pointsEarned;
+  private StatusEnum status = GOOD;
+  public Inspection(String inspectorUid, String inspectorName, String boatUuid,
+      String boatName, String message, Map<String, String> finding, Long inspectionTime,
+      List<Message> discussion, int pointsEarned,
+      StatusEnum status) {
+    this.inspectorUid = inspectorUid;
+    this.inspectorName = inspectorName;
+    this.boatUuid = boatUuid;
+    this.boatName = boatName;
+    this.message = message;
+    this.finding = finding;
+    this.inspectionTime = inspectionTime;
+    this.discussion = discussion;
+    this.pointsEarned = pointsEarned;
+    this.status = status;
+  }
+  public Inspection(){
+    //For Firestore
   }
 
-  public String inspectorUid;
-  public String inspectorName;
-  public String boatUuid;
-  public String boatName;
-  public String message;
-  public Map<String, String> finding;
-  public Long inspectionTime;
-  public List<Message> discussion;
-  public int pointsEarned;
-  private StatusEnum status = GOOD;
+  public String getInspectorUid() {
+    return inspectorUid;
+  }
+
+  public void setInspectorUid(String inspectorUid) {
+    this.inspectorUid = inspectorUid;
+  }
+
+  public String getInspectorName() {
+    return inspectorName;
+  }
+
+  public void setInspectorName(String inspectorName) {
+    this.inspectorName = inspectorName;
+  }
+
+  public String getBoatUuid() {
+    return boatUuid;
+  }
+
+  public void setBoatUuid(String boatUuid) {
+    this.boatUuid = boatUuid;
+  }
+
+  public String getBoatName() {
+    return boatName;
+  }
+
+  public void setBoatName(String boatName) {
+    this.boatName = boatName;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public Map<String, String> getFinding() {
+    return finding;
+  }
+
+  public void setFinding(Map<String, String> finding) {
+    this.finding = finding;
+  }
+
+  public Long getInspectionTime() {
+    return inspectionTime;
+  }
+
+  public void setInspectionTime(Long inspectionTime) {
+    this.inspectionTime = inspectionTime;
+  }
+
+  public List<Message> getDiscussion() {
+    return discussion;
+  }
+
+  public void setDiscussion(List<Message> discussion) {
+    this.discussion = discussion;
+  }
+
+  public int getPointsEarned() {
+    return pointsEarned;
+  }
+
+  public void setPointsEarned(int pointsEarned) {
+    this.pointsEarned = pointsEarned;
+  }
+
+
+
 
 
   public void setStatus(StatusEnum status) {this.status = status;}
@@ -67,5 +154,8 @@ public class Inspection extends BaseDbObject {
         ", discussion=" + discussion +
         '}';
   }
-
+  public enum StatusEnum
+  {
+    GOOD, BAD, VERY_BAD
+  }
 }

@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
-//import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,6 +46,10 @@ public class FireBase implements iDb {
     } else {
       FirebaseFirestore.setLoggingEnabled(false);
     }
+  }
+
+  public static void setBoatLastInspectionDate(String boatUuid, Long inspectionTime) {
+    FirebaseFirestore.getInstance().collection("boats").document(boatUuid).update("lastInspectionDate", inspectionTime);
   }
 
   @Override
@@ -101,7 +104,7 @@ public class FireBase implements iDb {
   }
   @Override
   public void getBoat(String uuid, OnCompleteListener<DocumentSnapshot> listener) {
-    mFirestore.collection("boats").document(uuid).get().addOnCompleteListener(listener);
+    FirebaseFirestore.getInstance().collection("boats").document(uuid).get().addOnCompleteListener(listener);
   }
 
   @Override
@@ -183,4 +186,6 @@ public class FireBase implements iDb {
   public void setSupportedVersion(long version) {
     mFirestore.collection("globalSettings").document("versions").set(new GlobalSettings(version));
   }
+
+
 }

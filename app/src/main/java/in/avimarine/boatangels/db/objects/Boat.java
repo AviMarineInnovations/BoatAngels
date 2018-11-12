@@ -21,6 +21,7 @@ public class Boat extends BaseDbObject {
   private String marinaUuid;
   private String marinaName;
   private int offerPoint = 0;
+  private String offeringUserUid;
   private String clubName;
   private String clubUuid;
   private Long lastInspectionDate;
@@ -132,5 +133,13 @@ public class Boat extends BaseDbObject {
   @Override
   public String toString() {
     return name;
+  }
+
+  public String getOfferingUserUid() {
+    return offeringUserUid;
+  }
+
+  public void setOfferingUserUid(String offeringUserUid) {
+    this.offeringUserUid = offeringUserUid;
   }
 }

@@ -88,13 +88,13 @@ public class MyActivityFragment extends Fragment {
           if (task.isSuccessful()) {
             for (DocumentSnapshot document : task.getResult()) {
               Inspection inspec = document.toObject(Inspection.class);
-              if (inspec.inspectorUid.equals(uid) || inspec.boatUuid.equals(myBoatUuid)) {
-                String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
-                arrayInspe.add(getString(R.string.inspect_boat) + inspec.boatName + "\n" +
+              if (inspec.getInspectorUid().equals(uid) || inspec.getBoatUuid().equals(myBoatUuid)) {
+                String inspeData = DateFormat.getDateInstance().format(inspec.getInspectionTime());
+                arrayInspe.add(getString(R.string.inspect_boat) + inspec.getBoatName() + "\n" +
                     getString(R.string.inspect_date) + inspeData + "\n" +
-                    getString(R.string.points_earned) + inspec.pointsEarned);
+                    getString(R.string.points_earned) + inspec.getPointsEarned());
                 Log.d(TAG, document.getId() + " => " + document.getData());
-                hashMap.put(indexList, inspec.boatUuid);
+                hashMap.put(indexList, inspec.getBoatUuid());
                 hashMapInspeUid.put(indexList, inspec.getUuid());
                 indexList++;
               }
