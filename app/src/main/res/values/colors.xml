@@ -9,4 +9,6 @@
   <color name="background">#605271</color>
   <color name="titlebackgroundcolor">#443656</color>
   <color name="lightbackground">#9f90af</color>
+  <color name="traffic_light_body">#FFFFFF</color>
+  <color name="search_icon">#FFFFFF</color>
 </resources>

@@ -27,38 +27,32 @@ import in.avimarine.boatangels.db.objects.Boat;
 
 public class BoatsForInspectionFragment extends Fragment {
 
-  private OnClickListener mOnClickListener;
   private static final String TAG = "BoatForInspectionActivi";
-  private FirestoreRecyclerAdapter adapter;
   private static final String BOATS_COLLECTION_NAME = "boats";
+  private OnClickListener mOnClickListener;
+  private FirestoreRecyclerAdapter adapter;
 
-  public void setInspectionList(boolean searchBoat, boolean subTest, String boatName) {
-
-    Query query = FirebaseFirestore.getInstance()
-        .collection(BOATS_COLLECTION_NAME)
-        .orderBy("offerPoint", Direction.DESCENDING)
-        .limit(50);
-    Log.d(TAG, "Boat Name: " + boatName);
-
-    if (searchBoat && !subTest) {
+  public void setInspectionList(boolean searchBoat, String boatName) {
+    Log.d(TAG, "Updating inspectin list for boatname: " + boatName);
+    Query query;
+    if (searchBoat && boatName != null) {
+      //For a query with boat name search
       query = FirebaseFirestore.getInstance()
-          .collection(BOATS_COLLECTION_NAME).whereEqualTo("name", boatName)
+          .collection(BOATS_COLLECTION_NAME).orderBy("lowerCaseName")
+          .startAt(boatName.toLowerCase()).endAt(boatName.toLowerCase() + "\uf8ff");
+    } else {
+      //For a query with no search (order by offerPoint)
+      query = FirebaseFirestore.getInstance()
+          .collection(BOATS_COLLECTION_NAME).orderBy("offerPoint", Direction.DESCENDING)
           .limit(50);
-    } else if (subTest && !searchBoat) {
-
-      query = FirebaseFirestore.getInstance()
-          .collection(BOATS_COLLECTION_NAME).whereGreaterThanOrEqualTo("name", boatName);
     }
-
     FirestoreRecyclerOptions<Boat> options = new FirestoreRecyclerOptions.Builder<Boat>()
         .setQuery(query, Boat.class)
         .build();
-
     adapter = new FirestoreRecyclerAdapter<Boat, BoatHolder>(options) {
       @Override
       public void onBindViewHolder(@NonNull BoatHolder holder, int position, @NonNull Boat model) {
         holder.bind(model);
-
       }
 
       @Override
@@ -84,6 +78,7 @@ public class BoatsForInspectionFragment extends Fragment {
 
 
   }
+
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -95,23 +90,24 @@ public class BoatsForInspectionFragment extends Fragment {
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setInspectionList(false, false, "");
+    setInspectionList(false,"");
     SearchView mSearchView = getActivity().findViewById(R.id.search_view_inspecton);
     mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 
       @Override
       public boolean onQueryTextSubmit(String boatName) {
-        setInspectionList(true, false, boatName);
+        setInspectionList(true, boatName);
         return false;
       }
 
       @Override
       public boolean onQueryTextChange(String s) {
-        setInspectionList(false, true, s);
+        setInspectionList( true, s);
         return false;
       }
     });
   }
+
   @Override
   public void onStart() {
     super.onStart();

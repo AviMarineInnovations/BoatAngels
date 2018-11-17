@@ -1,7 +1,5 @@
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.common.base.Strings;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.cloud.FirestoreClient;
@@ -44,6 +42,7 @@ public class Firestore {
         ret += "]";
         return ret;
     }
+
     public static List<Boat> getAllBoats(FirebaseApp app, String collection) {
         List<Boat> ret = new ArrayList<>();
         if ((app == null) || (Strings.isNullOrEmpty(collection))) {
@@ -88,7 +87,7 @@ public class Firestore {
 
     public static void putBoats(FirebaseApp app, List<Boat> boats) {
         com.google.cloud.firestore.Firestore firestore = FirestoreClient.getFirestore(app);
-        for (Boat b :boats) {
+        for (Boat b : boats) {
             ApiFuture<WriteResult> writeResult =
                     firestore.collection("boats")
                             .document(b.getUuid())
@@ -123,6 +122,7 @@ public class Firestore {
         }
         return ret;
     }
+
     public static List<User> getAllUsers(FirebaseApp app, String collection) {
         List<User> ret = new ArrayList<>();
         if ((app == null) || (Strings.isNullOrEmpty(collection))) {
@@ -144,10 +144,10 @@ public class Firestore {
         return ret;
     }
 
-    public static void deleteInspections(FirebaseApp app, List<String> Uuids){
+    public static void deleteInspections(FirebaseApp app, List<String> Uuids) {
         com.google.cloud.firestore.Firestore db = FirestoreClient.getFirestore(app);
         ApiFuture<WriteResult> writeResult = null;
-        for (String uuid: Uuids) {
+        for (String uuid : Uuids) {
             writeResult = db.collection("inspections").document(uuid).delete();
         }
 
@@ -158,5 +158,40 @@ public class Firestore {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void updateBoatLowerCaseName(FirebaseApp app, String uuid) {
+        com.google.cloud.firestore.Firestore db = FirestoreClient.getFirestore(app);
+        DocumentReference docRef = db.collection("boats").document(uuid);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = null;
+        String name = null;
+        try {
+            document = future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (document != null && document.exists()) {
+            name = document.getString("name");
+            // (async) Update one field
+            if (name != null) {
+                ApiFuture<WriteResult> writefuture = docRef.update("lowerCaseName", name.toLowerCase());
+                WriteResult result = null;
+                try {
+                    result = writefuture.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Write result: " + result);
+            }
+
+        } else {
+            System.out.println("No such document!");
+        }
+
     }
 }

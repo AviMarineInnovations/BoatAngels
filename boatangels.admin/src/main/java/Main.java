@@ -21,17 +21,19 @@ public class Main {
             return;
         }
 
-        saveDbs(devApp,"db\\dev");
-        saveDbs(stageApp,"db\\stage");
-        saveDbs(prodApp,"db\\prod");
+//        saveDbs(devApp,"db\\dev");
+//        saveDbs(stageApp,"db\\stage");
+//        saveDbs(prodApp,"db\\prod");
 //        Firestore.putBoats(devApp, boats);
-        Storage.getBoatPhotos(devApp,"","boats");
+//        Storage.getBoatPhotos(devApp,"","boats");
 
 //        List<Boat> boats = Firestore.getAllBoats(devApp,"boats");
 //        List<Inspection> inspections = Firestore.getAllInspections(devApp,"inspections");
 //        List<User> users = Firestore.getAllUsers(devApp,"users");
 
 //        removeOrphandBoats(devApp, boats, inspections, users);
+
+        Maintenance.addLowerCaseNamer(devApp);
 
 
     }

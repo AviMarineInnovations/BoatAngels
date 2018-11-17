@@ -16,6 +16,7 @@ public class Boat extends BaseDbObject {
 
   public List<String> users = new ArrayList<>();
   private String name;
+  private String lowerCaseName;
   private String model;
   private GeoPoint location;
   private String marinaUuid;
@@ -48,6 +49,15 @@ public class Boat extends BaseDbObject {
 
   public void setName(String name) {
     this.name = name;
+    this.lowerCaseName = name!=null?name.toLowerCase():name;
+  }
+
+  public String getLowerCaseName() {
+    return lowerCaseName;
+  }
+
+  public void setLowerCaseName(String name) {
+    this.lowerCaseName = lowerCaseName;
   }
 
   public String getModel() {
