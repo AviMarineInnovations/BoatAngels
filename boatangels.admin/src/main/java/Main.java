@@ -27,13 +27,14 @@ public class Main {
 //        Firestore.putBoats(devApp, boats);
 //        Storage.getBoatPhotos(devApp,"","boats");
 
-//        List<Boat> boats = Firestore.getAllBoats(devApp,"boats");
-//        List<Inspection> inspections = Firestore.getAllInspections(devApp,"inspections");
-//        List<User> users = Firestore.getAllUsers(devApp,"users");
+        List<Boat> boats = Firestore.getAllBoats(prodApp,"boats");
+//        Firestore.putBoats(prodApp,boats);
+        List<Inspection> inspections = Firestore.getAllInspections(prodApp,"inspections");
+        List<User> users = Firestore.getAllUsers(prodApp,"users");
 
-//        removeOrphandBoats(devApp, boats, inspections, users);
+        removeOrphandBoats(prodApp, boats, inspections, users);
 
-        Maintenance.addLowerCaseNamer(devApp);
+//        Maintenance.addLowerCaseNamer(prodApp);
 
 
     }

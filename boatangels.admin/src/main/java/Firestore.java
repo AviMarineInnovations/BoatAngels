@@ -149,15 +149,16 @@ public class Firestore {
         ApiFuture<WriteResult> writeResult = null;
         for (String uuid : Uuids) {
             writeResult = db.collection("inspections").document(uuid).delete();
+            try {
+                System.out.println(writeResult.get().getUpdateTime());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
 
-        try {
-            System.out.println(writeResult.get().getUpdateTime());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public static void updateBoatLowerCaseName(FirebaseApp app, String uuid) {

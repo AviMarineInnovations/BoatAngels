@@ -16,11 +16,13 @@ public class Boat extends BaseDbObject {
 
   public List<String> users = new ArrayList<>();
   private String name;
+  private String lowerCaseName;
   private String model;
   private GeoPoint location;
   private String marinaUuid;
   private String marinaName;
   private int offerPoint = 0;
+  private String offeringUserUid;
   private String clubName;
   private String clubUuid;
   private Long lastInspectionDate;
@@ -47,6 +49,15 @@ public class Boat extends BaseDbObject {
 
   public void setName(String name) {
     this.name = name;
+    this.lowerCaseName = name!=null?name.toLowerCase():name;
+  }
+
+  public String getLowerCaseName() {
+    return lowerCaseName;
+  }
+
+  public void setLowerCaseName(String name) {
+    this.lowerCaseName = lowerCaseName;
   }
 
   public String getModel() {
@@ -132,5 +143,13 @@ public class Boat extends BaseDbObject {
   @Override
   public String toString() {
     return name;
+  }
+
+  public String getOfferingUserUid() {
+    return offeringUserUid;
+  }
+
+  public void setOfferingUserUid(String offeringUserUid) {
+    this.offeringUserUid = offeringUserUid;
   }
 }
