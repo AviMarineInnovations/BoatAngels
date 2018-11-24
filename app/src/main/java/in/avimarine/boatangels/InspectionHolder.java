@@ -46,9 +46,12 @@ public class InspectionHolder extends RecyclerView.ViewHolder {
   public void displayLikeIcon(boolean liked)
   {
     if(liked)
-      likeIcon.setVisibility(itemView.VISIBLE);
+      //likeIcon.setVisibility(itemView.VISIBLE);
+      likeIcon.setVisibility(View.VISIBLE);
     else
-      likeIcon.setVisibility(itemView.INVISIBLE);
+      //likeIcon.setVisibility(itemView.INVISIBLE);
+      likeIcon.setVisibility(View.INVISIBLE);
+
   }
 
 

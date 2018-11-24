@@ -114,11 +114,11 @@ public class InspectBoatActivity extends AppCompatActivity {
       }
     });
 
-    setInspectionSeverityIcon(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
-    setInspectionSeverityIcon(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
-    setInspectionSeverityIcon(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
+    setInspectionSeverityBtPressed(findViewById(R.id.good_inspection_btn), StatusEnum.GOOD);
+    setInspectionSeverityBtPressed(findViewById(R.id.bad_inspection_btn), StatusEnum.BAD);
+    setInspectionSeverityBtPressed(findViewById(R.id.very_bad_inspection_btn), StatusEnum.VERY_BAD);
   }
-    void setInspectionSeverityIcon(ImageButton button, StatusEnum status){
+    void setInspectionSeverityBtPressed(ImageButton button, StatusEnum status){
       button.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         findViewById(R.id.good_inspection_btn).setSelected(false); //cancel another pressed button before pressing another

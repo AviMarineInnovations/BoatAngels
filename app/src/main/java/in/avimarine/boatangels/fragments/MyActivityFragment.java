@@ -64,16 +64,6 @@ public class MyActivityFragment extends Fragment {
   private String inspecUid;
   private OnFragmentInteractionListener mListener;
 
-
-
-//  private void displayLikeIcon(View view, ImageView likeIcon, boolean like)
-//  {
-//    if(like)
-//      likeIcon.setVisibility(view.VISIBLE);
-//    else
-//      likeIcon.setVisibility(view.INVISIBLE);
-//  }
-
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -104,7 +94,6 @@ public class MyActivityFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
-    //ImageView likeIcon2 = (ImageView)(getView().findViewById(R.id.like_icon));
     ButterKnife.bind(getActivity());
     return view;
   }
@@ -136,10 +125,6 @@ public class MyActivityFragment extends Fragment {
               for (DocumentSnapshot document : task.getResult()) {
                 Inspection inspec = document.toObject(Inspection.class);
                 if (inspec.inspectorUid.equals(uid) || inspec.boatUuid.equals(myBoatUuid)) {
-
-                  //ImageView likeImage =  getView().findViewById(R.id.like_icon);
-                  //displayLikeIcon(getView(),likeImage, inspec.getLiked());  //pazit
-
                   String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
                   arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
                       inspecDate + inspeData + "\n" +
