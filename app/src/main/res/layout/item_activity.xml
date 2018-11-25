@@ -7,14 +7,14 @@
 
   <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/text1"
-    android:layout_width="46dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:textColor="#ffffff"/>
 
   <ImageView
     android:id="@+id/like_icon"
-    android:layout_width="40dp"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     app:srcCompat="@drawable/ic_pressed_good_inspection_icon"/>
 
