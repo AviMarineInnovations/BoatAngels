@@ -15,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,7 +60,8 @@ public class MyActivityFragment extends Fragment {
   //  private FirestoreRecyclerAdapter adapter;
   private String uid = FirebaseAuth.getInstance().getUid();
   private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-  private List<String> arrayInspe = new ArrayList<>();
+//  private List<String> arrayInspe = new ArrayList<>();
+  private List<Inspection> arrayInspe = new ArrayList<>();
   private SparseArray<String> hashMap = new SparseArray<>();
   private SparseArray<String> hashMapInspeUid = new SparseArray<>();
   private Integer indexList = 0;
@@ -101,8 +105,53 @@ public class MyActivityFragment extends Fragment {
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),
-        R.layout.item_activity,R.id.text1, arrayInspe);
+//    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),
+//        R.layout.item_activity, R.id.text1, arrayInspe);
+    ListAdapter listAdapter = new BaseAdapter() {
+      private Context context;
+      private ArrayList<Inspection> items;
+      private String myBoatUuid;
+      String inspecBoat = getString(R.string.inspect_boat);
+      String inspecDate = getString(R.string.inspect_date);
+      String pointsEarned = getString(R.string.points_earned);
+
+      @Override
+      public int getCount() {
+        return items.size();
+      }
+
+      @Override
+      public Object getItem(int i) {
+        return items.get(i);
+      }
+
+      @Override
+      public long getItemId(int i) {
+        return i;
+      }
+
+      @Override
+      public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+          convertView = LayoutInflater.from(context).inflate(R.layout.item_activity, parent, false);
+        }
+        Inspection currentItem = (Inspection)getItem(position);
+        if (currentItem.inspectorUid.equals(uid) || currentItem.boatUuid.equals(myBoatUuid)) {
+          String inspeData = DateFormat.getDateInstance().format(currentItem.inspectionTime);
+          TextView tv = convertView.findViewById(R.id.text1);
+          tv.setText(inspecBoat + currentItem.boatName + "\n" +
+              inspecDate + inspeData + "\n" +
+              pointsEarned + currentItem.pointsEarned);
+          ImageView iv = convertView.findViewById(R.id.like_icon);
+          if (currentItem.getLiked())
+            iv.setVisibility(View.VISIBLE);
+          else
+            iv.setVisibility(View.INVISIBLE);
+          return convertView;
+        }
+        return null;
+      }
+    };
     ListView listView = getActivity().findViewById(R.id.my_inspection_list);
 
     String inspecBoat = getString(R.string.inspect_boat);
@@ -110,9 +159,10 @@ public class MyActivityFragment extends Fragment {
     String pointsEarned = getString(R.string.points_earned);
     FireBase fb = new FireBase();
     final String myBoatUuid;
-    if (fb.getCurrentUser()!=null && fb.getCurrentUser().getBoats()!= null && !fb.getCurrentUser().getBoats().isEmpty()){
-       myBoatUuid = fb.getCurrentUser().getBoats().get(0);
-    } else{
+    if (fb.getCurrentUser() != null && fb.getCurrentUser().getBoats() != null && !fb
+        .getCurrentUser().getBoats().isEmpty()) {
+      myBoatUuid = fb.getCurrentUser().getBoats().get(0);
+    } else {
       myBoatUuid = "";
     }
 
@@ -125,10 +175,8 @@ public class MyActivityFragment extends Fragment {
               for (DocumentSnapshot document : task.getResult()) {
                 Inspection inspec = document.toObject(Inspection.class);
                 if (inspec.inspectorUid.equals(uid) || inspec.boatUuid.equals(myBoatUuid)) {
-                  String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
-                  arrayInspe.add(inspecBoat + inspec.boatName + "\n" +
-                      inspecDate + inspeData + "\n" +
-                      pointsEarned + inspec.pointsEarned);
+//                  String inspeData = DateFormat.getDateInstance().format(inspec.inspectionTime);
+                  arrayInspe.add(inspec);
                   Log.d(TAG, document.getId() + " => " + document.getData());
 
                   hashMap.put(indexList, inspec.boatUuid);
@@ -136,7 +184,7 @@ public class MyActivityFragment extends Fragment {
                   indexList++;
                 }
               }
-              listView.setAdapter(arrayAdapter);
+              listView.setAdapter(listAdapter);
             } else {
               Log.d(TAG, "Cannot find inspection");
             }
