@@ -2,20 +2,11 @@ buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
     }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.26.1'
-    }
 }
 
 apply plugin: 'com.android.application'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
-apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 def final yourApplicationId = 'in.avimarine.boatangels'
 android.variantFilter { variant ->
@@ -42,7 +33,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    compileSdkVersion 27
+    compileSdkVersion 30
     defaultConfig {
         applicationId = yourApplicationId
         //These are the values for the authorities and account types.
@@ -52,10 +43,10 @@ android {
         //Reference them in .xml files.
         multiDexEnabled true
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 30
         versionCode 4
         versionName "1.03"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 //        resConfigs "en", "iw"
         vectorDrawables.useSupportLibrary = true
         ext.enableCrashlytics = true
@@ -96,25 +87,29 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:preference-v14:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:support-vector-drawable:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
+    implementation platform('com.google.firebase:firebase-bom:28.3.0')
+    implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.google.firebase:firebase-storage:16.0.4'
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.0'
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1'
     implementation 'com.firebaseui:firebase-ui-firestore:4.2.1'
     implementation 'com.firebaseui:firebase-ui-storage:4.2.1'
     implementation 'io.doorbell:android-sdk:0.2.8@aar'
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
-    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.jakewharton:butterknife:10.2.3'
     implementation 'com.hbb20:ccp:2.1.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.pwittchen:weathericonview:1.1.0'
@@ -123,10 +118,9 @@ dependencies {
     implementation('com.crashlytics.sdk.android:answers:1.4.4@aar') {
         transitive = true
     }
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
 }
-apply plugin: 'com.google.gms.google-services'

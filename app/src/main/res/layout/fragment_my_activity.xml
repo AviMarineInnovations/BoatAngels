@@ -5,7 +5,7 @@
   tools:context="in.avimarine.boatangels.fragments.BoatsForInspectionFragment"
   >
 
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,6 +19,6 @@
       android:layout_height="fill_parent">
     </ListView>
 
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

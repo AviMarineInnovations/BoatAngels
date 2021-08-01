@@ -1,6 +1,6 @@
 package in.avimarine.boatangels.geographical;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 import in.avimarine.boatangels.db.objects.BaseDbObject;

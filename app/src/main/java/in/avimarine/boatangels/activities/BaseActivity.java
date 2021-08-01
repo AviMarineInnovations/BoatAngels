@@ -1,7 +1,7 @@
 package in.avimarine.boatangels.activities;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import in.avimarine.boatangels.general.LocaleUtils;
 
 /**

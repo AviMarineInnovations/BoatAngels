@@ -12,7 +12,7 @@ import in.avimarine.boatangels.R;
  * This class is a special CheckBox with three states instead of one.
  */
 
-public class CheckBoxTriState extends android.support.v7.widget.AppCompatCheckBox {
+public class CheckBoxTriState extends androidx.appcompat.widget.AppCompatCheckBox {
   private State state;
 
   public CheckBoxTriState(Context context) {

@@ -3,8 +3,9 @@ package in.avimarine.boatangels;
 import android.app.Application;
 import android.content.res.Configuration;
 import android.util.Log;
+import com.google.firebase.FirebaseApp;
 import in.avimarine.boatangels.general.LocaleUtils;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -18,8 +19,8 @@ public class App extends Application {
   private static final String TAG = "App";
   public void onCreate(){
     super.onCreate();
-    Fabric.with(this, new Crashlytics());
     LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
+    FirebaseApp.initializeApp(this);
   }
 
   @Override
