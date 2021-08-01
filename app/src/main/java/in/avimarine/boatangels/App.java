@@ -6,7 +6,7 @@ import android.util.Log;
 import com.google.firebase.FirebaseApp;
 import in.avimarine.boatangels.general.LocaleUtils;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import io.fabric.sdk.android.Fabric;
+//import io.fabric.sdk.android.Fabric;
 
 /**
  * This file is part of an

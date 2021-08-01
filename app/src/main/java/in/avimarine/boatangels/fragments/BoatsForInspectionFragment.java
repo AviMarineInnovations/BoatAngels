@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Query.Direction;
 import in.avimarine.boatangels.BoatHolder;
+import in.avimarine.boatangels.LinearLayoutManagerWrapper;
 import in.avimarine.boatangels.R;
 import in.avimarine.boatangels.activities.InspectBoatActivity;
 import in.avimarine.boatangels.db.objects.Boat;
@@ -64,7 +65,7 @@ public class BoatsForInspectionFragment extends Fragment {
       }
     };
     RecyclerView boatsRv = getActivity().findViewById(R.id.boats_for_inspection_recyclerview1);
-    boatsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+    boatsRv.setLayoutManager(new LinearLayoutManagerWrapper(getActivity()));
     mOnClickListener = view -> {
       int itemPosition = boatsRv.getChildLayoutPosition(view);
       Log.d(TAG, "In on click listener: " + itemPosition);

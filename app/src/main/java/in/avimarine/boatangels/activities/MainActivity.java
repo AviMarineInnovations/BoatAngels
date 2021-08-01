@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
             .setLogo(R.mipmap.banner)
             .setTosAndPrivacyPolicyUrls(getString(R.string.tos_url),
                 getString(R.string.privacy_policy_url))
+            .setTheme(R.style.AppTheme)
             .build(),
         RC_SIGN_IN);
   }

@@ -5,8 +5,10 @@
     <!-- Customize your theme here. -->
     <!--<item name="colorPrimary">@color/colorPrimary</item>-->
     <item name="colorPrimary">@color/titlebackgroundcolor</item>
+    <item name="colorPrimaryVariant">@color/titlebackgroundcolor</item>
     <item name="android:textColorPrimary">@color/lightbackground</item>
     <item name="colorPrimaryDark">@color/background</item>
+    <item name="android:statusBarColor">@color/background</item>
     <item name="colorAccent">@color/colorAccent</item>
     <item name="preferenceTheme">
       @style/AppTheme.Preference

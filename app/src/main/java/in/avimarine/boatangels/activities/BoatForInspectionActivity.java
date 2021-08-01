@@ -86,9 +86,9 @@ public class BoatForInspectionActivity extends AppCompatActivity {
       @Override
       public void onBindViewHolder(@NonNull BoatHolder holder, int position, @NonNull Boat model) {
         holder.bind(model);
-
       }
 
+      @NonNull
       @Override
       public BoatHolder onCreateViewHolder(ViewGroup group, int i) {
         View view = LayoutInflater.from(group.getContext())

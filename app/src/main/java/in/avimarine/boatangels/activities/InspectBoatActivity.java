@@ -20,11 +20,11 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.crashlytics.android.answers.Answers;
+//import com.crashlytics.android.answers.Answers;
 import com.google.firebase.firestore.DocumentSnapshot;
 import in.avimarine.boatangels.Points;
 import in.avimarine.boatangels.R;
-import in.avimarine.boatangels.analytics.InspectionEvent;
+//import in.avimarine.boatangels.analytics.InspectionEvent;
 import in.avimarine.boatangels.customViews.CheckBoxTriState;
 import in.avimarine.boatangels.customViews.CheckBoxTriState.State;
 import in.avimarine.boatangels.db.FireBase;
@@ -194,7 +194,7 @@ public class InspectBoatActivity extends AppCompatActivity {
     inspection.setPointsEarned(points);
     db.addInspection(inspection);
     FireBase.setBoatLastInspectionDate(b.getUuid(), inspection.getInspectionTime());
-    Answers.getInstance().logCustom(new InspectionEvent());
+//    Answers.getInstance().logCustom(new InspectionEvent());
     finish();
   }
 
